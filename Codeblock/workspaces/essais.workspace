@@ -1,0 +1,19 @@
+<?xml version="1.0" encoding="UTF-8" standalone="yes" ?>
+<CodeBlocks_workspace_file>
+	<Workspace title="Workspace">
+		<Project filename="../TestBoostFunctions/TestBoostFunctions.cbp" />
+		<Project filename="../TestBoostLogs/TestBoostLogs.cbp" />
+		<Project filename="../Test Linux System Call/Test Linux System Call.cbp" />
+		<Project filename="../TestRCF/TestRCFCallback/TestRCFCallbackClient/Codeblock/TestRCF/TestRCFClient/TestRCFCallbackClient.cbp" />
+		<Project filename="../TestRCF/TestRCFCallback/TestRCFCallbackServer/Codeblock/TestRCF/TestRCFServer/TestRCFCallbackServer.cbp" />
+		<Project filename="../TestRCF/TestRCFClient/TestRCFClient.cbp" />
+		<Project filename="../TestRCF/TestRCFServer/TestRCFServer.cbp" />
+		<Project filename="../TestXML/TestXML.cbp" />
+		<Project filename="../TestEmptyProject/TestEmptyProject.cbp" />
+		<Project filename="../TestClass/TestClass.cbp" />
+		<Project filename="../testRCFProtoServer/testRCFProtoServer.cbp" />
+		<Project filename="../TestRCFProtoClient/TestRCFProtoClient.cbp" />
+		<Project filename="../Server1/Server1.cbp" />
+		<Project filename="../Train/Train.cbp" />
+	</Workspace>
+</CodeBlocks_workspace_file>

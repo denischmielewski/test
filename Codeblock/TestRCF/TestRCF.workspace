@@ -1,0 +1,9 @@
+<?xml version="1.0" encoding="UTF-8" standalone="yes" ?>
+<CodeBlocks_workspace_file>
+	<Workspace title="TestRCF">
+		<Project filename="TestRCFServer/TestRCFServer.cbp" />
+		<Project filename="TestRCFClient/TestRCFClient.cbp" />
+		<Project filename="TestRCFCallback/TestRCFCallbackServer/Codeblock/TestRCF/TestRCFServer/TestRCFCallbackServer.cbp" />
+		<Project filename="TestRCFCallback/TestRCFCallbackClient/Codeblock/TestRCF/TestRCFClient/TestRCFCallbackClient.cbp" />
+	</Workspace>
+</CodeBlocks_workspace_file>
