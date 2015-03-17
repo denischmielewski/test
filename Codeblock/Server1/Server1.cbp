@@ -96,7 +96,6 @@
 		<Unit filename="../common/src/config.cpp" />
 		<Unit filename="../common/src/log.cpp" />
 		<Unit filename="../common/src/utils.cpp" />
-		<Unit filename="../src/server1.cpp" />
 		<Unit filename="include/protobufserver.hpp" />
 		<Unit filename="include/server1.hpp" />
 		<Unit filename="src/main.cpp" />
