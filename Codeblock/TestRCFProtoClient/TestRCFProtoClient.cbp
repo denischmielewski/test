@@ -1,0 +1,77 @@
+<?xml version="1.0" encoding="UTF-8" standalone="yes" ?>
+<CodeBlocks_project_file>
+	<FileVersion major="1" minor="6" />
+	<Project>
+		<Option title="TestRCFProtoClient" />
+		<Option pch_mode="2" />
+		<Option compiler="gcc" />
+		<Build>
+			<Target title="Debug">
+				<Option output="bin/Debug/TestRCFProtoClient" prefix_auto="1" extension_auto="1" />
+				<Option object_output="obj/Debug/" />
+				<Option type="1" />
+				<Option compiler="gcc" />
+				<Compiler>
+					<Add option="-std=c++11" />
+					<Add option="-Wno-deprecated" />
+					<Add option="-g" />
+					<Add option="`pkg-config --cflags protobuf`" />
+					<Add directory="/home/denis/Dev/RCF-2.0.1.101/include" />
+					<Add directory="/home/denis/Dev/boost_1_57_0" />
+					<Add directory="/home/denis/Dev/RCFProto-src-1.0.0.3/cpp/src" />
+					<Add directory="/home/denis/Dev/Codeblock/TestRCFProtoCommon" />
+				</Compiler>
+				<Linker>
+					<Add option="`pkg-config --libs protobuf`" />
+					<Add library="/usr/lib/x86_64-linux-gnu/libdl.so" />
+				</Linker>
+				<ExtraCommands>
+					<Add after="cp /home/denis/Dev/Codeblock/TestRCFProtoClient/bin/Debug/TestRCFProtoClient /home/train/programs/real" />
+					<Add after="rsync -arzvhP /home/train/programs train@train221:/home/train/" />
+					<Add after="rsync -arzvhP /home/train/programs train@train211:/home/train/" />
+					<Mode after="always" />
+				</ExtraCommands>
+			</Target>
+			<Target title="Release">
+				<Option output="bin/Release/TestRCFProtoClient" prefix_auto="1" extension_auto="1" />
+				<Option object_output="obj/Release/" />
+				<Option type="1" />
+				<Option compiler="gcc" />
+				<Compiler>
+					<Add option="-O2" />
+					<Add option="-std=c++11" />
+					<Add option="-Wno-deprecated" />
+					<Add option="`pkg-config --cflags protobuf`" />
+					<Add directory="/home/denis/Dev/RCF-2.0.1.101/include" />
+					<Add directory="/home/denis/Dev/boost_1_57_0" />
+					<Add directory="/home/denis/Dev/RCFProto-src-1.0.0.3/cpp/src" />
+					<Add directory="/home/denis/Dev/Codeblock/TestRCFProtoCommon" />
+				</Compiler>
+				<Linker>
+					<Add option="-s" />
+					<Add option="`pkg-config --libs protobuf`" />
+					<Add library="/usr/lib/x86_64-linux-gnu/libdl.so" />
+				</Linker>
+				<ExtraCommands>
+					<Add after="cp /home/denis/Dev/Codeblock/TestRCFProtoClient/bin/Release/TestRCFProtoClient /home/train/programs/real" />
+					<Add after="rsync -arzvhP /home/train/programs train@train221:/home/train/" />
+					<Add after="rsync -arzvhP /home/train/programs train@train211:/home/train/" />
+					<Mode after="always" />
+				</ExtraCommands>
+			</Target>
+		</Build>
+		<Compiler>
+			<Add option="-Wall" />
+			<Add option="-fexceptions" />
+		</Compiler>
+		<Unit filename="../../RCF-2.0.1.101/src/RCF/RCF.cpp" />
+		<Unit filename="../../RCFProto-src-1.0.0.3/cpp/src/RCFProto.cpp" />
+		<Unit filename="../TestRCFProtoCommon/TestRCFProto.pb.cc" />
+		<Unit filename="../TestRCFProtoCommon/TestRCFProto.pb.h" />
+		<Unit filename="main.cpp" />
+		<Extensions>
+			<code_completion />
+			<debugger />
+		</Extensions>
+	</Project>
+</CodeBlocks_project_file>

@@ -1,0 +1,68 @@
+<?xml version="1.0" encoding="UTF-8" standalone="yes" ?>
+<CodeBlocks_project_file>
+	<FileVersion major="1" minor="6" />
+	<Project>
+		<Option title="TestRCFCallbackClient" />
+		<Option pch_mode="2" />
+		<Option compiler="gcc" />
+		<Build>
+			<Target title="Debug">
+				<Option output="bin/Debug/TestRCFCallbackClient" prefix_auto="1" extension_auto="1" />
+				<Option object_output="obj/Debug/" />
+				<Option type="1" />
+				<Option compiler="gcc" />
+				<Compiler>
+					<Add option="-g" />
+					<Add directory="/home/denis/Dev/boost_1_57_0" />
+					<Add directory="/home/denis/Dev/RCF-2.0.1.101/include" />
+				</Compiler>
+				<Linker>
+					<Add library="pthread" />
+					<Add library="dl" />
+				</Linker>
+			</Target>
+			<Target title="Release">
+				<Option output="bin/Release/TestRCFCallbackClient" prefix_auto="1" extension_auto="1" />
+				<Option object_output="obj/Release/" />
+				<Option type="1" />
+				<Option compiler="gcc" />
+				<Compiler>
+					<Add option="-O2" />
+					<Add directory="/home/denis/Dev/boost_1_57_0" />
+					<Add directory="/home/denis/Dev/RCF-2.0.1.101/include" />
+				</Compiler>
+				<Linker>
+					<Add option="-s" />
+					<Add library="pthread" />
+					<Add library="dl" />
+				</Linker>
+			</Target>
+			<Target title="ReleaseDeployment">
+				<Option output="../../../../../../../../../../x-train/programs/real/TestRCFCallbackClient" prefix_auto="1" extension_auto="1" />
+				<Option object_output="obj/ReleaseDeployment/" />
+				<Option type="1" />
+				<Option compiler="gcc" />
+				<Compiler>
+					<Add option="-O2" />
+					<Add directory="/home/denis/Dev/boost_1_57_0" />
+					<Add directory="/home/denis/Dev/RCF-2.0.1.101/include" />
+				</Compiler>
+				<Linker>
+					<Add option="-s" />
+					<Add library="pthread" />
+					<Add library="dl" />
+				</Linker>
+			</Target>
+		</Build>
+		<Compiler>
+			<Add option="-Wall" />
+			<Add option="-fexceptions" />
+		</Compiler>
+		<Unit filename="../../../../../../../RCF-2.0.1.101/src/RCF/RCF.cpp" />
+		<Unit filename="main.cpp" />
+		<Extensions>
+			<code_completion />
+			<debugger />
+		</Extensions>
+	</Project>
+</CodeBlocks_project_file>

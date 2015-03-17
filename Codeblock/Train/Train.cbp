@@ -1,0 +1,89 @@
+<?xml version="1.0" encoding="UTF-8" standalone="yes" ?>
+<CodeBlocks_project_file>
+	<FileVersion major="1" minor="6" />
+	<Project>
+		<Option title="Train" />
+		<Option pch_mode="2" />
+		<Option compiler="gcc" />
+		<Build>
+			<Target title="Debug">
+				<Option output="bin/Debug/Train" prefix_auto="1" extension_auto="1" />
+				<Option object_output="obj/Debug/" />
+				<Option type="1" />
+				<Option compiler="gcc" />
+				<Compiler>
+					<Add option="-std=c++11" />
+					<Add option="-Wno-deprecated" />
+					<Add option="-g" />
+					<Add option="-DBOOST_LOG_DYN_LINK" />
+					<Add directory="/home/denis/Dev/boost_1_57_0" />
+					<Add directory="/home/denis/Dev/Codeblock/Train/include" />
+					<Add directory="/home/denis/Dev/RCF-2.0.1.101/include" />
+					<Add directory="/home/denis/Dev/Codeblock/common/include" />
+				</Compiler>
+				<Linker>
+					<Add library="/home/denis/Dev/boost_1_57_0/stage/lib/libboost_chrono.so" />
+					<Add library="/home/denis/Dev/boost_1_57_0/stage/lib/libboost_date_time.so" />
+					<Add library="/home/denis/Dev/boost_1_57_0/stage/lib/libboost_filesystem.so" />
+					<Add library="/home/denis/Dev/boost_1_57_0/stage/lib/libboost_log.so" />
+					<Add library="/home/denis/Dev/boost_1_57_0/stage/lib/libboost_log_setup.so" />
+					<Add library="/home/denis/Dev/boost_1_57_0/stage/lib/libboost_regex.so" />
+					<Add library="/home/denis/Dev/boost_1_57_0/stage/lib/libboost_system.so" />
+					<Add library="/home/denis/Dev/boost_1_57_0/stage/lib/libboost_thread.so" />
+					<Add library="/usr/lib/x86_64-linux-gnu/libpthread.so" />
+				</Linker>
+				<ExtraCommands>
+					<Add after="cp /home/denis/Dev/Codeblock/Train/bin/Debug/Train /home/train/programs/real/" />
+					<Mode after="always" />
+				</ExtraCommands>
+			</Target>
+			<Target title="Release">
+				<Option output="bin/Release/Train" prefix_auto="1" extension_auto="1" />
+				<Option object_output="obj/Release/" />
+				<Option type="1" />
+				<Option compiler="gcc" />
+				<Compiler>
+					<Add option="-O2" />
+					<Add option="-std=c++11" />
+					<Add option="-Wno-deprecated" />
+					<Add option="-DBOOST_LOG_DYN_LINK" />
+					<Add directory="/home/denis/Dev/boost_1_57_0" />
+					<Add directory="/home/denis/Dev/Codeblock/Train/include" />
+					<Add directory="/home/denis/Dev/RCF-2.0.1.101/include" />
+					<Add directory="/home/denis/Dev/Codeblock/common/include" />
+				</Compiler>
+				<Linker>
+					<Add option="-s" />
+					<Add library="/home/denis/Dev/boost_1_57_0/stage/lib/libboost_chrono.so" />
+					<Add library="/home/denis/Dev/boost_1_57_0/stage/lib/libboost_date_time.so" />
+					<Add library="/home/denis/Dev/boost_1_57_0/stage/lib/libboost_filesystem.so" />
+					<Add library="/home/denis/Dev/boost_1_57_0/stage/lib/libboost_log.so" />
+					<Add library="/home/denis/Dev/boost_1_57_0/stage/lib/libboost_log_setup.so" />
+					<Add library="/home/denis/Dev/boost_1_57_0/stage/lib/libboost_regex.so" />
+					<Add library="/home/denis/Dev/boost_1_57_0/stage/lib/libboost_system.so" />
+					<Add library="/home/denis/Dev/boost_1_57_0/stage/lib/libboost_thread.so" />
+					<Add library="/usr/lib/x86_64-linux-gnu/libpthread.so" />
+				</Linker>
+				<ExtraCommands>
+					<Add after="cp /home/denis/Dev/Codeblock/Train/bin/Release/Train /home/train/programs/real" />
+					<Mode after="always" />
+				</ExtraCommands>
+			</Target>
+		</Build>
+		<Compiler>
+			<Add option="-Wall" />
+		</Compiler>
+		<Unit filename="../common/include/config.hpp" />
+		<Unit filename="../common/include/errors.hpp" />
+		<Unit filename="../common/include/log.hpp" />
+		<Unit filename="../common/include/utils.hpp" />
+		<Unit filename="../common/src/config.cpp" />
+		<Unit filename="../common/src/log.cpp" />
+		<Unit filename="../common/src/utils.cpp" />
+		<Unit filename="src/main.cpp" />
+		<Extensions>
+			<code_completion />
+			<debugger />
+		</Extensions>
+	</Project>
+</CodeBlocks_project_file>
