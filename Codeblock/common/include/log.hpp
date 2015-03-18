@@ -80,6 +80,12 @@ BOOST_LOG_INLINE_GLOBAL_LOGGER_INIT(comm_logger_c1, startup_severity_channel_log
     return startup_severity_channel_logger_mt(keywords::channel = "comm");
 }
 
+BOOST_LOG_INLINE_GLOBAL_LOGGER_INIT(protobufsyncserver_logger_c1, startup_severity_channel_logger_mt)
+{
+    // Specify the channel name on construction, similarly as with the channel_logger
+    return startup_severity_channel_logger_mt(keywords::channel = "comm");
+}
+
 class log
 {
     public:

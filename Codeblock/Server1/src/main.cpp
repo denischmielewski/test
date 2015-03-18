@@ -1,19 +1,20 @@
 #include "errors.hpp"
 #include "config.hpp"
 #include "log.hpp"
+#include "protobufsyncserver.hpp"
 #include <iostream>
 #include <thread>
 #include <chrono>
 #include <signal.h>
 
-static int volatile signal_received = 0;
+volatile int g_signal_received = 0;
 
 void sighandler( int sig, siginfo_t * siginfo, void * context)
 {
     startup_severity_channel_logger_mt& lg = comm_logger_c1::get();
     if(sig == SIGINT) BOOST_LOG_SEV(lg, notification) << "SIGHANDLER: SIGINT (CTRL^C) received. terminate all threads...";
     if(sig == SIGTERM) BOOST_LOG_SEV(lg, notification) << "SIGHANDLER: SIGTERM (kill) received. terminate all threads...";
-    signal_received = 1;
+    g_signal_received = 1;
 }
 
 void config_signal_management(void)
@@ -31,13 +32,13 @@ void codeThread1(int x)
     startup_severity_channel_logger_mt& lg = comm_logger_c1::get();
     std::chrono::seconds duration(1);
     int i = 0;
-    while(!signal_received && i < x)
+    while(!g_signal_received && i < x)
     {
         std::this_thread::sleep_for(duration);
         BOOST_LOG_SEV(lg, notification) << "thread 1";
         i++;
     }
-    if(signal_received) BOOST_LOG_SEV(lg, notification) << "Signal received, terminating thread 1";
+    if(g_signal_received && i != x) BOOST_LOG_SEV(lg, notification) << "Signal received, terminating thread 1";
 }
 
 void codeThread2(int x)
@@ -45,19 +46,22 @@ void codeThread2(int x)
     startup_severity_channel_logger_mt& lg = comm_logger_c1::get();
     std::chrono::seconds duration(1);
     int i = 0;
-    while(!signal_received && i < x)
+    while(!g_signal_received && i < x)
     {
         std::this_thread::sleep_for(duration);
         BOOST_LOG_SEV(lg, notification) << "thread 2";
         i++;
     }
-    if(signal_received) BOOST_LOG_SEV(lg, notification) << "Signal received, terminating thread 2";
+    if(g_signal_received && i != x) BOOST_LOG_SEV(lg, notification) << "Signal received, terminating thread 2";
 }
 
 int main()
 {
     class config * server_configuration;
     class log * train_logs;
+    ProtobufSyncServer * server;
+
+
     startup_severity_channel_logger_mt& lg = comm_logger_c1::get();
 
     //First setup logs capability
@@ -87,8 +91,15 @@ int main()
     }
 
     config_signal_management();
-    std::thread thread1(codeThread1,60);
-    std::thread thread2(codeThread2,60);
+
+    BOOST_LOG_SEV(lg, critical) << "try to create ProtobufSyncServer !!!";
+
+    //ProtobufSyncServer server(server_configuration);
+    server = new ProtobufSyncServer(server_configuration);
+    server->Start();
+
+    std::thread thread1(codeThread1,10);
+    std::thread thread2(codeThread2,10);
 
     BOOST_LOG_SEV(lg, notification) << "main, Thread1 and Thread2 now execute concurrently...";
 
@@ -98,6 +109,7 @@ int main()
 
     BOOST_LOG_SEV(lg, notification) << "Thread1 and Thread2 completed.";
 
+    delete(server);
     delete(server_configuration);
     delete(train_logs);
     return NO_ERROR;
