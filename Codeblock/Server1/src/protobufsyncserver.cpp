@@ -12,7 +12,7 @@ ProtobufSyncServer::ProtobufSyncServer() : ProtobufSyncServerThread()
     //ctor
 }
 
-ProtobufSyncServer::ProtobufSyncServer(const config * conf)
+ProtobufSyncServer::ProtobufSyncServer(config * &conf)
 {
     serverconf = conf;
 }
@@ -20,7 +20,7 @@ ProtobufSyncServer::ProtobufSyncServer(const config * conf)
 ProtobufSyncServer::~ProtobufSyncServer()
 {
     //dtor
-    ProtobufSyncServerThread.join();
+    if(ProtobufSyncServerThread.joinable()) ProtobufSyncServerThread.join();
 }
 
 // PositionInformationService implementation.
@@ -35,6 +35,10 @@ public:
         PositionInformationReceive *                response,
         Closure *                                   done)
     {
+        startup_severity_channel_logger_mt& lg = protobufsyncserver_logger_c1::get();
+
+        BOOST_LOG_SEV(lg, notification) << "message received from train !";
+
         RCF::RcfProtoController * rcfController = static_cast<RCF::RcfProtoController *>(controller);
         RCF::RcfProtoSession * pprotoSession = rcfController->getSession();
         RCF::RcfSession & rcfSession = rcfController->getSession()->getRcfSession();
@@ -74,35 +78,33 @@ void ProtobufSyncServer::ProtobufSyncServerThreadsCode(void)   //RCF and protobu
     try
     {
         // Initialize RCFProto.
-        //RCF::init();
-        //BOOST_LOG_SEV(lg, notification) << "RCF init !";
+        RCF::init();
+        RCF::enableLogging( RCF::LogToFile("/home/train/programs/real/rcfproto.log"), 4, "");
+        BOOST_LOG_SEV(lg, notification) << "RCF init !";
         // Create server.
-        //RCF::RcfProtoServer server( RCF::TcpEndpoint("0.0.0.0", 50001) );
-
+        RCF::RcfProtoServer server( RCF::TcpEndpoint("0.0.0.0", 50001) );
+        BOOST_LOG_SEV(lg, notification) << "Protobuf server created !";
         // Bind Protobuf service.
-        //PositionInformationImpl positionInformationImpl;
-        //server.bindService(positionInformationImpl);
-        //BOOST_LOG_SEV(lg, notification) << "RCF proto server declared and service bind !";
+        PositionInformationImpl positionInformationImpl;
+        server.bindService(positionInformationImpl);
+        BOOST_LOG_SEV(lg, notification) << "RCF proto server declared and service bind !";
 
         // Start the server.
-        //server.start();
-        //BOOST_LOG_SEV(lg, notification) << "RCF proto server started !";
+        server.start();
+        BOOST_LOG_SEV(lg, notification) << "RCF proto server started !";
 
+        while(!g_signal_received)
+        {
+            std::this_thread::sleep_for(duration);
+            BOOST_LOG_SEV(lg, notification) << "hello from protobufsyncserver thread";
+        }
+        if(g_signal_received) BOOST_LOG_SEV(lg, notification) << "Signal received, terminating ProtobufSyncServerThreads";
     }
     catch(const RCF::Exception & e)
     {
-
+        BOOST_LOG_SEV(lg, critical) << "RCF::Exception: " << e.getErrorString();
         return;
     }
-
-
-    while(!g_signal_received)
-    {
-        std::this_thread::sleep_for(duration);
-        BOOST_LOG_SEV(lg, notification) << "hello from protobufsyncserver thread";
-    }
-    if(g_signal_received) BOOST_LOG_SEV(lg, notification) << "Signal received, terminating ProtobufSyncServerThreads";
-
 }
 
 

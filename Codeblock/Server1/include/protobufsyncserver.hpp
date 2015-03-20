@@ -15,13 +15,18 @@ class ProtobufSyncServer
 {
     public:
         ProtobufSyncServer();
-        ProtobufSyncServer(const config * conf);
+        ProtobufSyncServer(config *&);
         ~ProtobufSyncServer();
         void ProtobufSyncServerThreadsCode(void);
         void Start()
         {
             // This will start the thread. Notice move semantics!
             ProtobufSyncServerThread = std::thread(&ProtobufSyncServer::ProtobufSyncServerThreadsCode,this);
+        }
+        void Join()
+        {
+            // This will start the thread. Notice move semantics!
+            ProtobufSyncServerThread.join();
         }
     protected:
     private:

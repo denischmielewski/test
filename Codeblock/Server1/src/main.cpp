@@ -67,7 +67,7 @@ int main()
     //First setup logs capability
     try
     {
-        train_logs = new(class log);
+        train_logs = new class log;
     }
     catch(const std::exception& e)
     {
@@ -81,7 +81,7 @@ int main()
     //then read information from xml configuration file and configure networking
     try
     {
-        server_configuration = new(class config);
+        server_configuration = new config;
         if (server_configuration->result != NO_ERROR){throw (-1);}
     }
     catch(int e)
@@ -92,25 +92,35 @@ int main()
 
     config_signal_management();
 
-    BOOST_LOG_SEV(lg, critical) << "try to create ProtobufSyncServer !!!";
-
-    //ProtobufSyncServer server(server_configuration);
-    server = new ProtobufSyncServer(server_configuration);
-    server->Start();
+    BOOST_LOG_SEV(lg, notification) << "try to create ProtobufSyncServer !!!";
+    try
+    {
+            server = new ProtobufSyncServer(server_configuration);
+            server->Start();
+    }
+    catch(int e)
+    {
+        BOOST_LOG_SEV(lg, critical) << "problem with protocolsyncserver !!!";
+        return ERROR_CONFIG_FILE_HANDLING;
+    }
 
     std::thread thread1(codeThread1,10);
     std::thread thread2(codeThread2,10);
 
-    BOOST_LOG_SEV(lg, notification) << "main, Thread1 and Thread2 now execute concurrently...";
+    BOOST_LOG_SEV(lg, notification) << "main and all threads now execute concurrently...";
 
     // synchronize threads:
-    thread1.join();               // pauses until first finishes
-    thread2.join();               // pauses until second finishes
+    if(thread1.joinable()) thread1.join();               // pauses until first finishes
+    if(thread2.joinable()) thread2.join();               // pauses until second finishes
+    server->Join();
 
-    BOOST_LOG_SEV(lg, notification) << "Thread1 and Thread2 completed.";
+    BOOST_LOG_SEV(lg, notification) << "All threads completed.";
 
     delete(server);
     delete(server_configuration);
     delete(train_logs);
+
+    BOOST_LOG_SEV(lg, notification) << "EVERYTHING TERMNATED PROPERLY !!!";
+    //return NO_ERROR;
     return NO_ERROR;
 }

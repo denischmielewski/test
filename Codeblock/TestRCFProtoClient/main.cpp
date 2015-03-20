@@ -17,6 +17,15 @@ int main()
 
     // Initialize RCFProto.
     RCF::init();
+    try
+    {
+        RCF::init();
+    }
+    catch(const RCF::Exception & e)
+    {
+        std::cout << "problem in RCF Init !!!" <<  std::endl;
+        std::cout << "RCF::Exception: " << e.getErrorString() << std::endl;
+    }
 
     // Create request object.
     PositionInformationTransmit request;
@@ -28,67 +37,77 @@ int main()
     PositionInformationReceive response;
 
     // Create channel.
-    RCF::RcfProtoChannel channel( RCF::TcpEndpoint("192.168.1.106", 50001) );
-
-    // connect timeout in ms.
-    channel.setConnectTimeoutMs(3000);
-    // remote call timeout in ms.
-    channel.setRemoteCallTimeoutMs(4000);
-
-
-
-    for(int i = 0 ; i < 10 ; i++)
+    try
     {
-        try
-        {
-            channel.connect();
-        }
-        catch(const RCF::Exception & e)
-        {
-            std::cout << "RCF::Exception: " << e.getErrorString() << std::endl;
-            //std::chrono::seconds duration(3);
-            //std::this_thread::sleep_for(duration);
+        RCF::RcfProtoChannel channel( RCF::TcpEndpoint("192.168.1.21", 50001) );
+            // connect timeout in ms.
+        channel.setConnectTimeoutMs(3000);
+        // remote call timeout in ms.
+        channel.setRemoteCallTimeoutMs(4000);
 
-            if(i == 9)
+        // Create service stub.
+        PositionInformationService::Stub stub(&channel);
+
+        // Print out request.
+        std::string strRequest;
+        TextFormat::PrintToString(request, &strRequest);
+        std::cout << "Sending request: " << strRequest << std::endl;
+
+        for(int i = 0 ; i < 3 ; i++)
+        {
+            try
             {
-                std::cout << "connection retry exceeded !" << std::endl;
-                return 1;
+                channel.connect();
+            }
+            catch(const RCF::Exception & e)
+            {
+                std::cout << "RCF::Exception: " << e.getErrorString() << std::endl;
+                //std::chrono::seconds duration(3);
+                //std::this_thread::sleep_for(duration);
+
+                if(i == 9)
+                {
+                    std::cout << "connection retry exceeded !" << std::endl;
+                    return 1;
+                }
+            }
+        }
+        for(int i = 0 ; i < 3 ; i++)
+        {
+            try
+            {
+                // Make a synchronous remote call to server.
+                stub.PositionInformation(NULL, &request, &response, NULL);
+
+                // Print out response.
+                std::string strResponse;
+                TextFormat::PrintToString(response, &strResponse);
+                std::cout << "Received response: " << strResponse << std::endl;
+                std::cout << strResponse << std::endl;
+                std::chrono::seconds duration(1);
+                std::this_thread::sleep_for(duration);
+            }
+            catch(const RCF::Exception & e)
+            {
+                std::cout << "RCF::Exception: " << e.getErrorString() << std::endl;
+                //return 1;
             }
         }
     }
-
-
-    // Create service stub.
-    PositionInformationService::Stub stub(&channel);
-
-    // Print out request.
-    std::string strRequest;
-    TextFormat::PrintToString(request, &strRequest);
-    std::cout << "Sending request: " << strRequest << std::endl;
-
-
-
-    for(int i = 0 ; i < 5 ; i++)
+    catch(const RCF::Exception & e)
     {
-        try
-        {
-            // Make a synchronous remote call to server.
-            stub.PositionInformation(NULL, &request, &response, NULL);
-
-            // Print out response.
-            std::string strResponse;
-            TextFormat::PrintToString(response, &strResponse);
-            std::cout << "Received response: " << strResponse << std::endl;
-            std::cout << strResponse << std::endl;
-            std::chrono::seconds duration(1);
-            std::this_thread::sleep_for(duration);
-        }
-        catch(const RCF::Exception & e)
-        {
-            std::cout << "RCF::Exception: " << e.getErrorString() << std::endl;
-            //return 1;
-        }
+        std::cout << "problem in protobuc channel creation !!!" <<  std::endl;
+        std::cout << "RCF::Exception: " << e.getErrorString() << std::endl;
     }
+
+
+
+
+
+
+
+
+
 
     return 0;
 }

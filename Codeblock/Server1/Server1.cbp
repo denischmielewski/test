@@ -77,9 +77,7 @@
 					<Add library="/usr/lib/x86_64-linux-gnu/libdl.so" />
 				</Linker>
 				<ExtraCommands>
-					<Add after="cp /home/denis/Dev/Codeblock/Server1/bin/Release/Server1 /home/train/programs/real" />
-					<Add after="rsync -arzvhP /home/train/programs train@train221:/home/train/" />
-					<Add after="rsync -arzvhP /home/train/programs train@train211:/home/train/" />
+					<Add after="cp /home/denis/Dev/Codeblock/Server1/bin/Release/Server1 /home/train/programs/real/" />
 					<Mode after="always" />
 				</ExtraCommands>
 			</Target>
@@ -87,6 +85,8 @@
 		<Compiler>
 			<Add option="-Wall" />
 		</Compiler>
+		<Unit filename="../../RCF-2.0.1.101/src/RCF/RCF.cpp" />
+		<Unit filename="../../RCFProto-src-1.0.0.3/cpp/src/RCFProto.cpp" />
 		<Unit filename="../common/include/config.hpp" />
 		<Unit filename="../common/include/errors.hpp" />
 		<Unit filename="../common/include/log.hpp" />
@@ -96,10 +96,9 @@
 		<Unit filename="../common/src/config.cpp" />
 		<Unit filename="../common/src/log.cpp" />
 		<Unit filename="../common/src/utils.cpp" />
-		<Unit filename="include/protobufserver.hpp" />
-		<Unit filename="include/server1.hpp" />
+		<Unit filename="include/protobufsyncserver.hpp" />
 		<Unit filename="src/main.cpp" />
-		<Unit filename="src/protobufserver.cpp" />
+		<Unit filename="src/protobufsyncserver.cpp" />
 		<Extensions>
 			<code_completion />
 			<debugger />

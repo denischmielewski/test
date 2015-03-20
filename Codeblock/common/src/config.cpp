@@ -89,7 +89,6 @@ config::config()
     {
         BOOST_LOG_SEV(lg, notification) << "address configured properly : " << ipaddress;
     }
-
 }
 
 config::~config()
