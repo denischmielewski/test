@@ -61,6 +61,7 @@
 					<Add directory="/home/denis/Dev/Codeblock/common/include" />
 					<Add directory="/home/denis/Dev/Codeblock/common/protobuf" />
 					<Add directory="/home/denis/Dev/RCFProto-src-1.0.0.3/cpp/src" />
+					<Add directory="/home/denis/Dev/Codeblock/common/Common-train-server1/include" />
 				</Compiler>
 				<Linker>
 					<Add option="-s" />
@@ -87,6 +88,8 @@
 		</Compiler>
 		<Unit filename="../../RCF-2.0.1.101/src/RCF/RCF.cpp" />
 		<Unit filename="../../RCFProto-src-1.0.0.3/cpp/src/RCFProto.cpp" />
+		<Unit filename="../common/Common-train-server1/include/protobufservicesimpl.hpp" />
+		<Unit filename="../common/Common-train-server1/src/protobufservicesimpl.cpp" />
 		<Unit filename="../common/include/config.hpp" />
 		<Unit filename="../common/include/errors.hpp" />
 		<Unit filename="../common/include/log.hpp" />

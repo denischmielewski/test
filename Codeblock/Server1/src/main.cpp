@@ -57,10 +57,10 @@ void codeThread2(int x)
 
 int main()
 {
-    class config * server_configuration;
-    class log * train_logs;
-    ProtobufSyncServer * server;
 
+    class log * train_logs;
+    class config * server_configuration;
+    ProtobufSyncServer * server;
 
     startup_severity_channel_logger_mt& lg = comm_logger_c1::get();
 
@@ -79,6 +79,7 @@ int main()
     BOOST_LOG_SEV(lg, notification) << "Boost.Logging library initialized !";
 
     //then read information from xml configuration file and configure networking
+
     try
     {
         server_configuration = new config;

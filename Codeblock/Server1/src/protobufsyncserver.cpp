@@ -1,9 +1,21 @@
 #include "protobufsyncserver.hpp"
+#include "protobufservicesimpl.hpp"
 
 using namespace std;
 using namespace google::protobuf;
 
 extern volatile int g_signal_received;
+
+
+
+Session::Session()
+{
+}
+
+Session::~Session()
+{
+    //dtor
+}
 
 void ProtobufSyncServerThreads(void);
 
@@ -12,7 +24,7 @@ ProtobufSyncServer::ProtobufSyncServer() : ProtobufSyncServerThread()
     //ctor
 }
 
-ProtobufSyncServer::ProtobufSyncServer(config * &conf)
+ProtobufSyncServer::ProtobufSyncServer(config * conf)
 {
     serverconf = conf;
 }
@@ -22,7 +34,7 @@ ProtobufSyncServer::~ProtobufSyncServer()
     //dtor
     if(ProtobufSyncServerThread.joinable()) ProtobufSyncServerThread.join();
 }
-
+/*
 // PositionInformationService implementation.
 class PositionInformationImpl : public PositionInformationService
 {
@@ -42,17 +54,16 @@ public:
         RCF::RcfProtoController * rcfController = static_cast<RCF::RcfProtoController *>(controller);
         RCF::RcfProtoSession * pprotoSession = rcfController->getSession();
         RCF::RcfSession & rcfSession = rcfController->getSession()->getRcfSession();
-
         // Fill in the response.
         response->set_servername("server");
 
         // Send response back to the client.
         done->Run();
-/*
+
         bool b = rcfSession.getEnableCompression();
         cout << "compression enable ?: " << b << endl;
         const RCF::RemoteAddress & ipaddress = rcfSession.getClientAddress();
-        std::cout << "remote address: " << ipaddress.string() << std::endl;
+        BOOST_LOG_SEV(lg, notification) << "remote address: " << ipaddress.string();
         time_t timeraw = rcfSession.getConnectedAtTime();
         std::cout << "connected at time: " << ctime(&timeraw);
         RCF::SessionState & sessionState = rcfSession.getSessionState();
@@ -66,14 +77,18 @@ public:
         std::cout << "transport protocol : " << pprotoSession->getTransportProtocol() << std::endl;
         std::cout << "transport type : " << pprotoSession->getTransportType() << std::endl;
         std::cout << "session cancelled ? " << pprotoSession->IsCanceled() << std::endl;
-*/
+
     }
 };
-
+*/
 void ProtobufSyncServer::ProtobufSyncServerThreadsCode(void)   //RCF and protobuf will start other threads hence the thread(s)
 {
+
+
     startup_severity_channel_logger_mt& lg = protobufsyncserver_logger_c1::get();
     std::chrono::seconds duration(1);
+
+    this->session_.sessionactive_=true;
 
     try
     {
@@ -99,6 +114,7 @@ void ProtobufSyncServer::ProtobufSyncServerThreadsCode(void)   //RCF and protobu
             BOOST_LOG_SEV(lg, notification) << "hello from protobufsyncserver thread";
         }
         if(g_signal_received) BOOST_LOG_SEV(lg, notification) << "Signal received, terminating ProtobufSyncServerThreads";
+
     }
     catch(const RCF::Exception & e)
     {
