@@ -75,7 +75,7 @@ int main()
         return ERROR_LOG_COULD_NOT_BE_INITIALIZED;
     }
     //now we can log
-    BOOST_LOG_SEV(lg, notification) << "Program TrainStartUp started";
+    BOOST_LOG_SEV(lg, notification) << "Program Server started";
     BOOST_LOG_SEV(lg, notification) << "Boost.Logging library initialized !";
 
     //then read information from xml configuration file and configure networking

@@ -23,6 +23,7 @@
 					<Add directory="/home/denis/Dev/Codeblock/common/include" />
 					<Add directory="/home/denis/Dev/Codeblock/common/protobuf" />
 					<Add directory="/home/denis/Dev/RCFProto-src-1.0.0.3/cpp/src" />
+					<Add directory="/home/denis/Dev/Codeblock/common/Common-train-server1/include" />
 				</Compiler>
 				<Linker>
 					<Add option="`pkg-config --libs protobuf`" />
@@ -39,8 +40,6 @@
 				</Linker>
 				<ExtraCommands>
 					<Add after="cp /home/denis/Dev/Codeblock/Server1/bin/Debug/Server1 /home/train/programs/real/" />
-					<Add after="rsync -arzvhP /home/train/programs train@train221:/home/train/" />
-					<Add after="rsync -arzvhP /home/train/programs train@train211:/home/train/" />
 					<Mode after="always" />
 				</ExtraCommands>
 			</Target>
@@ -55,8 +54,8 @@
 					<Add option="-Wno-deprecated" />
 					<Add option="`pkg-config --cflags protobuf`" />
 					<Add option="-DBOOST_LOG_DYN_LINK" />
-					<Add directory="/home/denis/Dev/Codeblock/Server1/include" />
 					<Add directory="/home/denis/Dev/boost_1_57_0" />
+					<Add directory="/home/denis/Dev/Codeblock/Server1/include" />
 					<Add directory="/home/denis/Dev/RCF-2.0.1.101/include" />
 					<Add directory="/home/denis/Dev/Codeblock/common/include" />
 					<Add directory="/home/denis/Dev/Codeblock/common/protobuf" />
@@ -92,14 +91,14 @@
 		<Unit filename="../common/Common-train-server1/src/protobufservicesimpl.cpp" />
 		<Unit filename="../common/include/config.hpp" />
 		<Unit filename="../common/include/errors.hpp" />
-		<Unit filename="../common/include/log.hpp" />
 		<Unit filename="../common/include/utils.hpp" />
 		<Unit filename="../common/protobuf/TestRCFProto.pb.cc" />
 		<Unit filename="../common/protobuf/TestRCFProto.pb.h" />
 		<Unit filename="../common/src/config.cpp" />
-		<Unit filename="../common/src/log.cpp" />
 		<Unit filename="../common/src/utils.cpp" />
+		<Unit filename="include/log.hpp" />
 		<Unit filename="include/protobufsyncserver.hpp" />
+		<Unit filename="src/log.cpp" />
 		<Unit filename="src/main.cpp" />
 		<Unit filename="src/protobufsyncserver.cpp" />
 		<Extensions>

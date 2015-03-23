@@ -100,14 +100,5 @@ int main()
         std::cout << "RCF::Exception: " << e.getErrorString() << std::endl;
     }
 
-
-
-
-
-
-
-
-
-
     return 0;
 }

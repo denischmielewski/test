@@ -15,13 +15,17 @@
 					<Add option="-std=c++11" />
 					<Add option="-Wno-deprecated" />
 					<Add option="-g" />
+					<Add option="`pkg-config --cflags protobuf`" />
 					<Add option="-DBOOST_LOG_DYN_LINK" />
 					<Add directory="/home/denis/Dev/boost_1_57_0" />
 					<Add directory="/home/denis/Dev/Codeblock/Train/include" />
 					<Add directory="/home/denis/Dev/RCF-2.0.1.101/include" />
 					<Add directory="/home/denis/Dev/Codeblock/common/include" />
+					<Add directory="/home/denis/Dev/Codeblock/common/protobuf" />
+					<Add directory="/home/denis/Dev/RCFProto-src-1.0.0.3/cpp/src" />
 				</Compiler>
 				<Linker>
+					<Add option="`pkg-config --libs protobuf`" />
 					<Add library="/home/denis/Dev/boost_1_57_0/stage/lib/libboost_chrono.so" />
 					<Add library="/home/denis/Dev/boost_1_57_0/stage/lib/libboost_date_time.so" />
 					<Add library="/home/denis/Dev/boost_1_57_0/stage/lib/libboost_filesystem.so" />
@@ -31,6 +35,7 @@
 					<Add library="/home/denis/Dev/boost_1_57_0/stage/lib/libboost_system.so" />
 					<Add library="/home/denis/Dev/boost_1_57_0/stage/lib/libboost_thread.so" />
 					<Add library="/usr/lib/x86_64-linux-gnu/libpthread.so" />
+					<Add library="/usr/lib/x86_64-linux-gnu/libdl.so" />
 				</Linker>
 				<ExtraCommands>
 					<Add after="cp /home/denis/Dev/Codeblock/Train/bin/Debug/Train /home/train/programs/real/" />
@@ -46,14 +51,18 @@
 					<Add option="-O2" />
 					<Add option="-std=c++11" />
 					<Add option="-Wno-deprecated" />
+					<Add option="`pkg-config --cflags protobuf`" />
 					<Add option="-DBOOST_LOG_DYN_LINK" />
 					<Add directory="/home/denis/Dev/boost_1_57_0" />
 					<Add directory="/home/denis/Dev/Codeblock/Train/include" />
 					<Add directory="/home/denis/Dev/RCF-2.0.1.101/include" />
 					<Add directory="/home/denis/Dev/Codeblock/common/include" />
+					<Add directory="/home/denis/Dev/Codeblock/common/protobuf" />
+					<Add directory="/home/denis/Dev/RCFProto-src-1.0.0.3/cpp/src" />
 				</Compiler>
 				<Linker>
 					<Add option="-s" />
+					<Add option="`pkg-config --libs protobuf`" />
 					<Add library="/home/denis/Dev/boost_1_57_0/stage/lib/libboost_chrono.so" />
 					<Add library="/home/denis/Dev/boost_1_57_0/stage/lib/libboost_date_time.so" />
 					<Add library="/home/denis/Dev/boost_1_57_0/stage/lib/libboost_filesystem.so" />
@@ -63,6 +72,7 @@
 					<Add library="/home/denis/Dev/boost_1_57_0/stage/lib/libboost_system.so" />
 					<Add library="/home/denis/Dev/boost_1_57_0/stage/lib/libboost_thread.so" />
 					<Add library="/usr/lib/x86_64-linux-gnu/libpthread.so" />
+					<Add library="/usr/lib/x86_64-linux-gnu/libdl.so" />
 				</Linker>
 				<ExtraCommands>
 					<Add after="cp /home/denis/Dev/Codeblock/Train/bin/Release/Train /home/train/programs/real" />
@@ -73,14 +83,20 @@
 		<Compiler>
 			<Add option="-Wall" />
 		</Compiler>
+		<Unit filename="../../RCF-2.0.1.101/src/RCF/RCF.cpp" />
+		<Unit filename="../../RCFProto-src-1.0.0.3/cpp/src/RCFProto.cpp" />
 		<Unit filename="../common/include/config.hpp" />
 		<Unit filename="../common/include/errors.hpp" />
-		<Unit filename="../common/include/log.hpp" />
 		<Unit filename="../common/include/utils.hpp" />
+		<Unit filename="../common/protobuf/TestRCFProto.pb.cc" />
+		<Unit filename="../common/protobuf/TestRCFProto.pb.h" />
 		<Unit filename="../common/src/config.cpp" />
-		<Unit filename="../common/src/log.cpp" />
 		<Unit filename="../common/src/utils.cpp" />
+		<Unit filename="include/log.hpp" />
+		<Unit filename="include/protobufsyncclient.hpp" />
+		<Unit filename="src/log.cpp" />
 		<Unit filename="src/main.cpp" />
+		<Unit filename="src/protobufsyncclient.cpp" />
 		<Extensions>
 			<code_completion />
 			<debugger />
