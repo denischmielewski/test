@@ -7,6 +7,9 @@
 #include <chrono>
 #include <signal.h>
 
+#define VERSION     "0.0.1.1"
+#define DATE        "20150323"
+
 volatile int g_signal_received = 0;
 
 void sighandler( int sig, siginfo_t * siginfo, void * context)
@@ -75,7 +78,7 @@ int main()
         return ERROR_LOG_COULD_NOT_BE_INITIALIZED;
     }
     //now we can log
-    BOOST_LOG_SEV(lg, notification) << "Program Server started";
+    BOOST_LOG_SEV(lg, notification) << "Program Server started ! Version : " << VERSION << " date : " << DATE;
     BOOST_LOG_SEV(lg, notification) << "Boost.Logging library initialized !";
 
     //then read information from xml configuration file and configure networking

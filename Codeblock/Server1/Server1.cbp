@@ -17,29 +17,31 @@
 					<Add option="-Wno-deprecated" />
 					<Add option="`pkg-config --cflags protobuf`" />
 					<Add option="-DBOOST_LOG_DYN_LINK" />
-					<Add directory="/home/dev/userdev/denis/lib/boost_1_57_0" />
-					<Add directory="/home/dev/userdev/denis/Codeblock/Server1/include" />
-					<Add directory="/home/dev/userdev/denis/lib/RCF-2.0.1.101/include" />
-					<Add directory="/home/dev/userdev/denis/Codeblock/common/include" />
-					<Add directory="/home/dev/userdev/denis/Codeblock/common/protobuf" />
-					<Add directory="/home/dev/userdev/denis/lib/RCFProto-src-1.0.0.3/cpp/src" />
-					<Add directory="/home/dev/userdev/denis/Codeblock/common/Common-train-server1/include" />
+					<Add directory="../../lib/boost_1_57_0" />
+					<Add directory="include" />
+					<Add directory="../../lib/RCF-2.0.1.101/include" />
+					<Add directory="../common/include" />
+					<Add directory="../common/protobuf" />
+					<Add directory="../../lib/RCFProto-src-1.0.0.3/cpp/src" />
+					<Add directory="../common/Common-train-server1/include" />
 				</Compiler>
 				<Linker>
 					<Add option="`pkg-config --libs protobuf`" />
 					<Add library="/usr/lib/x86_64-linux-gnu/libpthread.so" />
 					<Add library="/usr/lib/x86_64-linux-gnu/libdl.so" />
-					<Add library="/home/dev/userdev/denis/lib/libboostlog/libboost_chrono.so" />
-					<Add library="/home/dev/userdev/denis/lib/libboostlog/libboost_date_time.so" />
-					<Add library="/home/dev/userdev/denis/lib/libboostlog/libboost_filesystem.so" />
-					<Add library="/home/dev/userdev/denis/lib/libboostlog/libboost_log.so" />
-					<Add library="/home/dev/userdev/denis/lib/libboostlog/libboost_log_setup.so" />
-					<Add library="/home/dev/userdev/denis/lib/libboostlog/libboost_regex.so" />
-					<Add library="/home/dev/userdev/denis/lib/libboostlog/libboost_system.so" />
-					<Add library="/home/dev/userdev/denis/lib/libboostlog/libboost_thread.so" />
+					<Add library="../../lib/libboostlog/libboost_chrono.so" />
+					<Add library="../../lib/libboostlog/libboost_date_time.so" />
+					<Add library="../../lib/libboostlog/libboost_filesystem.so" />
+					<Add library="../../lib/libboostlog/libboost_log.so" />
+					<Add library="../../lib/libboostlog/libboost_log_setup.so" />
+					<Add library="../../lib/libboostlog/libboost_regex.so" />
+					<Add library="../../lib/libboostlog/libboost_system.so" />
+					<Add library="../../lib/libboostlog/libboost_thread.so" />
 				</Linker>
 				<ExtraCommands>
-					<Add after="cp /home/dev/userdev/denis/Codeblock/Server1/bin/Debug/Server1 /home/train/programs/real/" />
+					<Add after="rsync -avz ./bin/Debug/Server1 /home/train/programs/real/" />
+					<Add after="rsync -arzvhP ../../lib/libprotobuf/libprotobuf.so* /home/train/programs/lib/libprotobuf/" />
+					<Add after="rsync -arzvhP ../../lib/libboostlog/libboost*.so /home/train/programs/lib/libboostlog/" />
 					<Mode after="always" />
 				</ExtraCommands>
 			</Target>
@@ -54,30 +56,32 @@
 					<Add option="-Wno-deprecated" />
 					<Add option="`pkg-config --cflags protobuf`" />
 					<Add option="-DBOOST_LOG_DYN_LINK" />
-					<Add directory="/home/dev/userdev/denis/lib/boost_1_57_0" />
-					<Add directory="/home/dev/userdev/denis/Codeblock/Server1/include" />
-					<Add directory="/home/dev/userdev/denis/lib/RCF-2.0.1.101/include" />
-					<Add directory="/home/dev/userdev/denis/Codeblock/common/include" />
-					<Add directory="/home/dev/userdev/denis/Codeblock/common/protobuf" />
-					<Add directory="/home/dev/userdev/denis/lib/RCFProto-src-1.0.0.3/cpp/src" />
-					<Add directory="/home/dev/userdev/denis/Codeblock/common/Common-train-server1/include" />
+					<Add directory="../../lib/boost_1_57_0" />
+					<Add directory="include" />
+					<Add directory="../../lib/RCF-2.0.1.101/include" />
+					<Add directory="../common/include" />
+					<Add directory="../common/protobuf" />
+					<Add directory="../../lib/RCFProto-src-1.0.0.3/cpp/src" />
+					<Add directory="../common/Common-train-server1/include" />
 				</Compiler>
 				<Linker>
 					<Add option="-s" />
-					<Add option="`pkg-config --libs protobuf`" />
 					<Add library="/usr/lib/x86_64-linux-gnu/libpthread.so" />
 					<Add library="/usr/lib/x86_64-linux-gnu/libdl.so" />
-					<Add library="/home/dev/userdev/denis/lib/libboostlog/libboost_chrono.so" />
-					<Add library="/home/dev/userdev/denis/lib/libboostlog/libboost_date_time.so" />
-					<Add library="/home/dev/userdev/denis/lib/libboostlog/libboost_filesystem.so" />
-					<Add library="/home/dev/userdev/denis/lib/libboostlog/libboost_log.so" />
-					<Add library="/home/dev/userdev/denis/lib/libboostlog/libboost_log_setup.so" />
-					<Add library="/home/dev/userdev/denis/lib/libboostlog/libboost_regex.so" />
-					<Add library="/home/dev/userdev/denis/lib/libboostlog/libboost_system.so" />
-					<Add library="/home/dev/userdev/denis/lib/libboostlog/libboost_thread.so" />
+					<Add library="../../lib/libboostlog/libboost_chrono.so" />
+					<Add library="../../lib/libboostlog/libboost_date_time.so" />
+					<Add library="../../lib/libboostlog/libboost_filesystem.so" />
+					<Add library="../../lib/libboostlog/libboost_log.so" />
+					<Add library="../../lib/libboostlog/libboost_log_setup.so" />
+					<Add library="../../lib/libboostlog/libboost_regex.so" />
+					<Add library="../../lib/libboostlog/libboost_system.so" />
+					<Add library="../../lib/libboostlog/libboost_thread.so" />
+					<Add library="../../lib/libprotobuf/libprotobuf.so" />
 				</Linker>
 				<ExtraCommands>
-					<Add after="cp /home/dev/userdev/denis/Codeblock/Server1/bin/Release/Server1 /home/train/programs/real/" />
+					<Add after="rsync -avz ./bin/Release/Server1 /home/train/programs/real/" />
+					<Add after="rsync -arzvhP ../../lib/libprotobuf/libprotobuf.so* /home/train/programs/lib/libprotobuf/" />
+					<Add after="rsync -arzvhP ../../lib/libboostlog/libboost*.so /home/train/programs/lib/libboostlog/" />
 					<Mode after="always" />
 				</ExtraCommands>
 			</Target>
