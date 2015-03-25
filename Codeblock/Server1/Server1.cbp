@@ -79,9 +79,7 @@
 					<Add library="../../lib/libprotobuf/libprotobuf.so" />
 				</Linker>
 				<ExtraCommands>
-					<Add after="rsync -avz ./bin/Release/Server1 /home/train/programs/real/" />
-					<Add after="rsync -arzvhP ../../lib/libprotobuf/libprotobuf.so* /home/train/programs/lib/libprotobuf/" />
-					<Add after="rsync -arzvhP ../../lib/libboostlog/libboost*.so /home/train/programs/lib/libboostlog/" />
+					<Add after="../../batch/deploy_Server1_from_Codeblock_postbuild.sh" />
 					<Mode after="always" />
 				</ExtraCommands>
 			</Target>

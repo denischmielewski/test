@@ -1,0 +1,74 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<!-- This files contains all information for train configuration at startup -->
+
+<TRAIN_STARTUP_CONFIG>
+
+	<!-- this parameter defines the size for a buffer used in linux system calls -->	
+	<LINUX_SYSTEM_CALL_BUFFER_SIZE>4096</LINUX_SYSTEM_CALL_BUFFER_SIZE>
+
+	<!-- location and name of file that stores operational data (like train position...) -->	
+	<OPERATIONAL_DATA_XML_FILE_LOCATION>
+		/x-train/config/Local/operationalData.xml
+	</OPERATIONAL_DATA_XML_FILE_LOCATION>
+
+	<!-- train network configuration -->
+	<TRAINS_IP_CONFIG>
+		<dev-VM> <!-- Hostname of the linux OS, 1024 bytes MAX !!! -->
+			<IP_ADDRESSES_AND_PORT>
+				<ADAPTER>eth0</ADAPTER>
+				<IP>192.168.1.21/24</IP>
+				<PORT>44044</PORT>
+			</IP_ADDRESSES_AND_PORT>
+		</dev-VM>
+		<Train191> <!-- Hostname of the linux OS, 1024 bytes MAX !!! -->
+			<IP_ADDRESSES_AND_PORT>
+				<ADAPTER>eth0</ADAPTER>
+				<IP>192.168.1.191/24</IP>
+				<PORT>44044</PORT>
+			</IP_ADDRESSES_AND_PORT>
+		</Train191>		
+		<Train201> <!-- Hostname of the linux OS, 1024 bytes MAX !!! -->
+			<IP_ADDRESSES_AND_PORT>
+				<ADAPTER>eth0</ADAPTER>
+				<IP>192.168.1.201/24</IP>
+				<PORT>44044</PORT>
+			</IP_ADDRESSES_AND_PORT>
+		</Train201>		
+		<Train211> <!-- Hostname of the linux OS, 1024 bytes MAX !!! -->
+			<IP_ADDRESSES_AND_PORT>
+				<ADAPTER>eth0</ADAPTER>
+				<IP>192.168.1.211/24</IP>
+				<PORT>44044</PORT>
+			</IP_ADDRESSES_AND_PORT>
+		</Train211>
+		<Train221> <!-- Hostname of the linux OS, 1024 bytes MAX !!! -->
+			<IP_ADDRESSES_AND_PORT>
+				<ADAPTER>eth0</ADAPTER>
+				<IP>192.168.1.221/24</IP>
+				<PORT>44044</PORT>
+			</IP_ADDRESSES_AND_PORT>
+		</Train221>
+		<SERVER1> <!-- Hostname of the linux OS, 1024 bytes MAX !!! -->
+			<IP_ADDRESSES_AND_PORT>
+				<ADAPTER>eth0</ADAPTER>
+				<IP>192.168.1.11/24</IP>
+				<PORT>44044</PORT>
+			</IP_ADDRESSES_AND_PORT>
+		</SERVER1>
+		<SERVER2> <!-- Hostname of the linux OS, 1024 bytes MAX !!! -->
+			<IP_ADDRESSES_AND_PORT>
+				<ADAPTER>eth0</ADAPTER>
+				<IP>192.168.1.12/24</IP>
+				<PORT>44044</PORT>
+			</IP_ADDRESSES_AND_PORT>
+		</SERVER2>
+		<SERVER3> <!-- Hostname of the linux OS, 1024 bytes MAX !!! -->
+			<IP_ADDRESSES_AND_PORT>
+				<ADAPTER>eth0</ADAPTER>
+				<IP>192.168.1.13/24</IP>
+				<PORT>44044</PORT>
+			</IP_ADDRESSES_AND_PORT>
+		</SERVER3>
+	</TRAINS_IP_CONFIG>
+</TRAIN_STARTUP_CONFIG>

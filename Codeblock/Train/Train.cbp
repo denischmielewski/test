@@ -84,13 +84,7 @@
 					<Add library="../../lib/libboostlog/libboost_thread.so" />
 				</Linker>
 				<ExtraCommands>
-					<Add after="rsync -avz ./bin/Release/Train /home/train/programs/real" />
-					<Add after="rsync -avz ./bin/Release/Train train@train221:/home/train/programs/real/" />
-					<Add after="rsync -avz ./bin/Release/Train train@train211:/home/train/programs/real/" />
-					<Add after="rsync -arzvhP ../../lib/libprotobuf/libprotobuf.so* train@train221:/home/train/programs/lib/libprotobuf/" />
-					<Add after="rsync -arzvhP ../../lib/libboostlog/libboost*.so train@train221:/home/train/programs/lib/libboostlog/" />
-					<Add after="rsync -arzvhP ../../lib/libprotobuf/libprotobuf.so* train@train211:/home/train/programs/lib/libprotobuf/" />
-					<Add after="rsync -arzvhP ../../lib/libboostlog/libboost*.so train@train211:/home/train/programs/lib/libboostlog/" />
+					<Add after="../../batch/deploy_Train_from_Codeblock_postbuild.sh" />
 					<Mode after="always" />
 				</ExtraCommands>
 			</Target>
