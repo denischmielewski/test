@@ -2,15 +2,17 @@
 #include "config.hpp"
 #include "log.hpp"
 #include "protobufsyncserver.hpp"
+#include "TrainSession.hpp"
 #include <iostream>
 #include <thread>
 #include <chrono>
 #include <signal.h>
+#include <unordered_map>
 
-#define VERSION     "0.0.1.1"
-#define DATE        "20150323"
+#define VERSION     "0.0.1.2"
 
 volatile int g_signal_received = 0;
+std::unordered_map<std::string, TrainSession>    g_trains;
 
 void sighandler( int sig, siginfo_t * siginfo, void * context)
 {
@@ -78,7 +80,7 @@ int main()
         return ERROR_LOG_COULD_NOT_BE_INITIALIZED;
     }
     //now we can log
-    BOOST_LOG_SEV(lg, notification) << "Program Server started ! Version : " << VERSION << " date : " << DATE;
+    BOOST_LOG_SEV(lg, notification) << "Program Server started ! Version : " << VERSION << " date : " << __DATE__ << ":" << __TIME__;
     BOOST_LOG_SEV(lg, notification) << "Boost.Logging library initialized !";
 
     //then read information from xml configuration file and configure networking
@@ -118,13 +120,40 @@ int main()
     if(thread2.joinable()) thread2.join();               // pauses until second finishes
     server->Join();
 
-    BOOST_LOG_SEV(lg, notification) << "All threads completed.";
+    BOOST_LOG_SEV(lg, notification) << "All threads completed." << std::endl;
 
     delete(server);
     delete(server_configuration);
     delete(train_logs);
 
-    BOOST_LOG_SEV(lg, notification) << "EVERYTHING TERMNATED PROPERLY !!!";
+    //Log Summary of communication sessions with trains
+    BOOST_LOG_SEV(lg, notification) << "train communication sessions summary :" << std::endl;
+    int i = 0;
+    for ( auto it = g_trains.begin(); it != g_trains.end(); ++it ){i++;};
+    BOOST_LOG_SEV(lg, notification) << "number of sessions :" << i;
+    for ( auto it = g_trains.begin(); it != g_trains.end(); ++it )
+    {
+        BOOST_LOG_SEV(lg, notification) << "Train IP address :" << it->first;
+        TrainSession trainsession = it->second;
+        TrainCommSession & traincommsession = trainsession.GetTrainCommSessionRef();
+        if(traincommsession.TryLockCommSessionMutexFor(100))
+        {
+            time_t timeraw = traincommsession.GetSessionConnectionTime();
+            BOOST_LOG_SEV(lg, notification) << "Session connection at : " << ctime(&timeraw);
+            BOOST_LOG_SEV(lg, notification) << "Session connection duration : " << traincommsession.GetSessionConnectionDuration();
+            BOOST_LOG_SEV(lg, notification) << "Session remote calls count : " << traincommsession.GetSessionRemoteCallCount();
+            BOOST_LOG_SEV(lg, notification) << "Session total bytes received : " << traincommsession.GetSessionTotalBytesReceived();
+            BOOST_LOG_SEV(lg, notification) << "Session total bytes sent : " << traincommsession.GetSessionTotalBytesSent();
+            BOOST_LOG_SEV(lg, notification) << "Session connection lost count : " << traincommsession.GetSessionConnectionLossCount();
+            traincommsession.UnlockCommSessionMutex();
+        }
+        else
+        {
+            BOOST_LOG_SEV(lg, warning) << "Train Communication Session Lock failed !!!";
+        }
+    }
+
+    BOOST_LOG_SEV(lg, notification) << "EVERYTHING TERMINATED PROPERLY !!!";
     //return NO_ERROR;
     return NO_ERROR;
 }

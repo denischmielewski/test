@@ -24,6 +24,7 @@
 					<Add directory="../common/protobuf" />
 					<Add directory="../../lib/RCFProto-src-1.0.0.3/cpp/src" />
 					<Add directory="../common/Common-train-server1/include" />
+					<Add directory="Codeblock/Server1/include" />
 				</Compiler>
 				<Linker>
 					<Add option="`pkg-config --libs protobuf`" />
@@ -38,12 +39,6 @@
 					<Add library="../../lib/libboostlog/libboost_system.so" />
 					<Add library="../../lib/libboostlog/libboost_thread.so" />
 				</Linker>
-				<ExtraCommands>
-					<Add after="rsync -avz ./bin/Debug/Server1 /home/train/programs/real/" />
-					<Add after="rsync -arzvhP ../../lib/libprotobuf/libprotobuf.so* /home/train/programs/lib/libprotobuf/" />
-					<Add after="rsync -arzvhP ../../lib/libboostlog/libboost*.so /home/train/programs/lib/libboostlog/" />
-					<Mode after="always" />
-				</ExtraCommands>
 			</Target>
 			<Target title="Release">
 				<Option output="bin/Release/Server1" prefix_auto="1" extension_auto="1" />
@@ -63,6 +58,7 @@
 					<Add directory="../common/protobuf" />
 					<Add directory="../../lib/RCFProto-src-1.0.0.3/cpp/src" />
 					<Add directory="../common/Common-train-server1/include" />
+					<Add directory="Codeblock/Server1/include" />
 				</Compiler>
 				<Linker>
 					<Add option="-s" />
@@ -98,8 +94,14 @@
 		<Unit filename="../common/protobuf/TestRCFProto.pb.h" />
 		<Unit filename="../common/src/config.cpp" />
 		<Unit filename="../common/src/utils.cpp" />
+		<Unit filename="include/TrainCommSession.hpp" />
+		<Unit filename="include/TrainOperationSession.hpp" />
+		<Unit filename="include/TrainSession.hpp" />
 		<Unit filename="include/log.hpp" />
 		<Unit filename="include/protobufsyncserver.hpp" />
+		<Unit filename="src/TrainCommSession.cpp" />
+		<Unit filename="src/TrainOperationSession.cpp" />
+		<Unit filename="src/TrainSession.cpp" />
 		<Unit filename="src/log.cpp" />
 		<Unit filename="src/main.cpp" />
 		<Unit filename="src/protobufsyncserver.cpp" />

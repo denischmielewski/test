@@ -26,7 +26,7 @@ class ProtobufSyncServer
 {
     public:
         ProtobufSyncServer();
-        ProtobufSyncServer(config *);
+        ProtobufSyncServer(config const *);
         ~ProtobufSyncServer();
         void ProtobufSyncServerThreadsCode(void);
         void Start()

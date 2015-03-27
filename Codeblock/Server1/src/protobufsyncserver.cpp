@@ -24,7 +24,7 @@ ProtobufSyncServer::ProtobufSyncServer() : ProtobufSyncServerThread()
     //ctor
 }
 
-ProtobufSyncServer::ProtobufSyncServer(config * conf)
+ProtobufSyncServer::ProtobufSyncServer(config const * conf)
 {
     serverconf = conf;
 }
