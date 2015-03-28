@@ -13,6 +13,7 @@
 
 volatile int g_signal_received = 0;
 std::unordered_map<std::string, TrainSession>    g_trains;
+uint16_t g_commSessionMutexLockTimeoutMilliseconds = 111;
 
 void sighandler( int sig, siginfo_t * siginfo, void * context)
 {
@@ -62,39 +63,52 @@ void codeThread2(int x)
 
 int main()
 {
-
-    class log * train_logs;
+#warning TODO (dev#5#15-03-27): warning: variable ‘train_logs_after_configread’ set but not used [-Wunused-but-set-variable]|
+    class log * train_logs_start, * train_logs_after_configread;
     class config * server_configuration;
     ProtobufSyncServer * server;
 
     startup_severity_channel_logger_mt& lg = comm_logger_c1::get();
 
-    //First setup logs capability
+    //First setup logs capability with raw parameters. We want to be able to inspect configuration in case of problem !
     try
     {
-        train_logs = new class log;
+        train_logs_start = new class log;
+        try
+        {
+            server_configuration = new config;
+            if (server_configuration->result != NO_ERROR){throw (-1);}
+            else BOOST_LOG_SEV(lg, notification) << "Startup configuration terminated properly !!!";
+        }
+        catch(int e)
+        {
+            BOOST_LOG_SEV(lg, critical) << "Reading config file failed !!!";
+            return ERROR_CONFIG_FILE_HANDLING;
+        }
+        train_logs_start->RemoveStartupSink();
+        //delete(train_logs_start);
+
     }
     catch(const std::exception& e)
     {
         std::cout << "Initialization of log system failed !!!" << e.what() << std::endl;
         return ERROR_LOG_COULD_NOT_BE_INITIALIZED;
     }
+
+    //now we can confige logging as specified in xml configuration files
+    try
+    {
+        train_logs_after_configread = new class log(server_configuration);
+    }
+    catch(const std::exception& e)
+    {
+        std::cout << "Initialization of log system after config failed !!!" << e.what() << std::endl;
+        return ERROR_LOG_COULD_NOT_BE_INITIALIZED;
+    }
+
     //now we can log
     BOOST_LOG_SEV(lg, notification) << "Program Server started ! Version : " << VERSION << " date : " << __DATE__ << ":" << __TIME__;
     BOOST_LOG_SEV(lg, notification) << "Boost.Logging library initialized !";
-
-    //then read information from xml configuration file and configure networking
-
-    try
-    {
-        server_configuration = new config;
-        if (server_configuration->result != NO_ERROR){throw (-1);}
-    }
-    catch(int e)
-    {
-        BOOST_LOG_SEV(lg, critical) << "Reading config file failed !!!";
-        return ERROR_CONFIG_FILE_HANDLING;
-    }
 
     config_signal_management();
 
@@ -124,7 +138,6 @@ int main()
 
     delete(server);
     delete(server_configuration);
-    delete(train_logs);
 
     //Log Summary of communication sessions with trains
     BOOST_LOG_SEV(lg, notification) << "train communication sessions summary :" << std::endl;
@@ -136,9 +149,10 @@ int main()
         BOOST_LOG_SEV(lg, notification) << "Train IP address :" << it->first;
         TrainSession trainsession = it->second;
         TrainCommSession & traincommsession = trainsession.GetTrainCommSessionRef();
-        if(traincommsession.TryLockCommSessionMutexFor(100))
+        if(traincommsession.TryLockCommSessionMutexFor(server_configuration->commSessionMutexLockTimeoutMilliseconds_))
         {
             time_t timeraw = traincommsession.GetSessionConnectionTime();
+#warning TODO (dev#1#15-03-27): the following line add a carriage return in log file.
             BOOST_LOG_SEV(lg, notification) << "Session connection at : " << ctime(&timeraw);
             BOOST_LOG_SEV(lg, notification) << "Session connection duration : " << traincommsession.GetSessionConnectionDuration();
             BOOST_LOG_SEV(lg, notification) << "Session remote calls count : " << traincommsession.GetSessionRemoteCallCount();
@@ -154,6 +168,8 @@ int main()
     }
 
     BOOST_LOG_SEV(lg, notification) << "EVERYTHING TERMINATED PROPERLY !!!";
+    delete(train_logs_after_configread);
+
     //return NO_ERROR;
     return NO_ERROR;
 }

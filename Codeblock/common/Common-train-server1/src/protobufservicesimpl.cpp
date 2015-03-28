@@ -7,6 +7,8 @@ using namespace std;
 using namespace google::protobuf;
 
 extern std::unordered_map<std::string, TrainSession>    g_trains;
+extern uint16_t g_commSessionMutexLockTimeoutMilliseconds;
+
 
 // PositionInformation() method implementation.
 void PositionInformationImpl::PositionInformation(  RpcController *                             controller,
@@ -30,7 +32,7 @@ void PositionInformationImpl::PositionInformation(  RpcController *             
     //retrieve a ref to train comm session
     TrainCommSession & traincommsession = trainSession.GetTrainCommSessionRef();
 
-    if(traincommsession.TryLockCommSessionMutexFor(100))
+    if(traincommsession.TryLockCommSessionMutexFor(g_commSessionMutexLockTimeoutMilliseconds))
     {
         traincommsession.SetIpAddress(rcfSession.getClientAddress().string());
         BOOST_LOG_SEV(lg, notification) << "remote address: " << traincommsession.GetIpAddress();
@@ -46,25 +48,7 @@ void PositionInformationImpl::PositionInformation(  RpcController *             
     {
         BOOST_LOG_SEV(lg, warning) << "Train Communication Session Lock failed !!!";
     }
-/*
-    bool b = rcfSession.getEnableCompression();
-    cout << "compression enable ?: " << b << endl;
-    const RCF::RemoteAddress & ipaddress = rcfSession.getClientAddress();
-    BOOST_LOG_SEV(lg, notification) << "remote address: " << ipaddress.string();
-    time_t timeraw = rcfSession.getConnectedAtTime();
-    std::cout << "connected at time: " << ctime(&timeraw);
-    RCF::SessionState & sessionState = rcfSession.getSessionState();
-    b = sessionState.isConnected();
-    cout << "Session active ?: " << b << endl;
-    std::cout << "request user data: " << rcfSession.getRequestUserData() << std::endl;
-    std::cout << "connection duration: " << pprotoSession->getConnectionDuration() << std::endl;
-    std::cout << "remote call count: " << pprotoSession->getRemoteCallCount() << std::endl;
-    std::cout << "total bytes received: " << pprotoSession->getTotalBytesReceived() << std::endl;
-    std::cout << "total bytes sent: " << pprotoSession->getTotalBytesSent() << std::endl;
-    std::cout << "transport protocol : " << pprotoSession->getTransportProtocol() << std::endl;
-    std::cout << "transport type : " << pprotoSession->getTransportType() << std::endl;
-    std::cout << "session cancelled ? " << pprotoSession->IsCanceled() << std::endl;
-*/
+
     // Send response back to the client.
     done->Run();
 }

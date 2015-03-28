@@ -49,6 +49,7 @@ void ProtobufSyncServer::ProtobufSyncServerThreadsCode(void)   //RCF and protobu
         RCF::enableLogging( RCF::LogToFile("/home/train/programs/real/rcfproto.log"), 4, "");
         BOOST_LOG_SEV(lg, notification) << "RCF init !";
         // Create server.
+// TODO (dev#5#15-03-27): to make configurable
         RCF::RcfProtoServer server( RCF::TcpEndpoint("0.0.0.0", 50001) );
         BOOST_LOG_SEV(lg, notification) << "Protobuf server created !";
         // Bind Protobuf service.

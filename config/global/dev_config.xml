@@ -3,13 +3,13 @@
 <!-- This files contains development/factory parameters -->
 <!-- Users shall not modify these parameters unless instructed by the support team !!! -->
 
-<TRAIN_STARTUP_CONFIG>
+<TRAIN_CONFIG_DEV>
 	<!-- this parameter defines the size for a buffer used in linux system calls -->
 	<!-- 4096 should always be enough -->
-	<LINUX_SYSTEM_CALL_BUFFER_SIZE>4096</LINUX_SYSTEM_CALL_BUFFER_SIZE>
-	<!-- these parameters defines how long (milliseconds) a thread tries to lock on a comm or operationsession mutex -->
+	<LINUX_SYSTEM_CALL_BUFFER_SIZE>4096</LINUX_SYSTEM_CALL_BUFFER_SIZE>	<!-- Max 65535 -->
+	<!-- these parameters defines how long (milliseconds) a thread tries to lock on a comm or operation session mutex -->
 	<COMM_SESSION_MUTEX_LOCK_TIMEOUT>100</COMM_SESSION_MUTEX_LOCK_TIMEOUT>
 	<OPERATION_SESSION_MUTEX_LOCK_TIMEOUT>100</OPERATION_SESSION_MUTEX_LOCK_TIMEOUT>
 	<!-- this parameter defines the communication threads sleep duration in milliseconds-->
 	<COMMUNICATION_THREAD_SLEEP_DURATION>100</COMMUNICATION_THREAD_SLEEP_DURATION>
-</TRAIN_STARTUP_CONFIG>
+</TRAIN_CONFIG_DEV>

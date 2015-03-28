@@ -15,16 +15,15 @@
 #include <iostream>
 #include <boost/log/expressions.hpp>
 #include <boost/log/sources/severity_logger.hpp>
-//#include <boost/log/sources/record_ostream.hpp>
-//#include <boost/log/utility/formatting_ostream.hpp>
-//#include <boost/log/utility/manipulators/to_log.hpp>
 #include <boost/log/utility/setup/console.hpp>
 #include <boost/log/utility/setup/common_attributes.hpp>
+
+#include "config.hpp"
 
 namespace logging = boost::log;
 //namespace attrs = boost::log::attributes;
 namespace src = boost::log::sources;
-//namespace sinks = boost::log::sinks;
+namespace sinks = boost::log::sinks;
 //namespace expr = boost::log::expressions;
 namespace keywords = boost::log::keywords;
 
@@ -33,6 +32,7 @@ namespace keywords = boost::log::keywords;
 enum severity_level
 {
     normal = 0,
+// TODO (dev#1#15-03-27): Add several notification level
     notification,
     warning,
     error,
@@ -68,6 +68,8 @@ typedef src::severity_channel_logger_mt<
     std::string         // the type of the channel name
 > startup_severity_channel_logger_mt;
 
+typedef sinks::synchronous_sink< sinks::text_file_backend > sink_t;
+
 BOOST_LOG_INLINE_GLOBAL_LOGGER_INIT(startup_logger_c1, startup_severity_channel_logger_mt)
 {
     // Specify the channel name on construction, similarly as with the channel_logger
@@ -90,7 +92,11 @@ class log
 {
     public:
         log();
+        log(config const *);
         virtual ~log();
+        boost::shared_ptr< sink_t > startupSink;
+        boost::shared_ptr< sink_t > afterConfigSink;
+        void RemoveStartupSink(void);
     protected:
     private:
 };

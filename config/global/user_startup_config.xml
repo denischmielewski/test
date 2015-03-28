@@ -4,8 +4,16 @@
 
 <TRAIN_STARTUP_CONFIG>
 
-	<!-- this parameter defines the size for a buffer used in linux system calls -->	
-	<LINUX_SYSTEM_CALL_BUFFER_SIZE>4096</LINUX_SYSTEM_CALL_BUFFER_SIZE>
+	<!-- parameters for logging -->
+	<LOG>
+		<LOG_COLLECTOR_FOLDER>/home/train/logs</LOG_COLLECTOR_FOLDER>
+		<LOG_COLLECTOR_FOLDER_MAX_SIZE_IN_MBYTES>100</LOG_COLLECTOR_FOLDER_MAX_SIZE_IN_MBYTES>	<!-- some log files will be deleted to get that maximum size -->
+		<DRIVE_MIN_FREE_SPACE_IN_MBYTES>1024</DRIVE_MIN_FREE_SPACE_IN_MBYTES> <!-- some log files will be deleted to get that minimum size -->
+		<LOG_AUTO_FLUSH>NO</LOG_AUTO_FLUSH>	<!-- YES = write to file after each log -->
+		<MAX_LOG_FILE_SIZE_IN_KBYTES>100</MAX_LOG_FILE_SIZE_IN_KBYTES>
+		<LOG_LEVEL>notification</LOG_LEVEL>
+	</LOG>	
+
 
 	<!-- location and name of file that stores operational data (like train position...) -->	
 	<OPERATIONAL_DATA_XML_FILE_LOCATION>
