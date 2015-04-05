@@ -24,7 +24,14 @@ const ::google::protobuf::internal::GeneratedMessageReflection*
 const ::google::protobuf::Descriptor* PositionInformationReceive_descriptor_ = NULL;
 const ::google::protobuf::internal::GeneratedMessageReflection*
   PositionInformationReceive_reflection_ = NULL;
+const ::google::protobuf::Descriptor* SetOperationModeCommand_descriptor_ = NULL;
+const ::google::protobuf::internal::GeneratedMessageReflection*
+  SetOperationModeCommand_reflection_ = NULL;
+const ::google::protobuf::Descriptor* SetOperationModeResponse_descriptor_ = NULL;
+const ::google::protobuf::internal::GeneratedMessageReflection*
+  SetOperationModeResponse_reflection_ = NULL;
 const ::google::protobuf::ServiceDescriptor* PositionInformationService_descriptor_ = NULL;
+const ::google::protobuf::ServiceDescriptor* SetOperationModeService_descriptor_ = NULL;
 
 }  // namespace
 
@@ -67,7 +74,39 @@ void protobuf_AssignDesc_TestRCFProto_2eproto() {
       ::google::protobuf::DescriptorPool::generated_pool(),
       ::google::protobuf::MessageFactory::generated_factory(),
       sizeof(PositionInformationReceive));
+  SetOperationModeCommand_descriptor_ = file->message_type(2);
+  static const int SetOperationModeCommand_offsets_[1] = {
+    GOOGLE_PROTOBUF_GENERATED_MESSAGE_FIELD_OFFSET(SetOperationModeCommand, mode_),
+  };
+  SetOperationModeCommand_reflection_ =
+    new ::google::protobuf::internal::GeneratedMessageReflection(
+      SetOperationModeCommand_descriptor_,
+      SetOperationModeCommand::default_instance_,
+      SetOperationModeCommand_offsets_,
+      GOOGLE_PROTOBUF_GENERATED_MESSAGE_FIELD_OFFSET(SetOperationModeCommand, _has_bits_[0]),
+      GOOGLE_PROTOBUF_GENERATED_MESSAGE_FIELD_OFFSET(SetOperationModeCommand, _unknown_fields_),
+      -1,
+      ::google::protobuf::DescriptorPool::generated_pool(),
+      ::google::protobuf::MessageFactory::generated_factory(),
+      sizeof(SetOperationModeCommand));
+  SetOperationModeResponse_descriptor_ = file->message_type(3);
+  static const int SetOperationModeResponse_offsets_[2] = {
+    GOOGLE_PROTOBUF_GENERATED_MESSAGE_FIELD_OFFSET(SetOperationModeResponse, previousmode_),
+    GOOGLE_PROTOBUF_GENERATED_MESSAGE_FIELD_OFFSET(SetOperationModeResponse, newmode_),
+  };
+  SetOperationModeResponse_reflection_ =
+    new ::google::protobuf::internal::GeneratedMessageReflection(
+      SetOperationModeResponse_descriptor_,
+      SetOperationModeResponse::default_instance_,
+      SetOperationModeResponse_offsets_,
+      GOOGLE_PROTOBUF_GENERATED_MESSAGE_FIELD_OFFSET(SetOperationModeResponse, _has_bits_[0]),
+      GOOGLE_PROTOBUF_GENERATED_MESSAGE_FIELD_OFFSET(SetOperationModeResponse, _unknown_fields_),
+      -1,
+      ::google::protobuf::DescriptorPool::generated_pool(),
+      ::google::protobuf::MessageFactory::generated_factory(),
+      sizeof(SetOperationModeResponse));
   PositionInformationService_descriptor_ = file->service(0);
+  SetOperationModeService_descriptor_ = file->service(1);
 }
 
 namespace {
@@ -84,6 +123,10 @@ void protobuf_RegisterTypes(const ::std::string&) {
     PositionInformationTransmit_descriptor_, &PositionInformationTransmit::default_instance());
   ::google::protobuf::MessageFactory::InternalRegisterGeneratedMessage(
     PositionInformationReceive_descriptor_, &PositionInformationReceive::default_instance());
+  ::google::protobuf::MessageFactory::InternalRegisterGeneratedMessage(
+    SetOperationModeCommand_descriptor_, &SetOperationModeCommand::default_instance());
+  ::google::protobuf::MessageFactory::InternalRegisterGeneratedMessage(
+    SetOperationModeResponse_descriptor_, &SetOperationModeResponse::default_instance());
 }
 
 }  // namespace
@@ -93,6 +136,10 @@ void protobuf_ShutdownFile_TestRCFProto_2eproto() {
   delete PositionInformationTransmit_reflection_;
   delete PositionInformationReceive::default_instance_;
   delete PositionInformationReceive_reflection_;
+  delete SetOperationModeCommand::default_instance_;
+  delete SetOperationModeCommand_reflection_;
+  delete SetOperationModeResponse::default_instance_;
+  delete SetOperationModeResponse_reflection_;
 }
 
 void protobuf_AddDesc_TestRCFProto_2eproto() {
@@ -103,18 +150,28 @@ void protobuf_AddDesc_TestRCFProto_2eproto() {
 
   ::google::protobuf::DescriptorPool::InternalAddGeneratedFile(
     "\n\022TestRCFProto.proto\"P\n\033PositionInformat"
-    "ionTransmit\022\017\n\007trainID\030\001 \002(\t\022\020\n\010position"
+    "ionTransmit\022\017\n\007trainid\030\001 \002(\t\022\020\n\010position"
     "\030\002 \002(\t\022\016\n\006status\030\003 \001(\005\"0\n\032PositionInform"
-    "ationReceive\022\022\n\nserverName\030\002 \002(\t2n\n\032Posi"
-    "tionInformationService\022P\n\023PositionInform"
-    "ation\022\034.PositionInformationTransmit\032\033.Po"
-    "sitionInformationReceiveB\t\200\001\001\210\001\001\220\001\001", 275);
+    "ationReceive\022\022\n\nservername\030\002 \002(\t\"\'\n\027SetO"
+    "perationModeCommand\022\014\n\004mode\030\001 \002(\t\"A\n\030Set"
+    "OperationModeResponse\022\024\n\014previousmode\030\001 "
+    "\002(\t\022\017\n\007newmode\030\002 \002(\t2n\n\032PositionInformat"
+    "ionService\022P\n\023PositionInformation\022\034.Posi"
+    "tionInformationTransmit\032\033.PositionInform"
+    "ationReceive2b\n\027SetOperationModeService\022"
+    "G\n\020SetOperationMode\022\030.SetOperationModeCo"
+    "mmand\032\031.SetOperationModeResponseB\t\200\001\001\210\001\001"
+    "\220\001\001", 483);
   ::google::protobuf::MessageFactory::InternalRegisterGeneratedFile(
     "TestRCFProto.proto", &protobuf_RegisterTypes);
   PositionInformationTransmit::default_instance_ = new PositionInformationTransmit();
   PositionInformationReceive::default_instance_ = new PositionInformationReceive();
+  SetOperationModeCommand::default_instance_ = new SetOperationModeCommand();
+  SetOperationModeResponse::default_instance_ = new SetOperationModeResponse();
   PositionInformationTransmit::default_instance_->InitAsDefaultInstance();
   PositionInformationReceive::default_instance_->InitAsDefaultInstance();
+  SetOperationModeCommand::default_instance_->InitAsDefaultInstance();
+  SetOperationModeResponse::default_instance_->InitAsDefaultInstance();
   ::google::protobuf::internal::OnShutdown(&protobuf_ShutdownFile_TestRCFProto_2eproto);
 }
 
@@ -128,7 +185,7 @@ struct StaticDescriptorInitializer_TestRCFProto_2eproto {
 // ===================================================================
 
 #ifndef _MSC_VER
-const int PositionInformationTransmit::kTrainIDFieldNumber;
+const int PositionInformationTransmit::kTrainidFieldNumber;
 const int PositionInformationTransmit::kPositionFieldNumber;
 const int PositionInformationTransmit::kStatusFieldNumber;
 #endif  // !_MSC_VER
@@ -223,7 +280,7 @@ bool PositionInformationTransmit::MergePartialFromCodedStream(
     tag = p.first;
     if (!p.second) goto handle_unusual;
     switch (::google::protobuf::internal::WireFormatLite::GetTagFieldNumber(tag)) {
-      // required string trainID = 1;
+      // required string trainid = 1;
       case 1: {
         if (tag == 10) {
           DO_(::google::protobuf::internal::WireFormatLite::ReadString(
@@ -296,7 +353,7 @@ failure:
 void PositionInformationTransmit::SerializeWithCachedSizes(
     ::google::protobuf::io::CodedOutputStream* output) const {
   // @@protoc_insertion_point(serialize_start:PositionInformationTransmit)
-  // required string trainID = 1;
+  // required string trainid = 1;
   if (has_trainid()) {
     ::google::protobuf::internal::WireFormat::VerifyUTF8StringNamedField(
       this->trainid().data(), this->trainid().length(),
@@ -331,7 +388,7 @@ void PositionInformationTransmit::SerializeWithCachedSizes(
 ::google::protobuf::uint8* PositionInformationTransmit::SerializeWithCachedSizesToArray(
     ::google::protobuf::uint8* target) const {
   // @@protoc_insertion_point(serialize_to_array_start:PositionInformationTransmit)
-  // required string trainID = 1;
+  // required string trainid = 1;
   if (has_trainid()) {
     ::google::protobuf::internal::WireFormat::VerifyUTF8StringNamedField(
       this->trainid().data(), this->trainid().length(),
@@ -370,7 +427,7 @@ int PositionInformationTransmit::ByteSize() const {
   int total_size = 0;
 
   if (_has_bits_[0 / 32] & (0xffu << (0 % 32))) {
-    // required string trainID = 1;
+    // required string trainid = 1;
     if (has_trainid()) {
       total_size += 1 +
         ::google::protobuf::internal::WireFormatLite::StringSize(
@@ -472,7 +529,7 @@ void PositionInformationTransmit::Swap(PositionInformationTransmit* other) {
 // ===================================================================
 
 #ifndef _MSC_VER
-const int PositionInformationReceive::kServerNameFieldNumber;
+const int PositionInformationReceive::kServernameFieldNumber;
 #endif  // !_MSC_VER
 
 PositionInformationReceive::PositionInformationReceive()
@@ -552,7 +609,7 @@ bool PositionInformationReceive::MergePartialFromCodedStream(
     tag = p.first;
     if (!p.second) goto handle_unusual;
     switch (::google::protobuf::internal::WireFormatLite::GetTagFieldNumber(tag)) {
-      // required string serverName = 2;
+      // required string servername = 2;
       case 2: {
         if (tag == 18) {
           DO_(::google::protobuf::internal::WireFormatLite::ReadString(
@@ -593,7 +650,7 @@ failure:
 void PositionInformationReceive::SerializeWithCachedSizes(
     ::google::protobuf::io::CodedOutputStream* output) const {
   // @@protoc_insertion_point(serialize_start:PositionInformationReceive)
-  // required string serverName = 2;
+  // required string servername = 2;
   if (has_servername()) {
     ::google::protobuf::internal::WireFormat::VerifyUTF8StringNamedField(
       this->servername().data(), this->servername().length(),
@@ -613,7 +670,7 @@ void PositionInformationReceive::SerializeWithCachedSizes(
 ::google::protobuf::uint8* PositionInformationReceive::SerializeWithCachedSizesToArray(
     ::google::protobuf::uint8* target) const {
   // @@protoc_insertion_point(serialize_to_array_start:PositionInformationReceive)
-  // required string serverName = 2;
+  // required string servername = 2;
   if (has_servername()) {
     ::google::protobuf::internal::WireFormat::VerifyUTF8StringNamedField(
       this->servername().data(), this->servername().length(),
@@ -636,7 +693,7 @@ int PositionInformationReceive::ByteSize() const {
   int total_size = 0;
 
   if (_has_bits_[0 / 32] & (0xffu << (0 % 32))) {
-    // required string serverName = 2;
+    // required string servername = 2;
     if (has_servername()) {
       total_size += 1 +
         ::google::protobuf::internal::WireFormatLite::StringSize(
@@ -709,6 +766,555 @@ void PositionInformationReceive::Swap(PositionInformationReceive* other) {
   ::google::protobuf::Metadata metadata;
   metadata.descriptor = PositionInformationReceive_descriptor_;
   metadata.reflection = PositionInformationReceive_reflection_;
+  return metadata;
+}
+
+
+// ===================================================================
+
+#ifndef _MSC_VER
+const int SetOperationModeCommand::kModeFieldNumber;
+#endif  // !_MSC_VER
+
+SetOperationModeCommand::SetOperationModeCommand()
+  : ::google::protobuf::Message() {
+  SharedCtor();
+  // @@protoc_insertion_point(constructor:SetOperationModeCommand)
+}
+
+void SetOperationModeCommand::InitAsDefaultInstance() {
+}
+
+SetOperationModeCommand::SetOperationModeCommand(const SetOperationModeCommand& from)
+  : ::google::protobuf::Message() {
+  SharedCtor();
+  MergeFrom(from);
+  // @@protoc_insertion_point(copy_constructor:SetOperationModeCommand)
+}
+
+void SetOperationModeCommand::SharedCtor() {
+  ::google::protobuf::internal::GetEmptyString();
+  _cached_size_ = 0;
+  mode_ = const_cast< ::std::string*>(&::google::protobuf::internal::GetEmptyStringAlreadyInited());
+  ::memset(_has_bits_, 0, sizeof(_has_bits_));
+}
+
+SetOperationModeCommand::~SetOperationModeCommand() {
+  // @@protoc_insertion_point(destructor:SetOperationModeCommand)
+  SharedDtor();
+}
+
+void SetOperationModeCommand::SharedDtor() {
+  if (mode_ != &::google::protobuf::internal::GetEmptyStringAlreadyInited()) {
+    delete mode_;
+  }
+  if (this != default_instance_) {
+  }
+}
+
+void SetOperationModeCommand::SetCachedSize(int size) const {
+  GOOGLE_SAFE_CONCURRENT_WRITES_BEGIN();
+  _cached_size_ = size;
+  GOOGLE_SAFE_CONCURRENT_WRITES_END();
+}
+const ::google::protobuf::Descriptor* SetOperationModeCommand::descriptor() {
+  protobuf_AssignDescriptorsOnce();
+  return SetOperationModeCommand_descriptor_;
+}
+
+const SetOperationModeCommand& SetOperationModeCommand::default_instance() {
+  if (default_instance_ == NULL) protobuf_AddDesc_TestRCFProto_2eproto();
+  return *default_instance_;
+}
+
+SetOperationModeCommand* SetOperationModeCommand::default_instance_ = NULL;
+
+SetOperationModeCommand* SetOperationModeCommand::New() const {
+  return new SetOperationModeCommand;
+}
+
+void SetOperationModeCommand::Clear() {
+  if (has_mode()) {
+    if (mode_ != &::google::protobuf::internal::GetEmptyStringAlreadyInited()) {
+      mode_->clear();
+    }
+  }
+  ::memset(_has_bits_, 0, sizeof(_has_bits_));
+  mutable_unknown_fields()->Clear();
+}
+
+bool SetOperationModeCommand::MergePartialFromCodedStream(
+    ::google::protobuf::io::CodedInputStream* input) {
+#define DO_(EXPRESSION) if (!(EXPRESSION)) goto failure
+  ::google::protobuf::uint32 tag;
+  // @@protoc_insertion_point(parse_start:SetOperationModeCommand)
+  for (;;) {
+    ::std::pair< ::google::protobuf::uint32, bool> p = input->ReadTagWithCutoff(127);
+    tag = p.first;
+    if (!p.second) goto handle_unusual;
+    switch (::google::protobuf::internal::WireFormatLite::GetTagFieldNumber(tag)) {
+      // required string mode = 1;
+      case 1: {
+        if (tag == 10) {
+          DO_(::google::protobuf::internal::WireFormatLite::ReadString(
+                input, this->mutable_mode()));
+          ::google::protobuf::internal::WireFormat::VerifyUTF8StringNamedField(
+            this->mode().data(), this->mode().length(),
+            ::google::protobuf::internal::WireFormat::PARSE,
+            "mode");
+        } else {
+          goto handle_unusual;
+        }
+        if (input->ExpectAtEnd()) goto success;
+        break;
+      }
+
+      default: {
+      handle_unusual:
+        if (tag == 0 ||
+            ::google::protobuf::internal::WireFormatLite::GetTagWireType(tag) ==
+            ::google::protobuf::internal::WireFormatLite::WIRETYPE_END_GROUP) {
+          goto success;
+        }
+        DO_(::google::protobuf::internal::WireFormat::SkipField(
+              input, tag, mutable_unknown_fields()));
+        break;
+      }
+    }
+  }
+success:
+  // @@protoc_insertion_point(parse_success:SetOperationModeCommand)
+  return true;
+failure:
+  // @@protoc_insertion_point(parse_failure:SetOperationModeCommand)
+  return false;
+#undef DO_
+}
+
+void SetOperationModeCommand::SerializeWithCachedSizes(
+    ::google::protobuf::io::CodedOutputStream* output) const {
+  // @@protoc_insertion_point(serialize_start:SetOperationModeCommand)
+  // required string mode = 1;
+  if (has_mode()) {
+    ::google::protobuf::internal::WireFormat::VerifyUTF8StringNamedField(
+      this->mode().data(), this->mode().length(),
+      ::google::protobuf::internal::WireFormat::SERIALIZE,
+      "mode");
+    ::google::protobuf::internal::WireFormatLite::WriteStringMaybeAliased(
+      1, this->mode(), output);
+  }
+
+  if (!unknown_fields().empty()) {
+    ::google::protobuf::internal::WireFormat::SerializeUnknownFields(
+        unknown_fields(), output);
+  }
+  // @@protoc_insertion_point(serialize_end:SetOperationModeCommand)
+}
+
+::google::protobuf::uint8* SetOperationModeCommand::SerializeWithCachedSizesToArray(
+    ::google::protobuf::uint8* target) const {
+  // @@protoc_insertion_point(serialize_to_array_start:SetOperationModeCommand)
+  // required string mode = 1;
+  if (has_mode()) {
+    ::google::protobuf::internal::WireFormat::VerifyUTF8StringNamedField(
+      this->mode().data(), this->mode().length(),
+      ::google::protobuf::internal::WireFormat::SERIALIZE,
+      "mode");
+    target =
+      ::google::protobuf::internal::WireFormatLite::WriteStringToArray(
+        1, this->mode(), target);
+  }
+
+  if (!unknown_fields().empty()) {
+    target = ::google::protobuf::internal::WireFormat::SerializeUnknownFieldsToArray(
+        unknown_fields(), target);
+  }
+  // @@protoc_insertion_point(serialize_to_array_end:SetOperationModeCommand)
+  return target;
+}
+
+int SetOperationModeCommand::ByteSize() const {
+  int total_size = 0;
+
+  if (_has_bits_[0 / 32] & (0xffu << (0 % 32))) {
+    // required string mode = 1;
+    if (has_mode()) {
+      total_size += 1 +
+        ::google::protobuf::internal::WireFormatLite::StringSize(
+          this->mode());
+    }
+
+  }
+  if (!unknown_fields().empty()) {
+    total_size +=
+      ::google::protobuf::internal::WireFormat::ComputeUnknownFieldsSize(
+        unknown_fields());
+  }
+  GOOGLE_SAFE_CONCURRENT_WRITES_BEGIN();
+  _cached_size_ = total_size;
+  GOOGLE_SAFE_CONCURRENT_WRITES_END();
+  return total_size;
+}
+
+void SetOperationModeCommand::MergeFrom(const ::google::protobuf::Message& from) {
+  GOOGLE_CHECK_NE(&from, this);
+  const SetOperationModeCommand* source =
+    ::google::protobuf::internal::dynamic_cast_if_available<const SetOperationModeCommand*>(
+      &from);
+  if (source == NULL) {
+    ::google::protobuf::internal::ReflectionOps::Merge(from, this);
+  } else {
+    MergeFrom(*source);
+  }
+}
+
+void SetOperationModeCommand::MergeFrom(const SetOperationModeCommand& from) {
+  GOOGLE_CHECK_NE(&from, this);
+  if (from._has_bits_[0 / 32] & (0xffu << (0 % 32))) {
+    if (from.has_mode()) {
+      set_mode(from.mode());
+    }
+  }
+  mutable_unknown_fields()->MergeFrom(from.unknown_fields());
+}
+
+void SetOperationModeCommand::CopyFrom(const ::google::protobuf::Message& from) {
+  if (&from == this) return;
+  Clear();
+  MergeFrom(from);
+}
+
+void SetOperationModeCommand::CopyFrom(const SetOperationModeCommand& from) {
+  if (&from == this) return;
+  Clear();
+  MergeFrom(from);
+}
+
+bool SetOperationModeCommand::IsInitialized() const {
+  if ((_has_bits_[0] & 0x00000001) != 0x00000001) return false;
+
+  return true;
+}
+
+void SetOperationModeCommand::Swap(SetOperationModeCommand* other) {
+  if (other != this) {
+    std::swap(mode_, other->mode_);
+    std::swap(_has_bits_[0], other->_has_bits_[0]);
+    _unknown_fields_.Swap(&other->_unknown_fields_);
+    std::swap(_cached_size_, other->_cached_size_);
+  }
+}
+
+::google::protobuf::Metadata SetOperationModeCommand::GetMetadata() const {
+  protobuf_AssignDescriptorsOnce();
+  ::google::protobuf::Metadata metadata;
+  metadata.descriptor = SetOperationModeCommand_descriptor_;
+  metadata.reflection = SetOperationModeCommand_reflection_;
+  return metadata;
+}
+
+
+// ===================================================================
+
+#ifndef _MSC_VER
+const int SetOperationModeResponse::kPreviousmodeFieldNumber;
+const int SetOperationModeResponse::kNewmodeFieldNumber;
+#endif  // !_MSC_VER
+
+SetOperationModeResponse::SetOperationModeResponse()
+  : ::google::protobuf::Message() {
+  SharedCtor();
+  // @@protoc_insertion_point(constructor:SetOperationModeResponse)
+}
+
+void SetOperationModeResponse::InitAsDefaultInstance() {
+}
+
+SetOperationModeResponse::SetOperationModeResponse(const SetOperationModeResponse& from)
+  : ::google::protobuf::Message() {
+  SharedCtor();
+  MergeFrom(from);
+  // @@protoc_insertion_point(copy_constructor:SetOperationModeResponse)
+}
+
+void SetOperationModeResponse::SharedCtor() {
+  ::google::protobuf::internal::GetEmptyString();
+  _cached_size_ = 0;
+  previousmode_ = const_cast< ::std::string*>(&::google::protobuf::internal::GetEmptyStringAlreadyInited());
+  newmode_ = const_cast< ::std::string*>(&::google::protobuf::internal::GetEmptyStringAlreadyInited());
+  ::memset(_has_bits_, 0, sizeof(_has_bits_));
+}
+
+SetOperationModeResponse::~SetOperationModeResponse() {
+  // @@protoc_insertion_point(destructor:SetOperationModeResponse)
+  SharedDtor();
+}
+
+void SetOperationModeResponse::SharedDtor() {
+  if (previousmode_ != &::google::protobuf::internal::GetEmptyStringAlreadyInited()) {
+    delete previousmode_;
+  }
+  if (newmode_ != &::google::protobuf::internal::GetEmptyStringAlreadyInited()) {
+    delete newmode_;
+  }
+  if (this != default_instance_) {
+  }
+}
+
+void SetOperationModeResponse::SetCachedSize(int size) const {
+  GOOGLE_SAFE_CONCURRENT_WRITES_BEGIN();
+  _cached_size_ = size;
+  GOOGLE_SAFE_CONCURRENT_WRITES_END();
+}
+const ::google::protobuf::Descriptor* SetOperationModeResponse::descriptor() {
+  protobuf_AssignDescriptorsOnce();
+  return SetOperationModeResponse_descriptor_;
+}
+
+const SetOperationModeResponse& SetOperationModeResponse::default_instance() {
+  if (default_instance_ == NULL) protobuf_AddDesc_TestRCFProto_2eproto();
+  return *default_instance_;
+}
+
+SetOperationModeResponse* SetOperationModeResponse::default_instance_ = NULL;
+
+SetOperationModeResponse* SetOperationModeResponse::New() const {
+  return new SetOperationModeResponse;
+}
+
+void SetOperationModeResponse::Clear() {
+  if (_has_bits_[0 / 32] & 3) {
+    if (has_previousmode()) {
+      if (previousmode_ != &::google::protobuf::internal::GetEmptyStringAlreadyInited()) {
+        previousmode_->clear();
+      }
+    }
+    if (has_newmode()) {
+      if (newmode_ != &::google::protobuf::internal::GetEmptyStringAlreadyInited()) {
+        newmode_->clear();
+      }
+    }
+  }
+  ::memset(_has_bits_, 0, sizeof(_has_bits_));
+  mutable_unknown_fields()->Clear();
+}
+
+bool SetOperationModeResponse::MergePartialFromCodedStream(
+    ::google::protobuf::io::CodedInputStream* input) {
+#define DO_(EXPRESSION) if (!(EXPRESSION)) goto failure
+  ::google::protobuf::uint32 tag;
+  // @@protoc_insertion_point(parse_start:SetOperationModeResponse)
+  for (;;) {
+    ::std::pair< ::google::protobuf::uint32, bool> p = input->ReadTagWithCutoff(127);
+    tag = p.first;
+    if (!p.second) goto handle_unusual;
+    switch (::google::protobuf::internal::WireFormatLite::GetTagFieldNumber(tag)) {
+      // required string previousmode = 1;
+      case 1: {
+        if (tag == 10) {
+          DO_(::google::protobuf::internal::WireFormatLite::ReadString(
+                input, this->mutable_previousmode()));
+          ::google::protobuf::internal::WireFormat::VerifyUTF8StringNamedField(
+            this->previousmode().data(), this->previousmode().length(),
+            ::google::protobuf::internal::WireFormat::PARSE,
+            "previousmode");
+        } else {
+          goto handle_unusual;
+        }
+        if (input->ExpectTag(18)) goto parse_newmode;
+        break;
+      }
+
+      // required string newmode = 2;
+      case 2: {
+        if (tag == 18) {
+         parse_newmode:
+          DO_(::google::protobuf::internal::WireFormatLite::ReadString(
+                input, this->mutable_newmode()));
+          ::google::protobuf::internal::WireFormat::VerifyUTF8StringNamedField(
+            this->newmode().data(), this->newmode().length(),
+            ::google::protobuf::internal::WireFormat::PARSE,
+            "newmode");
+        } else {
+          goto handle_unusual;
+        }
+        if (input->ExpectAtEnd()) goto success;
+        break;
+      }
+
+      default: {
+      handle_unusual:
+        if (tag == 0 ||
+            ::google::protobuf::internal::WireFormatLite::GetTagWireType(tag) ==
+            ::google::protobuf::internal::WireFormatLite::WIRETYPE_END_GROUP) {
+          goto success;
+        }
+        DO_(::google::protobuf::internal::WireFormat::SkipField(
+              input, tag, mutable_unknown_fields()));
+        break;
+      }
+    }
+  }
+success:
+  // @@protoc_insertion_point(parse_success:SetOperationModeResponse)
+  return true;
+failure:
+  // @@protoc_insertion_point(parse_failure:SetOperationModeResponse)
+  return false;
+#undef DO_
+}
+
+void SetOperationModeResponse::SerializeWithCachedSizes(
+    ::google::protobuf::io::CodedOutputStream* output) const {
+  // @@protoc_insertion_point(serialize_start:SetOperationModeResponse)
+  // required string previousmode = 1;
+  if (has_previousmode()) {
+    ::google::protobuf::internal::WireFormat::VerifyUTF8StringNamedField(
+      this->previousmode().data(), this->previousmode().length(),
+      ::google::protobuf::internal::WireFormat::SERIALIZE,
+      "previousmode");
+    ::google::protobuf::internal::WireFormatLite::WriteStringMaybeAliased(
+      1, this->previousmode(), output);
+  }
+
+  // required string newmode = 2;
+  if (has_newmode()) {
+    ::google::protobuf::internal::WireFormat::VerifyUTF8StringNamedField(
+      this->newmode().data(), this->newmode().length(),
+      ::google::protobuf::internal::WireFormat::SERIALIZE,
+      "newmode");
+    ::google::protobuf::internal::WireFormatLite::WriteStringMaybeAliased(
+      2, this->newmode(), output);
+  }
+
+  if (!unknown_fields().empty()) {
+    ::google::protobuf::internal::WireFormat::SerializeUnknownFields(
+        unknown_fields(), output);
+  }
+  // @@protoc_insertion_point(serialize_end:SetOperationModeResponse)
+}
+
+::google::protobuf::uint8* SetOperationModeResponse::SerializeWithCachedSizesToArray(
+    ::google::protobuf::uint8* target) const {
+  // @@protoc_insertion_point(serialize_to_array_start:SetOperationModeResponse)
+  // required string previousmode = 1;
+  if (has_previousmode()) {
+    ::google::protobuf::internal::WireFormat::VerifyUTF8StringNamedField(
+      this->previousmode().data(), this->previousmode().length(),
+      ::google::protobuf::internal::WireFormat::SERIALIZE,
+      "previousmode");
+    target =
+      ::google::protobuf::internal::WireFormatLite::WriteStringToArray(
+        1, this->previousmode(), target);
+  }
+
+  // required string newmode = 2;
+  if (has_newmode()) {
+    ::google::protobuf::internal::WireFormat::VerifyUTF8StringNamedField(
+      this->newmode().data(), this->newmode().length(),
+      ::google::protobuf::internal::WireFormat::SERIALIZE,
+      "newmode");
+    target =
+      ::google::protobuf::internal::WireFormatLite::WriteStringToArray(
+        2, this->newmode(), target);
+  }
+
+  if (!unknown_fields().empty()) {
+    target = ::google::protobuf::internal::WireFormat::SerializeUnknownFieldsToArray(
+        unknown_fields(), target);
+  }
+  // @@protoc_insertion_point(serialize_to_array_end:SetOperationModeResponse)
+  return target;
+}
+
+int SetOperationModeResponse::ByteSize() const {
+  int total_size = 0;
+
+  if (_has_bits_[0 / 32] & (0xffu << (0 % 32))) {
+    // required string previousmode = 1;
+    if (has_previousmode()) {
+      total_size += 1 +
+        ::google::protobuf::internal::WireFormatLite::StringSize(
+          this->previousmode());
+    }
+
+    // required string newmode = 2;
+    if (has_newmode()) {
+      total_size += 1 +
+        ::google::protobuf::internal::WireFormatLite::StringSize(
+          this->newmode());
+    }
+
+  }
+  if (!unknown_fields().empty()) {
+    total_size +=
+      ::google::protobuf::internal::WireFormat::ComputeUnknownFieldsSize(
+        unknown_fields());
+  }
+  GOOGLE_SAFE_CONCURRENT_WRITES_BEGIN();
+  _cached_size_ = total_size;
+  GOOGLE_SAFE_CONCURRENT_WRITES_END();
+  return total_size;
+}
+
+void SetOperationModeResponse::MergeFrom(const ::google::protobuf::Message& from) {
+  GOOGLE_CHECK_NE(&from, this);
+  const SetOperationModeResponse* source =
+    ::google::protobuf::internal::dynamic_cast_if_available<const SetOperationModeResponse*>(
+      &from);
+  if (source == NULL) {
+    ::google::protobuf::internal::ReflectionOps::Merge(from, this);
+  } else {
+    MergeFrom(*source);
+  }
+}
+
+void SetOperationModeResponse::MergeFrom(const SetOperationModeResponse& from) {
+  GOOGLE_CHECK_NE(&from, this);
+  if (from._has_bits_[0 / 32] & (0xffu << (0 % 32))) {
+    if (from.has_previousmode()) {
+      set_previousmode(from.previousmode());
+    }
+    if (from.has_newmode()) {
+      set_newmode(from.newmode());
+    }
+  }
+  mutable_unknown_fields()->MergeFrom(from.unknown_fields());
+}
+
+void SetOperationModeResponse::CopyFrom(const ::google::protobuf::Message& from) {
+  if (&from == this) return;
+  Clear();
+  MergeFrom(from);
+}
+
+void SetOperationModeResponse::CopyFrom(const SetOperationModeResponse& from) {
+  if (&from == this) return;
+  Clear();
+  MergeFrom(from);
+}
+
+bool SetOperationModeResponse::IsInitialized() const {
+  if ((_has_bits_[0] & 0x00000003) != 0x00000003) return false;
+
+  return true;
+}
+
+void SetOperationModeResponse::Swap(SetOperationModeResponse* other) {
+  if (other != this) {
+    std::swap(previousmode_, other->previousmode_);
+    std::swap(newmode_, other->newmode_);
+    std::swap(_has_bits_[0], other->_has_bits_[0]);
+    _unknown_fields_.Swap(&other->_unknown_fields_);
+    std::swap(_cached_size_, other->_cached_size_);
+  }
+}
+
+::google::protobuf::Metadata SetOperationModeResponse::GetMetadata() const {
+  protobuf_AssignDescriptorsOnce();
+  ::google::protobuf::Metadata metadata;
+  metadata.descriptor = SetOperationModeResponse_descriptor_;
+  metadata.reflection = SetOperationModeResponse_reflection_;
   return metadata;
 }
 
@@ -792,6 +1398,89 @@ PositionInformationService_Stub::~PositionInformationService_Stub() {
 void PositionInformationService_Stub::PositionInformation(::google::protobuf::RpcController* controller,
                               const ::PositionInformationTransmit* request,
                               ::PositionInformationReceive* response,
+                              ::google::protobuf::Closure* done) {
+  channel_->CallMethod(descriptor()->method(0),
+                       controller, request, response, done);
+}
+// ===================================================================
+
+SetOperationModeService::~SetOperationModeService() {}
+
+const ::google::protobuf::ServiceDescriptor* SetOperationModeService::descriptor() {
+  protobuf_AssignDescriptorsOnce();
+  return SetOperationModeService_descriptor_;
+}
+
+const ::google::protobuf::ServiceDescriptor* SetOperationModeService::GetDescriptor() {
+  protobuf_AssignDescriptorsOnce();
+  return SetOperationModeService_descriptor_;
+}
+
+void SetOperationModeService::SetOperationMode(::google::protobuf::RpcController* controller,
+                         const ::SetOperationModeCommand*,
+                         ::SetOperationModeResponse*,
+                         ::google::protobuf::Closure* done) {
+  controller->SetFailed("Method SetOperationMode() not implemented.");
+  done->Run();
+}
+
+void SetOperationModeService::CallMethod(const ::google::protobuf::MethodDescriptor* method,
+                             ::google::protobuf::RpcController* controller,
+                             const ::google::protobuf::Message* request,
+                             ::google::protobuf::Message* response,
+                             ::google::protobuf::Closure* done) {
+  GOOGLE_DCHECK_EQ(method->service(), SetOperationModeService_descriptor_);
+  switch(method->index()) {
+    case 0:
+      SetOperationMode(controller,
+             ::google::protobuf::down_cast<const ::SetOperationModeCommand*>(request),
+             ::google::protobuf::down_cast< ::SetOperationModeResponse*>(response),
+             done);
+      break;
+    default:
+      GOOGLE_LOG(FATAL) << "Bad method index; this should never happen.";
+      break;
+  }
+}
+
+const ::google::protobuf::Message& SetOperationModeService::GetRequestPrototype(
+    const ::google::protobuf::MethodDescriptor* method) const {
+  GOOGLE_DCHECK_EQ(method->service(), descriptor());
+  switch(method->index()) {
+    case 0:
+      return ::SetOperationModeCommand::default_instance();
+    default:
+      GOOGLE_LOG(FATAL) << "Bad method index; this should never happen.";
+      return *reinterpret_cast< ::google::protobuf::Message*>(NULL);
+  }
+}
+
+const ::google::protobuf::Message& SetOperationModeService::GetResponsePrototype(
+    const ::google::protobuf::MethodDescriptor* method) const {
+  GOOGLE_DCHECK_EQ(method->service(), descriptor());
+  switch(method->index()) {
+    case 0:
+      return ::SetOperationModeResponse::default_instance();
+    default:
+      GOOGLE_LOG(FATAL) << "Bad method index; this should never happen.";
+      return *reinterpret_cast< ::google::protobuf::Message*>(NULL);
+  }
+}
+
+SetOperationModeService_Stub::SetOperationModeService_Stub(::google::protobuf::RpcChannel* channel)
+  : channel_(channel), owns_channel_(false) {}
+SetOperationModeService_Stub::SetOperationModeService_Stub(
+    ::google::protobuf::RpcChannel* channel,
+    ::google::protobuf::Service::ChannelOwnership ownership)
+  : channel_(channel),
+    owns_channel_(ownership == ::google::protobuf::Service::STUB_OWNS_CHANNEL) {}
+SetOperationModeService_Stub::~SetOperationModeService_Stub() {
+  if (owns_channel_) delete channel_;
+}
+
+void SetOperationModeService_Stub::SetOperationMode(::google::protobuf::RpcController* controller,
+                              const ::SetOperationModeCommand* request,
+                              ::SetOperationModeResponse* response,
                               ::google::protobuf::Closure* done) {
   channel_->CallMethod(descriptor()->method(0),
                        controller, request, response, done);

@@ -4,6 +4,7 @@
 #include <string>
 #include <mutex>
 #include <chrono>
+#include <RCFProto.hpp>
 
 #define COMM_SESSION_ACTIVE 1
 #define COMM_SESSION_INACTIVE 0
@@ -31,6 +32,7 @@ class TrainCommSession
         time_t GetSessionConnectionTime(void);
         bool TryLockCommSessionMutexFor(size_t milliseconds);
         void UnlockCommSessionMutex(void);
+        void IncConnectionLossCount(void);
     protected:
     private:
         std::string     commSessionIPAddress = "Not set !!!";

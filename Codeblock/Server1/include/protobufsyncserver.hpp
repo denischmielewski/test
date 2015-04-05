@@ -29,16 +29,8 @@ class ProtobufSyncServer
         ProtobufSyncServer(config const *);
         ~ProtobufSyncServer();
         void ProtobufSyncServerThreadsCode(void);
-        void Start()
-        {
-            // This will start the thread. Notice move semantics!
-            ProtobufSyncServerThread = std::thread(&ProtobufSyncServer::ProtobufSyncServerThreadsCode,this);
-        }
-        void Join()
-        {
-            // This will start the thread. Notice move semantics!
-            ProtobufSyncServerThread.join();
-        }
+        void Start(void);
+        void Join(void);
     protected:
     private:
         std::thread ProtobufSyncServerThread; //the default constructor is called so the thread is created.

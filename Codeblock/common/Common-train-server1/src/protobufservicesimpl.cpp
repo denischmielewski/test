@@ -23,20 +23,30 @@ void PositionInformationImpl::PositionInformation(  RpcController *             
     RCF::RcfProtoController * rcfController = static_cast<RCF::RcfProtoController *>(controller);
     RCF::RcfProtoSession * pprotoSession = rcfController->getSession();
     RCF::RcfSession & rcfSession = rcfController->getSession()->getRcfSession();
+
     // Fill in the response.
     response->set_servername("server");
+    // Send response back to the client.
+    done->Run();
 
     //Retrieve session info and store them in global g_trains unordered_map
-    //g_trains is keyed by train IP addresses and TCP port
-    TrainSession & trainSession = g_trains[rcfSession.getClientAddress().string()];
+    //g_trains is keyed by train IP addresses
+    std::string ipaddressmask = rcfSession.getClientAddress().string();
+    std::size_t pos = ipaddressmask.find(":");      // position of "/" in string
+    std::string ipaddress = ipaddressmask.substr (0,pos);
+
+    TrainSession & trainSession = g_trains[ipaddress];
+
     //retrieve a ref to train comm session
     TrainCommSession & traincommsession = trainSession.GetTrainCommSessionRef();
 
     if(traincommsession.TryLockCommSessionMutexFor(g_commSessionMutexLockTimeoutMilliseconds))
     {
-        traincommsession.SetIpAddress(rcfSession.getClientAddress().string());
+        traincommsession.SetSessionActive();
+        traincommsession.SetIpAddress(ipaddress);
         BOOST_LOG_SEV(lg, notification) << "remote address: " << traincommsession.GetIpAddress();
         time_t timeraw = rcfSession.getConnectedAtTime();
+        if(timeraw != traincommsession.GetSessionConnectionTime() && traincommsession.GetSessionRemoteCallCount() != 0)  traincommsession.IncConnectionLossCount();
         traincommsession.SetSessionConnectionTime(timeraw);
         traincommsession.SetSessionConnectionDuration(pprotoSession->getConnectionDuration());
         traincommsession.SetSessionRemoteCallCount(pprotoSession->getRemoteCallCount());
@@ -48,8 +58,5 @@ void PositionInformationImpl::PositionInformation(  RpcController *             
     {
         BOOST_LOG_SEV(lg, warning) << "Train Communication Session Lock failed !!!";
     }
-
-    // Send response back to the client.
-    done->Run();
 }
 

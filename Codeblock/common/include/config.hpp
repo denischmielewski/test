@@ -9,10 +9,12 @@ class config
     public:
         config();
         virtual ~config();
-        std::string adapter = "";
-        std::string ipaddress = "";
-        std::string port = "";
-        std::string ipaddressmask = "";
+        std::string adapter_ = "";
+        std::string main_ipaddressmask_ = "";
+        std::string main_ipaddress_ = "";
+        std::string gui_ipaddressmask_ = "";
+        std::string gui_ipaddress_ = "";
+        std::string listener_port_ = "";
         int result = NO_ERROR;
         std::string boostLogCollectorFolder_ = "";
         uint16_t boostLogCollectorFolderMaxSizeInMbytes_ = 111; //111 Mbytes by default
@@ -20,10 +22,17 @@ class config
         bool boostLogAutoFlush_ = true;
         uint16_t boostLogFileMaxSizeInKBytes_ = 111;
         std::string boostLogLevel_ = "";
+        std::string server1_ipaddress_ = "";
+        std::string server2_ipaddress_ = "";
+        std::string server3_ipaddress_ = "";
         unsigned int linuxSysCallBufferSize_ = 8192;    //8192 bytes by default
         uint16_t commSessionMutexLockTimeoutMilliseconds_ = 111; //111 ms by default
         uint16_t operationSessionMutexLockTimeoutMilliseconds_ = 111; //111 ms by default
         uint16_t communicationThreadsSleepDurationMilliseconds_ = 111; //111 ms by default
+        int16_t configureMainIPPortMask_(void);
+        int16_t configureGUIIPPortMask_(void);
+        int16_t removeMainIPPortMask_(void);
+        int16_t removeGUIIPPortMask_(void);
     protected:
     private:
 };

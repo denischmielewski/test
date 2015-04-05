@@ -10,8 +10,10 @@
 		<LOG_COLLECTOR_FOLDER_MAX_SIZE_IN_MBYTES>100</LOG_COLLECTOR_FOLDER_MAX_SIZE_IN_MBYTES>	<!-- some log files will be deleted to get that maximum size -->
 		<DRIVE_MIN_FREE_SPACE_IN_MBYTES>1024</DRIVE_MIN_FREE_SPACE_IN_MBYTES> <!-- some log files will be deleted to get that minimum size -->
 		<LOG_AUTO_FLUSH>NO</LOG_AUTO_FLUSH>	<!-- YES = write to file after each log -->
-		<MAX_LOG_FILE_SIZE_IN_KBYTES>100</MAX_LOG_FILE_SIZE_IN_KBYTES>
-		<LOG_LEVEL>notification</LOG_LEVEL>
+		<MAX_LOG_FILE_SIZE_IN_KBYTES>100</MAX_LOG_FILE_SIZE_IN_KBYTES>	<!-- precision is +/- 10% -->
+		<!-- this parameter defines the lower log level included in logs. Levels are : -->
+		<!-- debug, debug_temporary, internal_message, external_message, Threads, notification, warning, error and critical -->
+		<LOG_LEVEL>internal_message</LOG_LEVEL>		
 	</LOG>	
 
 
@@ -22,61 +24,63 @@
 
 	<!-- train network configuration -->
 	<TRAINS_IP_CONFIG>
+		<MAIN_LISTENER_PORT>44044</MAIN_LISTENER_PORT>
+		<GUI_LISTENER_PORT>44045</GUI_LISTENER_PORT>
 		<dev-VM> <!-- Hostname of the linux OS, 1024 bytes MAX !!! -->
-			<IP_ADDRESSES_AND_PORT>
+			<IP_ADDRESSES_AND_SUBNET>
 				<ADAPTER>eth0</ADAPTER>
-				<IP>192.168.1.21/24</IP>
-				<PORT>44044</PORT>
-			</IP_ADDRESSES_AND_PORT>
+				<MAIN_IP>192.168.1.11/24</MAIN_IP>
+				<GUI_IP>192.168.1.12/24</GUI_IP>
+			</IP_ADDRESSES_AND_SUBNET>
 		</dev-VM>
 		<Train191> <!-- Hostname of the linux OS, 1024 bytes MAX !!! -->
-			<IP_ADDRESSES_AND_PORT>
+			<IP_ADDRESSES_AND_SUBNET>
 				<ADAPTER>eth0</ADAPTER>
-				<IP>192.168.1.191/24</IP>
-				<PORT>44044</PORT>
-			</IP_ADDRESSES_AND_PORT>
+				<MAIN_IP>192.168.1.191/24</MAIN_IP>
+				<GUI_IP>192.168.1.192/24</GUI_IP>
+			</IP_ADDRESSES_AND_SUBNET>
 		</Train191>		
 		<Train201> <!-- Hostname of the linux OS, 1024 bytes MAX !!! -->
-			<IP_ADDRESSES_AND_PORT>
+			<IP_ADDRESSES_AND_SUBNET>
 				<ADAPTER>eth0</ADAPTER>
-				<IP>192.168.1.201/24</IP>
-				<PORT>44044</PORT>
-			</IP_ADDRESSES_AND_PORT>
+				<MAIN_IP>192.168.1.201/24</MAIN_IP>
+				<GUI_IP>192.168.1.202/24</GUI_IP>
+			</IP_ADDRESSES_AND_SUBNET>
 		</Train201>		
 		<Train211> <!-- Hostname of the linux OS, 1024 bytes MAX !!! -->
-			<IP_ADDRESSES_AND_PORT>
+			<IP_ADDRESSES_AND_SUBNET>
 				<ADAPTER>eth0</ADAPTER>
-				<IP>192.168.1.211/24</IP>
-				<PORT>44044</PORT>
-			</IP_ADDRESSES_AND_PORT>
+				<MAIN_IP>192.168.1.211/24</MAIN_IP>
+				<GUI_IP>192.168.1.212/24</GUI_IP>
+			</IP_ADDRESSES_AND_SUBNET>
 		</Train211>
 		<Train221> <!-- Hostname of the linux OS, 1024 bytes MAX !!! -->
-			<IP_ADDRESSES_AND_PORT>
+			<IP_ADDRESSES_AND_SUBNET>
 				<ADAPTER>eth0</ADAPTER>
-				<IP>192.168.1.221/24</IP>
-				<PORT>44044</PORT>
-			</IP_ADDRESSES_AND_PORT>
+				<MAIN_IP>192.168.1.221/24</MAIN_IP>
+				<GUI_IP>192.168.1.222/24</GUI_IP>
+			</IP_ADDRESSES_AND_SUBNET>
 		</Train221>
 		<SERVER1> <!-- Hostname of the linux OS, 1024 bytes MAX !!! -->
-			<IP_ADDRESSES_AND_PORT>
+			<IP_ADDRESSES_AND_SUBNET>
 				<ADAPTER>eth0</ADAPTER>
-				<IP>192.168.1.11/24</IP>
-				<PORT>44044</PORT>
-			</IP_ADDRESSES_AND_PORT>
+				<MAIN_IP>192.168.1.11/24</MAIN_CLIENT_IP>
+				<GUI_IP>192.168.1.12/24</GUI_CLIENT_IP>
+			</IP_ADDRESSES_AND_SUBNET>
 		</SERVER1>
 		<SERVER2> <!-- Hostname of the linux OS, 1024 bytes MAX !!! -->
-			<IP_ADDRESSES_AND_PORT>
+			<IP_ADDRESSES_AND_SUBNET>
 				<ADAPTER>eth0</ADAPTER>
-				<IP>192.168.1.12/24</IP>
-				<PORT>44044</PORT>
-			</IP_ADDRESSES_AND_PORT>
+				<MAIN_IP>192.168.1.15/24</MAIN_CLIENT_IP>
+				<GUI_IP>192.168.1.16/24</GUI_CLIENT_IP>
+			</IP_ADDRESSES_AND_SUBNET>
 		</SERVER2>
 		<SERVER3> <!-- Hostname of the linux OS, 1024 bytes MAX !!! -->
-			<IP_ADDRESSES_AND_PORT>
+			<IP_ADDRESSES_AND_SUBNET>
 				<ADAPTER>eth0</ADAPTER>
-				<IP>192.168.1.13/24</IP>
-				<PORT>44044</PORT>
-			</IP_ADDRESSES_AND_PORT>
+				<MAIN_IP>192.168.1.20/24</MAIN_CLIENT_IP>
+				<GUI_IP>192.168.1.21/24</GUI_CLIENT_IP>
+			</IP_ADDRESSES_AND_SUBNET>
 		</SERVER3>
 	</TRAINS_IP_CONFIG>
 </TRAIN_STARTUP_CONFIG>

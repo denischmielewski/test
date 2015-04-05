@@ -25,7 +25,12 @@ void TrainCommSession::SetSessionActive(void)
 
 void TrainCommSession::SetSessionInactive(void)
 {
-    commSessionState = COMM_SESSION_ACTIVE;
+    commSessionState = COMM_SESSION_INACTIVE;
+    commSessionConnectionLossCount++;
+}
+
+void TrainCommSession::IncConnectionLossCount(void)
+{
     commSessionConnectionLossCount++;
 }
 
@@ -109,5 +114,6 @@ void TrainCommSession::UnlockCommSessionMutex(void)
 {
     pcommSessionTimed_Mutex->unlock();
 }
+
 
 

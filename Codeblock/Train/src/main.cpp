@@ -7,10 +7,10 @@
 #include <chrono>
 #include <signal.h>
 
-#define VERSION     "0.0.1.1"
-#define DATE        "20150323"
+#define VERSION     "0.0.1.2"
 
 volatile int g_signal_received = 0;
+uint16_t g_commSessionMutexLockTimeoutMilliseconds = 111;
 
 void sighandler( int sig, siginfo_t * siginfo, void * context)
 {
@@ -32,49 +32,73 @@ void config_signal_management(void)
 
 int main()
 {
-    class log * train_logs;
-    class config * train_config;
+#warning TODO (dev#5#15-03-27): warning: variable ‘train_logs_after_configread’ set but not used [-Wunused-but-set-variable]|
+    class log * train_logs_start, * train_logs_after_configread;
+    class config * train_configuration;
     ProtobufSyncClient * client;
 
-    startup_severity_channel_logger_mt& lg = startup_logger_c1::get();
+    startup_severity_channel_logger_mt& lg = comm_logger_c1::get();
 
-    //First setup logs capability
+    //First setup logs capability with raw parameters. We want to be able to inspect configuration in case of problem !
     try
     {
-        train_logs = new(class log);
+        train_logs_start = new class log;
+        try
+        {
+            train_configuration = new config;
+            if (train_configuration->result != NO_ERROR){throw (-1);}
+            else
+            {
+                if (train_configuration->configureMainIPPortMask_() == NO_ERROR)
+                    BOOST_LOG_SEV(lg, notification) << "main IP configuration terminated properly !!!";
+                else
+                {
+                    BOOST_LOG_SEV(lg, critical) << "PROBLEM main IP configuration !!!";
+                    return ERROR_MAIN_IP_CONFIGURATION;
+                }
+            }
+        }
+        catch(int e)
+        {
+            BOOST_LOG_SEV(lg, critical) << "Reading config file failed !!!";
+            return ERROR_CONFIG_FILE_HANDLING;
+        }
+        train_logs_start->RemoveStartupSink();
+        //delete(train_logs_start);
+
     }
     catch(const std::exception& e)
     {
         std::cout << "Initialization of log system failed !!!" << e.what() << std::endl;
         return ERROR_LOG_COULD_NOT_BE_INITIALIZED;
     }
-    //now we can log
-    BOOST_LOG_SEV(lg, notification) << "Program Train started ! Version : " << VERSION << " date : " << DATE;
-    BOOST_LOG_SEV(lg, notification) << "Boost.Logging library initialized !";
 
-    //then read information from xml configuration file and configure networking
+    //now we can configure logging as specified in xml configuration files
     try
     {
-        train_config = new(class config);
-        if (train_config->result != NO_ERROR){throw (-1);};
+        train_logs_after_configread = new class log(train_configuration);
     }
-    catch(int e)
+    catch(const std::exception& e)
     {
-        BOOST_LOG_SEV(lg, critical) << "Reading config file failed !!!";
-        return ERROR_CONFIG_FILE_HANDLING;
+        std::cout << "Initialization of log system after config failed !!!" << e.what() << std::endl;
+        return ERROR_LOG_COULD_NOT_BE_INITIALIZED;
     }
+
+    //now we can log
+    BOOST_LOG_SEV(lg, notification) << "Program Train started ! Version : " << VERSION << " date : " << __DATE__ << ":" << __TIME__;;
+    BOOST_LOG_SEV(lg, notification) << "Boost.Logging library initialized !";
 
     config_signal_management();
 
     BOOST_LOG_SEV(lg, notification) << "try to create ProtobufSyncClient !!!";
     try
     {
-            client = new ProtobufSyncClient(train_config);
+            client = new ProtobufSyncClient(train_configuration);
             client->Start();
     }
     catch(int e)
     {
-        BOOST_LOG_SEV(lg, critical) << "problem with protocolsyncserver !!!";
+        BOOST_LOG_SEV(lg, critical) << "problem with ProtobufSyncClient !!!";
         return ERROR_CONFIG_FILE_HANDLING;
     }
 
@@ -84,8 +108,10 @@ int main()
     BOOST_LOG_SEV(lg, notification) << "All threads completed.";
 
     delete(client);
-    delete(train_config);
-    delete(train_logs);
+    train_configuration->removeMainIPPortMask_();
+    delete(train_configuration);
+    delete(train_logs_start);
+    delete(train_logs_after_configread);
 
     BOOST_LOG_SEV(lg, notification) << "EVERYTHING TERMNATED PROPERLY !!!";
 

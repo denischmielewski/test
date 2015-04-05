@@ -85,7 +85,9 @@
 		</Compiler>
 		<Unit filename="../../lib/RCF-2.0.1.101/src/RCF/RCF.cpp" />
 		<Unit filename="../../lib/RCFProto-src-1.0.0.3/cpp/src/RCFProto.cpp" />
+		<Unit filename="../common/Common-train-server1/include/TrainOperationSession.hpp" />
 		<Unit filename="../common/Common-train-server1/include/protobufservicesimpl.hpp" />
+		<Unit filename="../common/Common-train-server1/src/TrainOperationSession.cpp" />
 		<Unit filename="../common/Common-train-server1/src/protobufservicesimpl.cpp" />
 		<Unit filename="../common/include/config.hpp" />
 		<Unit filename="../common/include/errors.hpp" />
@@ -95,12 +97,10 @@
 		<Unit filename="../common/src/config.cpp" />
 		<Unit filename="../common/src/utils.cpp" />
 		<Unit filename="include/TrainCommSession.hpp" />
-		<Unit filename="include/TrainOperationSession.hpp" />
 		<Unit filename="include/TrainSession.hpp" />
 		<Unit filename="include/log.hpp" />
 		<Unit filename="include/protobufsyncserver.hpp" />
 		<Unit filename="src/TrainCommSession.cpp" />
-		<Unit filename="src/TrainOperationSession.cpp" />
 		<Unit filename="src/TrainSession.cpp" />
 		<Unit filename="src/log.cpp" />
 		<Unit filename="src/main.cpp" />
@@ -108,6 +108,7 @@
 		<Extensions>
 			<code_completion />
 			<debugger />
+			<envvars />
 		</Extensions>
 	</Project>
 </CodeBlocks_project_file>

@@ -3,26 +3,40 @@ option cc_generic_services = true;
 option java_generic_services = true;
 option py_generic_services = true;
 
-// Defining a print service.
-
+//============Position transmit service=========================================================
 // Define a request.
-
 message PositionInformationTransmit {
-  required string trainID = 1;
+  required string trainid = 1;
   required string position = 2;
   optional int32 status = 3;
 }
-
 // Define a response
 
 message PositionInformationReceive {
-  required string serverName = 2;
+  required string servername = 2;
 }
-
 // Define the service.
 
 service PositionInformationService
 {
   rpc PositionInformation (PositionInformationTransmit) returns (PositionInformationReceive);
 }
+//============Position transmit service=========================================================
 
+//============Set Operation Mode Service : automatic or manual=========================================================
+// Define a request.
+message SetOperationModeCommand{
+  required string mode = 1;
+}
+// Define a response
+message SetOperationModeResponse{
+  required string previousmode = 1;
+  required string newmode = 2;
+}
+// Define the service.
+
+service SetOperationModeService
+{
+  rpc SetOperationMode (SetOperationModeCommand) returns (SetOperationModeResponse);
+}
+//============Set Operation Mode Service : automatic or manual=========================================================

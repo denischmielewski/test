@@ -10,6 +10,7 @@
 #include <unordered_map>
 
 #define VERSION     "0.0.1.2"
+#define DATE        "20150404"
 
 volatile int g_signal_received = 0;
 std::unordered_map<std::string, TrainSession>    g_trains;
@@ -64,7 +65,7 @@ void codeThread2(int x)
 int main()
 {
 #warning TODO (dev#5#15-03-27): warning: variable ‘train_logs_after_configread’ set but not used [-Wunused-but-set-variable]|
-    class log * train_logs_start, * train_logs_after_configread;
+    class log * server_logs_start, * server_logs_after_configread;
     class config * server_configuration;
     ProtobufSyncServer * server;
 
@@ -73,19 +74,28 @@ int main()
     //First setup logs capability with raw parameters. We want to be able to inspect configuration in case of problem !
     try
     {
-        train_logs_start = new class log;
+        server_logs_start = new class log;
         try
         {
             server_configuration = new config;
             if (server_configuration->result != NO_ERROR){throw (-1);}
-            else BOOST_LOG_SEV(lg, notification) << "Startup configuration terminated properly !!!";
+            else
+            {
+                if (server_configuration->configureMainIPPortMask_() == NO_ERROR)
+                    BOOST_LOG_SEV(lg, notification) << "main IP configuration terminated properly !!!";
+                else
+                {
+                    BOOST_LOG_SEV(lg, critical) << "PROBLEM main IP configuration !!!";
+                    return ERROR_MAIN_IP_CONFIGURATION;
+                }
+            }
         }
         catch(int e)
         {
             BOOST_LOG_SEV(lg, critical) << "Reading config file failed !!!";
             return ERROR_CONFIG_FILE_HANDLING;
         }
-        train_logs_start->RemoveStartupSink();
+        server_logs_start->RemoveStartupSink();
         //delete(train_logs_start);
 
     }
@@ -95,10 +105,10 @@ int main()
         return ERROR_LOG_COULD_NOT_BE_INITIALIZED;
     }
 
-    //now we can confige logging as specified in xml configuration files
+    //now we can configure logging as specified in xml configuration files
     try
     {
-        train_logs_after_configread = new class log(server_configuration);
+        server_logs_after_configread = new class log(server_configuration);
     }
     catch(const std::exception& e)
     {
@@ -136,6 +146,7 @@ int main()
 
     BOOST_LOG_SEV(lg, notification) << "All threads completed." << std::endl;
 
+    server_configuration->removeMainIPPortMask_();
     delete(server);
     delete(server_configuration);
 
@@ -168,7 +179,8 @@ int main()
     }
 
     BOOST_LOG_SEV(lg, notification) << "EVERYTHING TERMINATED PROPERLY !!!";
-    delete(train_logs_after_configread);
+    delete(server_logs_start);
+    delete(server_logs_after_configread);
 
     //return NO_ERROR;
     return NO_ERROR;

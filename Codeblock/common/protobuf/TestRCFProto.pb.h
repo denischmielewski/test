@@ -34,6 +34,8 @@ void protobuf_ShutdownFile_TestRCFProto_2eproto();
 
 class PositionInformationTransmit;
 class PositionInformationReceive;
+class SetOperationModeCommand;
+class SetOperationModeResponse;
 
 // ===================================================================
 
@@ -90,10 +92,10 @@ class PositionInformationTransmit : public ::google::protobuf::Message {
 
   // accessors -------------------------------------------------------
 
-  // required string trainID = 1;
+  // required string trainid = 1;
   inline bool has_trainid() const;
   inline void clear_trainid();
-  static const int kTrainIDFieldNumber = 1;
+  static const int kTrainidFieldNumber = 1;
   inline const ::std::string& trainid() const;
   inline void set_trainid(const ::std::string& value);
   inline void set_trainid(const char* value);
@@ -199,10 +201,10 @@ class PositionInformationReceive : public ::google::protobuf::Message {
 
   // accessors -------------------------------------------------------
 
-  // required string serverName = 2;
+  // required string servername = 2;
   inline bool has_servername() const;
   inline void clear_servername();
-  static const int kServerNameFieldNumber = 2;
+  static const int kServernameFieldNumber = 2;
   inline const ::std::string& servername() const;
   inline void set_servername(const ::std::string& value);
   inline void set_servername(const char* value);
@@ -227,6 +229,189 @@ class PositionInformationReceive : public ::google::protobuf::Message {
 
   void InitAsDefaultInstance();
   static PositionInformationReceive* default_instance_;
+};
+// -------------------------------------------------------------------
+
+class SetOperationModeCommand : public ::google::protobuf::Message {
+ public:
+  SetOperationModeCommand();
+  virtual ~SetOperationModeCommand();
+
+  SetOperationModeCommand(const SetOperationModeCommand& from);
+
+  inline SetOperationModeCommand& operator=(const SetOperationModeCommand& from) {
+    CopyFrom(from);
+    return *this;
+  }
+
+  inline const ::google::protobuf::UnknownFieldSet& unknown_fields() const {
+    return _unknown_fields_;
+  }
+
+  inline ::google::protobuf::UnknownFieldSet* mutable_unknown_fields() {
+    return &_unknown_fields_;
+  }
+
+  static const ::google::protobuf::Descriptor* descriptor();
+  static const SetOperationModeCommand& default_instance();
+
+  void Swap(SetOperationModeCommand* other);
+
+  // implements Message ----------------------------------------------
+
+  SetOperationModeCommand* New() const;
+  void CopyFrom(const ::google::protobuf::Message& from);
+  void MergeFrom(const ::google::protobuf::Message& from);
+  void CopyFrom(const SetOperationModeCommand& from);
+  void MergeFrom(const SetOperationModeCommand& from);
+  void Clear();
+  bool IsInitialized() const;
+
+  int ByteSize() const;
+  bool MergePartialFromCodedStream(
+      ::google::protobuf::io::CodedInputStream* input);
+  void SerializeWithCachedSizes(
+      ::google::protobuf::io::CodedOutputStream* output) const;
+  ::google::protobuf::uint8* SerializeWithCachedSizesToArray(::google::protobuf::uint8* output) const;
+  int GetCachedSize() const { return _cached_size_; }
+  private:
+  void SharedCtor();
+  void SharedDtor();
+  void SetCachedSize(int size) const;
+  public:
+  ::google::protobuf::Metadata GetMetadata() const;
+
+  // nested types ----------------------------------------------------
+
+  // accessors -------------------------------------------------------
+
+  // required string mode = 1;
+  inline bool has_mode() const;
+  inline void clear_mode();
+  static const int kModeFieldNumber = 1;
+  inline const ::std::string& mode() const;
+  inline void set_mode(const ::std::string& value);
+  inline void set_mode(const char* value);
+  inline void set_mode(const char* value, size_t size);
+  inline ::std::string* mutable_mode();
+  inline ::std::string* release_mode();
+  inline void set_allocated_mode(::std::string* mode);
+
+  // @@protoc_insertion_point(class_scope:SetOperationModeCommand)
+ private:
+  inline void set_has_mode();
+  inline void clear_has_mode();
+
+  ::google::protobuf::UnknownFieldSet _unknown_fields_;
+
+  ::google::protobuf::uint32 _has_bits_[1];
+  mutable int _cached_size_;
+  ::std::string* mode_;
+  friend void  protobuf_AddDesc_TestRCFProto_2eproto();
+  friend void protobuf_AssignDesc_TestRCFProto_2eproto();
+  friend void protobuf_ShutdownFile_TestRCFProto_2eproto();
+
+  void InitAsDefaultInstance();
+  static SetOperationModeCommand* default_instance_;
+};
+// -------------------------------------------------------------------
+
+class SetOperationModeResponse : public ::google::protobuf::Message {
+ public:
+  SetOperationModeResponse();
+  virtual ~SetOperationModeResponse();
+
+  SetOperationModeResponse(const SetOperationModeResponse& from);
+
+  inline SetOperationModeResponse& operator=(const SetOperationModeResponse& from) {
+    CopyFrom(from);
+    return *this;
+  }
+
+  inline const ::google::protobuf::UnknownFieldSet& unknown_fields() const {
+    return _unknown_fields_;
+  }
+
+  inline ::google::protobuf::UnknownFieldSet* mutable_unknown_fields() {
+    return &_unknown_fields_;
+  }
+
+  static const ::google::protobuf::Descriptor* descriptor();
+  static const SetOperationModeResponse& default_instance();
+
+  void Swap(SetOperationModeResponse* other);
+
+  // implements Message ----------------------------------------------
+
+  SetOperationModeResponse* New() const;
+  void CopyFrom(const ::google::protobuf::Message& from);
+  void MergeFrom(const ::google::protobuf::Message& from);
+  void CopyFrom(const SetOperationModeResponse& from);
+  void MergeFrom(const SetOperationModeResponse& from);
+  void Clear();
+  bool IsInitialized() const;
+
+  int ByteSize() const;
+  bool MergePartialFromCodedStream(
+      ::google::protobuf::io::CodedInputStream* input);
+  void SerializeWithCachedSizes(
+      ::google::protobuf::io::CodedOutputStream* output) const;
+  ::google::protobuf::uint8* SerializeWithCachedSizesToArray(::google::protobuf::uint8* output) const;
+  int GetCachedSize() const { return _cached_size_; }
+  private:
+  void SharedCtor();
+  void SharedDtor();
+  void SetCachedSize(int size) const;
+  public:
+  ::google::protobuf::Metadata GetMetadata() const;
+
+  // nested types ----------------------------------------------------
+
+  // accessors -------------------------------------------------------
+
+  // required string previousmode = 1;
+  inline bool has_previousmode() const;
+  inline void clear_previousmode();
+  static const int kPreviousmodeFieldNumber = 1;
+  inline const ::std::string& previousmode() const;
+  inline void set_previousmode(const ::std::string& value);
+  inline void set_previousmode(const char* value);
+  inline void set_previousmode(const char* value, size_t size);
+  inline ::std::string* mutable_previousmode();
+  inline ::std::string* release_previousmode();
+  inline void set_allocated_previousmode(::std::string* previousmode);
+
+  // required string newmode = 2;
+  inline bool has_newmode() const;
+  inline void clear_newmode();
+  static const int kNewmodeFieldNumber = 2;
+  inline const ::std::string& newmode() const;
+  inline void set_newmode(const ::std::string& value);
+  inline void set_newmode(const char* value);
+  inline void set_newmode(const char* value, size_t size);
+  inline ::std::string* mutable_newmode();
+  inline ::std::string* release_newmode();
+  inline void set_allocated_newmode(::std::string* newmode);
+
+  // @@protoc_insertion_point(class_scope:SetOperationModeResponse)
+ private:
+  inline void set_has_previousmode();
+  inline void clear_has_previousmode();
+  inline void set_has_newmode();
+  inline void clear_has_newmode();
+
+  ::google::protobuf::UnknownFieldSet _unknown_fields_;
+
+  ::google::protobuf::uint32 _has_bits_[1];
+  mutable int _cached_size_;
+  ::std::string* previousmode_;
+  ::std::string* newmode_;
+  friend void  protobuf_AddDesc_TestRCFProto_2eproto();
+  friend void protobuf_AssignDesc_TestRCFProto_2eproto();
+  friend void protobuf_ShutdownFile_TestRCFProto_2eproto();
+
+  void InitAsDefaultInstance();
+  static SetOperationModeResponse* default_instance_;
 };
 // ===================================================================
 
@@ -287,6 +472,65 @@ class PositionInformationService_Stub : public PositionInformationService {
 };
 
 
+// -------------------------------------------------------------------
+
+class SetOperationModeService_Stub;
+
+class SetOperationModeService : public ::google::protobuf::Service {
+ protected:
+  // This class should be treated as an abstract interface.
+  inline SetOperationModeService() {};
+ public:
+  virtual ~SetOperationModeService();
+
+  typedef SetOperationModeService_Stub Stub;
+
+  static const ::google::protobuf::ServiceDescriptor* descriptor();
+
+  virtual void SetOperationMode(::google::protobuf::RpcController* controller,
+                       const ::SetOperationModeCommand* request,
+                       ::SetOperationModeResponse* response,
+                       ::google::protobuf::Closure* done);
+
+  // implements Service ----------------------------------------------
+
+  const ::google::protobuf::ServiceDescriptor* GetDescriptor();
+  void CallMethod(const ::google::protobuf::MethodDescriptor* method,
+                  ::google::protobuf::RpcController* controller,
+                  const ::google::protobuf::Message* request,
+                  ::google::protobuf::Message* response,
+                  ::google::protobuf::Closure* done);
+  const ::google::protobuf::Message& GetRequestPrototype(
+    const ::google::protobuf::MethodDescriptor* method) const;
+  const ::google::protobuf::Message& GetResponsePrototype(
+    const ::google::protobuf::MethodDescriptor* method) const;
+
+ private:
+  GOOGLE_DISALLOW_EVIL_CONSTRUCTORS(SetOperationModeService);
+};
+
+class SetOperationModeService_Stub : public SetOperationModeService {
+ public:
+  SetOperationModeService_Stub(::google::protobuf::RpcChannel* channel);
+  SetOperationModeService_Stub(::google::protobuf::RpcChannel* channel,
+                   ::google::protobuf::Service::ChannelOwnership ownership);
+  ~SetOperationModeService_Stub();
+
+  inline ::google::protobuf::RpcChannel* channel() { return channel_; }
+
+  // implements SetOperationModeService ------------------------------------------
+
+  void SetOperationMode(::google::protobuf::RpcController* controller,
+                       const ::SetOperationModeCommand* request,
+                       ::SetOperationModeResponse* response,
+                       ::google::protobuf::Closure* done);
+ private:
+  ::google::protobuf::RpcChannel* channel_;
+  bool owns_channel_;
+  GOOGLE_DISALLOW_EVIL_CONSTRUCTORS(SetOperationModeService_Stub);
+};
+
+
 // ===================================================================
 
 
@@ -294,7 +538,7 @@ class PositionInformationService_Stub : public PositionInformationService {
 
 // PositionInformationTransmit
 
-// required string trainID = 1;
+// required string trainid = 1;
 inline bool PositionInformationTransmit::has_trainid() const {
   return (_has_bits_[0] & 0x00000001u) != 0;
 }
@@ -311,7 +555,7 @@ inline void PositionInformationTransmit::clear_trainid() {
   clear_has_trainid();
 }
 inline const ::std::string& PositionInformationTransmit::trainid() const {
-  // @@protoc_insertion_point(field_get:PositionInformationTransmit.trainID)
+  // @@protoc_insertion_point(field_get:PositionInformationTransmit.trainid)
   return *trainid_;
 }
 inline void PositionInformationTransmit::set_trainid(const ::std::string& value) {
@@ -320,7 +564,7 @@ inline void PositionInformationTransmit::set_trainid(const ::std::string& value)
     trainid_ = new ::std::string;
   }
   trainid_->assign(value);
-  // @@protoc_insertion_point(field_set:PositionInformationTransmit.trainID)
+  // @@protoc_insertion_point(field_set:PositionInformationTransmit.trainid)
 }
 inline void PositionInformationTransmit::set_trainid(const char* value) {
   set_has_trainid();
@@ -328,7 +572,7 @@ inline void PositionInformationTransmit::set_trainid(const char* value) {
     trainid_ = new ::std::string;
   }
   trainid_->assign(value);
-  // @@protoc_insertion_point(field_set_char:PositionInformationTransmit.trainID)
+  // @@protoc_insertion_point(field_set_char:PositionInformationTransmit.trainid)
 }
 inline void PositionInformationTransmit::set_trainid(const char* value, size_t size) {
   set_has_trainid();
@@ -336,14 +580,14 @@ inline void PositionInformationTransmit::set_trainid(const char* value, size_t s
     trainid_ = new ::std::string;
   }
   trainid_->assign(reinterpret_cast<const char*>(value), size);
-  // @@protoc_insertion_point(field_set_pointer:PositionInformationTransmit.trainID)
+  // @@protoc_insertion_point(field_set_pointer:PositionInformationTransmit.trainid)
 }
 inline ::std::string* PositionInformationTransmit::mutable_trainid() {
   set_has_trainid();
   if (trainid_ == &::google::protobuf::internal::GetEmptyStringAlreadyInited()) {
     trainid_ = new ::std::string;
   }
-  // @@protoc_insertion_point(field_mutable:PositionInformationTransmit.trainID)
+  // @@protoc_insertion_point(field_mutable:PositionInformationTransmit.trainid)
   return trainid_;
 }
 inline ::std::string* PositionInformationTransmit::release_trainid() {
@@ -367,7 +611,7 @@ inline void PositionInformationTransmit::set_allocated_trainid(::std::string* tr
     clear_has_trainid();
     trainid_ = const_cast< ::std::string*>(&::google::protobuf::internal::GetEmptyStringAlreadyInited());
   }
-  // @@protoc_insertion_point(field_set_allocated:PositionInformationTransmit.trainID)
+  // @@protoc_insertion_point(field_set_allocated:PositionInformationTransmit.trainid)
 }
 
 // required string position = 2;
@@ -474,7 +718,7 @@ inline void PositionInformationTransmit::set_status(::google::protobuf::int32 va
 
 // PositionInformationReceive
 
-// required string serverName = 2;
+// required string servername = 2;
 inline bool PositionInformationReceive::has_servername() const {
   return (_has_bits_[0] & 0x00000001u) != 0;
 }
@@ -491,7 +735,7 @@ inline void PositionInformationReceive::clear_servername() {
   clear_has_servername();
 }
 inline const ::std::string& PositionInformationReceive::servername() const {
-  // @@protoc_insertion_point(field_get:PositionInformationReceive.serverName)
+  // @@protoc_insertion_point(field_get:PositionInformationReceive.servername)
   return *servername_;
 }
 inline void PositionInformationReceive::set_servername(const ::std::string& value) {
@@ -500,7 +744,7 @@ inline void PositionInformationReceive::set_servername(const ::std::string& valu
     servername_ = new ::std::string;
   }
   servername_->assign(value);
-  // @@protoc_insertion_point(field_set:PositionInformationReceive.serverName)
+  // @@protoc_insertion_point(field_set:PositionInformationReceive.servername)
 }
 inline void PositionInformationReceive::set_servername(const char* value) {
   set_has_servername();
@@ -508,7 +752,7 @@ inline void PositionInformationReceive::set_servername(const char* value) {
     servername_ = new ::std::string;
   }
   servername_->assign(value);
-  // @@protoc_insertion_point(field_set_char:PositionInformationReceive.serverName)
+  // @@protoc_insertion_point(field_set_char:PositionInformationReceive.servername)
 }
 inline void PositionInformationReceive::set_servername(const char* value, size_t size) {
   set_has_servername();
@@ -516,14 +760,14 @@ inline void PositionInformationReceive::set_servername(const char* value, size_t
     servername_ = new ::std::string;
   }
   servername_->assign(reinterpret_cast<const char*>(value), size);
-  // @@protoc_insertion_point(field_set_pointer:PositionInformationReceive.serverName)
+  // @@protoc_insertion_point(field_set_pointer:PositionInformationReceive.servername)
 }
 inline ::std::string* PositionInformationReceive::mutable_servername() {
   set_has_servername();
   if (servername_ == &::google::protobuf::internal::GetEmptyStringAlreadyInited()) {
     servername_ = new ::std::string;
   }
-  // @@protoc_insertion_point(field_mutable:PositionInformationReceive.serverName)
+  // @@protoc_insertion_point(field_mutable:PositionInformationReceive.servername)
   return servername_;
 }
 inline ::std::string* PositionInformationReceive::release_servername() {
@@ -547,7 +791,243 @@ inline void PositionInformationReceive::set_allocated_servername(::std::string* 
     clear_has_servername();
     servername_ = const_cast< ::std::string*>(&::google::protobuf::internal::GetEmptyStringAlreadyInited());
   }
-  // @@protoc_insertion_point(field_set_allocated:PositionInformationReceive.serverName)
+  // @@protoc_insertion_point(field_set_allocated:PositionInformationReceive.servername)
+}
+
+// -------------------------------------------------------------------
+
+// SetOperationModeCommand
+
+// required string mode = 1;
+inline bool SetOperationModeCommand::has_mode() const {
+  return (_has_bits_[0] & 0x00000001u) != 0;
+}
+inline void SetOperationModeCommand::set_has_mode() {
+  _has_bits_[0] |= 0x00000001u;
+}
+inline void SetOperationModeCommand::clear_has_mode() {
+  _has_bits_[0] &= ~0x00000001u;
+}
+inline void SetOperationModeCommand::clear_mode() {
+  if (mode_ != &::google::protobuf::internal::GetEmptyStringAlreadyInited()) {
+    mode_->clear();
+  }
+  clear_has_mode();
+}
+inline const ::std::string& SetOperationModeCommand::mode() const {
+  // @@protoc_insertion_point(field_get:SetOperationModeCommand.mode)
+  return *mode_;
+}
+inline void SetOperationModeCommand::set_mode(const ::std::string& value) {
+  set_has_mode();
+  if (mode_ == &::google::protobuf::internal::GetEmptyStringAlreadyInited()) {
+    mode_ = new ::std::string;
+  }
+  mode_->assign(value);
+  // @@protoc_insertion_point(field_set:SetOperationModeCommand.mode)
+}
+inline void SetOperationModeCommand::set_mode(const char* value) {
+  set_has_mode();
+  if (mode_ == &::google::protobuf::internal::GetEmptyStringAlreadyInited()) {
+    mode_ = new ::std::string;
+  }
+  mode_->assign(value);
+  // @@protoc_insertion_point(field_set_char:SetOperationModeCommand.mode)
+}
+inline void SetOperationModeCommand::set_mode(const char* value, size_t size) {
+  set_has_mode();
+  if (mode_ == &::google::protobuf::internal::GetEmptyStringAlreadyInited()) {
+    mode_ = new ::std::string;
+  }
+  mode_->assign(reinterpret_cast<const char*>(value), size);
+  // @@protoc_insertion_point(field_set_pointer:SetOperationModeCommand.mode)
+}
+inline ::std::string* SetOperationModeCommand::mutable_mode() {
+  set_has_mode();
+  if (mode_ == &::google::protobuf::internal::GetEmptyStringAlreadyInited()) {
+    mode_ = new ::std::string;
+  }
+  // @@protoc_insertion_point(field_mutable:SetOperationModeCommand.mode)
+  return mode_;
+}
+inline ::std::string* SetOperationModeCommand::release_mode() {
+  clear_has_mode();
+  if (mode_ == &::google::protobuf::internal::GetEmptyStringAlreadyInited()) {
+    return NULL;
+  } else {
+    ::std::string* temp = mode_;
+    mode_ = const_cast< ::std::string*>(&::google::protobuf::internal::GetEmptyStringAlreadyInited());
+    return temp;
+  }
+}
+inline void SetOperationModeCommand::set_allocated_mode(::std::string* mode) {
+  if (mode_ != &::google::protobuf::internal::GetEmptyStringAlreadyInited()) {
+    delete mode_;
+  }
+  if (mode) {
+    set_has_mode();
+    mode_ = mode;
+  } else {
+    clear_has_mode();
+    mode_ = const_cast< ::std::string*>(&::google::protobuf::internal::GetEmptyStringAlreadyInited());
+  }
+  // @@protoc_insertion_point(field_set_allocated:SetOperationModeCommand.mode)
+}
+
+// -------------------------------------------------------------------
+
+// SetOperationModeResponse
+
+// required string previousmode = 1;
+inline bool SetOperationModeResponse::has_previousmode() const {
+  return (_has_bits_[0] & 0x00000001u) != 0;
+}
+inline void SetOperationModeResponse::set_has_previousmode() {
+  _has_bits_[0] |= 0x00000001u;
+}
+inline void SetOperationModeResponse::clear_has_previousmode() {
+  _has_bits_[0] &= ~0x00000001u;
+}
+inline void SetOperationModeResponse::clear_previousmode() {
+  if (previousmode_ != &::google::protobuf::internal::GetEmptyStringAlreadyInited()) {
+    previousmode_->clear();
+  }
+  clear_has_previousmode();
+}
+inline const ::std::string& SetOperationModeResponse::previousmode() const {
+  // @@protoc_insertion_point(field_get:SetOperationModeResponse.previousmode)
+  return *previousmode_;
+}
+inline void SetOperationModeResponse::set_previousmode(const ::std::string& value) {
+  set_has_previousmode();
+  if (previousmode_ == &::google::protobuf::internal::GetEmptyStringAlreadyInited()) {
+    previousmode_ = new ::std::string;
+  }
+  previousmode_->assign(value);
+  // @@protoc_insertion_point(field_set:SetOperationModeResponse.previousmode)
+}
+inline void SetOperationModeResponse::set_previousmode(const char* value) {
+  set_has_previousmode();
+  if (previousmode_ == &::google::protobuf::internal::GetEmptyStringAlreadyInited()) {
+    previousmode_ = new ::std::string;
+  }
+  previousmode_->assign(value);
+  // @@protoc_insertion_point(field_set_char:SetOperationModeResponse.previousmode)
+}
+inline void SetOperationModeResponse::set_previousmode(const char* value, size_t size) {
+  set_has_previousmode();
+  if (previousmode_ == &::google::protobuf::internal::GetEmptyStringAlreadyInited()) {
+    previousmode_ = new ::std::string;
+  }
+  previousmode_->assign(reinterpret_cast<const char*>(value), size);
+  // @@protoc_insertion_point(field_set_pointer:SetOperationModeResponse.previousmode)
+}
+inline ::std::string* SetOperationModeResponse::mutable_previousmode() {
+  set_has_previousmode();
+  if (previousmode_ == &::google::protobuf::internal::GetEmptyStringAlreadyInited()) {
+    previousmode_ = new ::std::string;
+  }
+  // @@protoc_insertion_point(field_mutable:SetOperationModeResponse.previousmode)
+  return previousmode_;
+}
+inline ::std::string* SetOperationModeResponse::release_previousmode() {
+  clear_has_previousmode();
+  if (previousmode_ == &::google::protobuf::internal::GetEmptyStringAlreadyInited()) {
+    return NULL;
+  } else {
+    ::std::string* temp = previousmode_;
+    previousmode_ = const_cast< ::std::string*>(&::google::protobuf::internal::GetEmptyStringAlreadyInited());
+    return temp;
+  }
+}
+inline void SetOperationModeResponse::set_allocated_previousmode(::std::string* previousmode) {
+  if (previousmode_ != &::google::protobuf::internal::GetEmptyStringAlreadyInited()) {
+    delete previousmode_;
+  }
+  if (previousmode) {
+    set_has_previousmode();
+    previousmode_ = previousmode;
+  } else {
+    clear_has_previousmode();
+    previousmode_ = const_cast< ::std::string*>(&::google::protobuf::internal::GetEmptyStringAlreadyInited());
+  }
+  // @@protoc_insertion_point(field_set_allocated:SetOperationModeResponse.previousmode)
+}
+
+// required string newmode = 2;
+inline bool SetOperationModeResponse::has_newmode() const {
+  return (_has_bits_[0] & 0x00000002u) != 0;
+}
+inline void SetOperationModeResponse::set_has_newmode() {
+  _has_bits_[0] |= 0x00000002u;
+}
+inline void SetOperationModeResponse::clear_has_newmode() {
+  _has_bits_[0] &= ~0x00000002u;
+}
+inline void SetOperationModeResponse::clear_newmode() {
+  if (newmode_ != &::google::protobuf::internal::GetEmptyStringAlreadyInited()) {
+    newmode_->clear();
+  }
+  clear_has_newmode();
+}
+inline const ::std::string& SetOperationModeResponse::newmode() const {
+  // @@protoc_insertion_point(field_get:SetOperationModeResponse.newmode)
+  return *newmode_;
+}
+inline void SetOperationModeResponse::set_newmode(const ::std::string& value) {
+  set_has_newmode();
+  if (newmode_ == &::google::protobuf::internal::GetEmptyStringAlreadyInited()) {
+    newmode_ = new ::std::string;
+  }
+  newmode_->assign(value);
+  // @@protoc_insertion_point(field_set:SetOperationModeResponse.newmode)
+}
+inline void SetOperationModeResponse::set_newmode(const char* value) {
+  set_has_newmode();
+  if (newmode_ == &::google::protobuf::internal::GetEmptyStringAlreadyInited()) {
+    newmode_ = new ::std::string;
+  }
+  newmode_->assign(value);
+  // @@protoc_insertion_point(field_set_char:SetOperationModeResponse.newmode)
+}
+inline void SetOperationModeResponse::set_newmode(const char* value, size_t size) {
+  set_has_newmode();
+  if (newmode_ == &::google::protobuf::internal::GetEmptyStringAlreadyInited()) {
+    newmode_ = new ::std::string;
+  }
+  newmode_->assign(reinterpret_cast<const char*>(value), size);
+  // @@protoc_insertion_point(field_set_pointer:SetOperationModeResponse.newmode)
+}
+inline ::std::string* SetOperationModeResponse::mutable_newmode() {
+  set_has_newmode();
+  if (newmode_ == &::google::protobuf::internal::GetEmptyStringAlreadyInited()) {
+    newmode_ = new ::std::string;
+  }
+  // @@protoc_insertion_point(field_mutable:SetOperationModeResponse.newmode)
+  return newmode_;
+}
+inline ::std::string* SetOperationModeResponse::release_newmode() {
+  clear_has_newmode();
+  if (newmode_ == &::google::protobuf::internal::GetEmptyStringAlreadyInited()) {
+    return NULL;
+  } else {
+    ::std::string* temp = newmode_;
+    newmode_ = const_cast< ::std::string*>(&::google::protobuf::internal::GetEmptyStringAlreadyInited());
+    return temp;
+  }
+}
+inline void SetOperationModeResponse::set_allocated_newmode(::std::string* newmode) {
+  if (newmode_ != &::google::protobuf::internal::GetEmptyStringAlreadyInited()) {
+    delete newmode_;
+  }
+  if (newmode) {
+    set_has_newmode();
+    newmode_ = newmode;
+  } else {
+    clear_has_newmode();
+    newmode_ = const_cast< ::std::string*>(&::google::protobuf::internal::GetEmptyStringAlreadyInited());
+  }
+  // @@protoc_insertion_point(field_set_allocated:SetOperationModeResponse.newmode)
 }
 
 

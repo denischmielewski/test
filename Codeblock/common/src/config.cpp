@@ -9,6 +9,7 @@
 #include <unistd.h>     //for gethostname() call
 #include "log.hpp"
 
+// TODO (dev#1#15-03-27): to be removed and use value from xml config file
 #define MAX_BUFFER_LENGTH 1024
 
 using namespace std;
@@ -67,7 +68,7 @@ config::config()
         BOOST_LOG_SEV(lg, notification) << "PARSED OK config file /home/train/config/global/dev_config.xml !";
     }
 
-    //global config file found. Retrieve all config parameters for this element (train or server or operator PC...)
+    //global config files found. Retrieve all config parameters for this element (train or server or operator PC...)
     try
     {
         std::string node = "TRAIN_CONFIG_DEV.LINUX_SYSTEM_CALL_BUFFER_SIZE";
@@ -90,21 +91,45 @@ config::config()
         char * hostname = nullptr;
         hostname = new char[linuxSysCallBufferSize_];   //deleted at the end of the block
         gethostname(hostname, linuxSysCallBufferSize_);
-
         BOOST_LOG_SEV(lg, notification) << "Computer hostname found : " << hostname;
-        node = "TRAIN_STARTUP_CONFIG.TRAINS_IP_CONFIG." + string(hostname) + ".IP_ADDRESSES_AND_PORT.IP";
+
+        node = "TRAIN_STARTUP_CONFIG.TRAINS_IP_CONFIG." + string(hostname) + ".IP_ADDRESSES_AND_SUBNET.MAIN_IP";
+        main_ipaddressmask_ = pt1.get<std::string>(node);
+        std::size_t pos = main_ipaddressmask_.find("/");      // position of "/" in string
+        main_ipaddress_ = main_ipaddressmask_.substr (0,pos);
+        BOOST_LOG_SEV(lg, notification) << "IP address & subnet to configure for main software : " << main_ipaddress_ << " " << main_ipaddressmask_;
+
+        node = "TRAIN_STARTUP_CONFIG.TRAINS_IP_CONFIG." + string(hostname) + ".IP_ADDRESSES_AND_SUBNET.GUI_IP";
+        gui_ipaddressmask_ = pt1.get<std::string>(node);
+        pos = gui_ipaddressmask_.find("/");      // position of "/" in string
+        gui_ipaddress_ = gui_ipaddressmask_.substr (0,pos);
+        BOOST_LOG_SEV(lg, notification) << "IP address & subnet to configure for GUI software : " << gui_ipaddress_ << " " << gui_ipaddressmask_;
+
+        node = "TRAIN_STARTUP_CONFIG.TRAINS_IP_CONFIG." + string(hostname) + ".IP_ADDRESSES_AND_SUBNET.ADAPTER";
+        adapter_ = pt1.get<std::string>(node);
+        BOOST_LOG_SEV(lg, notification) << "Network adapter to use : " << adapter_;
+
+        node = "TRAIN_STARTUP_CONFIG.TRAINS_IP_CONFIG.MAIN_LISTENER_PORT";
+        listener_port_ = pt1.get<std::string>(node);
+        BOOST_LOG_SEV(lg, notification) << "Communication port to use : " << listener_port_;
+
+        node = "TRAIN_STARTUP_CONFIG.TRAINS_IP_CONFIG.SERVER1.IP_ADDRESSES_AND_SUBNET.MAIN_IP";
+        std::string ipaddressmask = pt1.get<std::string>(node);
+        pos = ipaddressmask.find("/");      // position of "/" in string
+        server1_ipaddress_ = ipaddressmask.substr (0,pos);
+        BOOST_LOG_SEV(lg, notification) << "server1 Main sw IP address : " << server1_ipaddress_;
+
+        node = "TRAIN_STARTUP_CONFIG.TRAINS_IP_CONFIG.SERVER2.IP_ADDRESSES_AND_SUBNET.MAIN_IP";
         ipaddressmask = pt1.get<std::string>(node);
-        std::size_t pos = ipaddressmask.find("/");      // position of "/" in string
-        ipaddress = ipaddressmask.substr (0,pos);
-        BOOST_LOG_SEV(lg, notification) << "IP address & subnet to configure : " << ipaddress << " " << ipaddressmask;
+        pos = ipaddressmask.find("/");      // position of "/" in string
+        server2_ipaddress_ = ipaddressmask.substr (0,pos);
+        BOOST_LOG_SEV(lg, notification) << "server2 Main sw IP address : " << server2_ipaddress_;
 
-        node = "TRAIN_STARTUP_CONFIG.TRAINS_IP_CONFIG." + string(hostname) + ".IP_ADDRESSES_AND_PORT.ADAPTER";
-        adapter = pt1.get<std::string>(node);
-        BOOST_LOG_SEV(lg, notification) << "Network adapter to use : " << adapter;
-
-        node = "TRAIN_STARTUP_CONFIG.TRAINS_IP_CONFIG." + string(hostname) + ".IP_ADDRESSES_AND_PORT.PORT";
-        port = pt1.get<std::string>(node);
-        BOOST_LOG_SEV(lg, notification) << "Communication port to use : " << port;
+        node = "TRAIN_STARTUP_CONFIG.TRAINS_IP_CONFIG.SERVER3.IP_ADDRESSES_AND_SUBNET.MAIN_IP";
+        ipaddressmask = pt1.get<std::string>(node);
+        pos = ipaddressmask.find("/");      // position of "/" in string
+        server3_ipaddress_ = ipaddressmask.substr (0,pos);
+        BOOST_LOG_SEV(lg, notification) << "server1 Main sw IP address : " << server3_ipaddress_;
 
         node = "TRAIN_STARTUP_CONFIG.LOG.LOG_COLLECTOR_FOLDER";
         boostLogCollectorFolder_ = pt1.get<std::string>(node);
@@ -140,49 +165,97 @@ config::config()
         BOOST_LOG_SEV(lg, critical) << ex.what();
         return;
     }
-
-    //Configure IP address on specified adapter
-    string command = "sudo -S ip addr add " + ipaddressmask + " dev " + adapter;
-    string ls = GetStdoutFromCommand(command, MAX_BUFFER_LENGTH);
-    //Verify if IP address has been properly configured
-    command = "ip addr list | sed -n \"/"+ adapter + "/,/" + adapter +  "/p\" | grep inet";
-    //ls = GetStdoutFromCommand("ip addr list | sed -n \"/eth0/,/eth0/p\" | grep inet");
-    ls = GetStdoutFromCommand(command, MAX_BUFFER_LENGTH);
-
-    if(ls.find(ipaddress,0) == string::npos)
-    {
-        BOOST_LOG_SEV(lg, critical) << "address not configured : " << ipaddress;
-    }
-    else
-    {
-        BOOST_LOG_SEV(lg, notification) << "address configured properly : " << ipaddress;
-    }
 }
 
 config::~config()
 {
     //dtor
-    //remove IP address on specified adapter
-    if(result == NO_ERROR)
-    {
-        string command = "sudo -S ip addr del " + ipaddress + " dev " + adapter;
-        string ls = GetStdoutFromCommand(command, MAX_BUFFER_LENGTH);
-        //Verify if IP address has been properly configured
-        command = "ip addr list | sed -n \"/"+ adapter + "/,/" + adapter +  "/p\" | grep inet";
-        //ls = GetStdoutFromCommand("ip addr list | sed -n \"/eth0/,/eth0/p\" | grep inet");
-        ls = GetStdoutFromCommand(command, MAX_BUFFER_LENGTH);
+}
 
-        if(ls.find(ipaddress,0) == string::npos)
-        {
-            BOOST_LOG_SEV(lg, notification) << "IP address removed properly : " << ipaddress;
-        }
-        else
-        {
-            BOOST_LOG_SEV(lg, critical) << "IP address not removed properly : " << ipaddress;
-        }
+int16_t config::configureMainIPPortMask_(void)
+{
+    //Configure main IP address on specified adapter
+    string command = "sudo -S ip addr add " + main_ipaddressmask_ + " dev " + adapter_;
+    string ls = GetStdoutFromCommand(command, MAX_BUFFER_LENGTH);
+    //Verify if IP address has been properly configured
+    command = "ip addr list | sed -n \"/"+ adapter_ + "/,/" + adapter_ +  "/p\" | grep inet";
+    //ls = GetStdoutFromCommand("ip addr list | sed -n \"/eth0/,/eth0/p\" | grep inet");
+    ls = GetStdoutFromCommand(command, MAX_BUFFER_LENGTH);
+
+    if(ls.find(main_ipaddress_,0) == string::npos)
+    {
+        BOOST_LOG_SEV(lg, critical) << "address not configured : " << main_ipaddress_;
+        return ERROR_MAIN_IP_CONFIGURATION;
     }
     else
     {
-        BOOST_LOG_SEV(lg, critical) << "Error when terminating the program due to configuration issue !!! Search for errors in Logs !!!";
+        BOOST_LOG_SEV(lg, notification) << "address configured properly : " << main_ipaddress_;
+        return NO_ERROR;
+    }
+}
+
+int16_t config::configureGUIIPPortMask_(void)
+{
+    //Configure GUI IP address on specified adapter
+    string command = "sudo -S ip addr add " + gui_ipaddressmask_ + " dev " + adapter_;
+    string ls = GetStdoutFromCommand(command, MAX_BUFFER_LENGTH);
+    //Verify if IP address has been properly configured
+    command = "ip addr list | sed -n \"/"+ adapter_ + "/,/" + adapter_ +  "/p\" | grep inet";
+    //ls = GetStdoutFromCommand("ip addr list | sed -n \"/eth0/,/eth0/p\" | grep inet");
+    ls = GetStdoutFromCommand(command, MAX_BUFFER_LENGTH);
+
+    if(ls.find(gui_ipaddress_,0) == string::npos)
+    {
+        BOOST_LOG_SEV(lg, critical) << "address not configured : " << gui_ipaddress_;
+        return ERROR_GUI_IP_CONFIGURATION;
+    }
+    else
+    {
+        BOOST_LOG_SEV(lg, notification) << "address configured properly : " << gui_ipaddress_;
+        return NO_ERROR;
+    }
+}
+
+int16_t config::removeMainIPPortMask_(void)
+{
+    //remove main IP address on specified adapter
+    string command = "sudo -S ip addr del " + main_ipaddress_ + " dev " + adapter_;
+    string ls = GetStdoutFromCommand(command, MAX_BUFFER_LENGTH);
+    //Verify if IP address has been properly configured
+    command = "ip addr list | sed -n \"/"+ adapter_ + "/,/" + adapter_ +  "/p\" | grep inet";
+    //ls = GetStdoutFromCommand("ip addr list | sed -n \"/eth0/,/eth0/p\" | grep inet");
+    ls = GetStdoutFromCommand(command, MAX_BUFFER_LENGTH);
+
+    if(ls.find(main_ipaddress_,0) == string::npos)
+    {
+        BOOST_LOG_SEV(lg, notification) << "IP address removed properly : " << main_ipaddress_;
+        return NO_ERROR;
+    }
+    else
+    {
+        BOOST_LOG_SEV(lg, critical) << "IP address not removed properly : " << main_ipaddress_;
+        return ERROR_MAIN_IP_CONFIGURATION;
+    }
+}
+
+int16_t config::removeGUIIPPortMask_(void)
+{
+//remove main IP address on specified adapter
+    string command = "sudo -S ip addr del " + gui_ipaddress_ + " dev " + adapter_;
+    string ls = GetStdoutFromCommand(command, MAX_BUFFER_LENGTH);
+    //Verify if IP address has been properly configured
+    command = "ip addr list | sed -n \"/"+ adapter_ + "/,/" + adapter_ +  "/p\" | grep inet";
+    //ls = GetStdoutFromCommand("ip addr list | sed -n \"/eth0/,/eth0/p\" | grep inet");
+    ls = GetStdoutFromCommand(command, MAX_BUFFER_LENGTH);
+
+    if(ls.find(main_ipaddress_,0) == string::npos)
+    {
+        BOOST_LOG_SEV(lg, notification) << "IP address removed properly : " << gui_ipaddress_;
+        return NO_ERROR;
+    }
+    else
+    {
+        BOOST_LOG_SEV(lg, critical) << "IP address not removed properly : " << gui_ipaddress_;
+        return ERROR_MAIN_IP_CONFIGURATION;
     }
 }

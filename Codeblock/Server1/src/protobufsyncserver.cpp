@@ -49,9 +49,8 @@ void ProtobufSyncServer::ProtobufSyncServerThreadsCode(void)   //RCF and protobu
         RCF::enableLogging( RCF::LogToFile("/home/train/programs/real/rcfproto.log"), 4, "");
         BOOST_LOG_SEV(lg, notification) << "RCF init !";
         // Create server.
-// TODO (dev#5#15-03-27): to make configurable
-        RCF::RcfProtoServer server( RCF::TcpEndpoint("0.0.0.0", 50001) );
-        BOOST_LOG_SEV(lg, notification) << "Protobuf server created !";
+        RCF::RcfProtoServer server( RCF::TcpEndpoint("0.0.0.0", std::stoi(serverconf->listener_port_)));
+        BOOST_LOG_SEV(lg, notification) << "Protobuf server created ! listen on 0.0.0.0, port " << std::stoi(serverconf->listener_port_);
         // Bind Protobuf service.
         PositionInformationImpl positionInformationImpl;
         server.bindService(positionInformationImpl);
@@ -74,6 +73,18 @@ void ProtobufSyncServer::ProtobufSyncServerThreadsCode(void)   //RCF and protobu
         BOOST_LOG_SEV(lg, critical) << "RCF::Exception: " << e.getErrorString();
         return;
     }
+}
+
+void ProtobufSyncServer::Start(void)
+{
+    // This will start the thread. Notice move semantics!
+    ProtobufSyncServerThread = std::thread(&ProtobufSyncServer::ProtobufSyncServerThreadsCode,this);
+}
+
+void ProtobufSyncServer::Join(void)
+{
+    // This will start the thread. Notice move semantics!
+    ProtobufSyncServerThread.join();
 }
 
 

@@ -13,26 +13,30 @@
 
 #include <cstddef>
 #include <iostream>
-#include <boost/log/expressions.hpp>
-#include <boost/log/sources/severity_logger.hpp>
-//#include <boost/log/sources/record_ostream.hpp>
-//#include <boost/log/utility/formatting_ostream.hpp>
-//#include <boost/log/utility/manipulators/to_log.hpp>
-#include <boost/log/utility/setup/console.hpp>
+//#include <boost/log/expressions.hpp>
+//#include <boost/log/sources/severity_logger.hpp>
+//#include <boost/log/utility/setup/console.hpp>
 #include <boost/log/utility/setup/common_attributes.hpp>
+
+#include "config.hpp"
 
 namespace logging = boost::log;
 //namespace attrs = boost::log::attributes;
 namespace src = boost::log::sources;
-//namespace sinks = boost::log::sinks;
+namespace sinks = boost::log::sinks;
 //namespace expr = boost::log::expressions;
 namespace keywords = boost::log::keywords;
 
-#define NUM_SEVERITY_LEVELS 5
+
+#define NUM_SEVERITY_LEVELS 9
 
 enum severity_level
 {
-    normal = 0,
+    debug,                          //for development team
+    debug_temporary,                //for development team
+    internal_message,
+    external_message,
+    threads,
     notification,
     warning,
     error,
@@ -41,11 +45,15 @@ enum severity_level
 
 static const char* severity_level_strings[] =
 {
-            "normal",
-            "notification",
-            "warning",
-            "error",
-            "critical"
+            "debug              ",                      //for development team
+            "debug_temporary    ",                //for development team
+            "internal_message   ",
+            "external_message   ",
+            "threads            ",
+            "notification       ",
+            "warning            ",
+            "error              ",
+            "critical           "
 };
 
 template< typename CharT, typename TraitsT >
@@ -68,6 +76,8 @@ typedef src::severity_channel_logger_mt<
     std::string         // the type of the channel name
 > startup_severity_channel_logger_mt;
 
+typedef sinks::synchronous_sink< sinks::text_file_backend > sink_t;
+
 BOOST_LOG_INLINE_GLOBAL_LOGGER_INIT(startup_logger_c1, startup_severity_channel_logger_mt)
 {
     // Specify the channel name on construction, similarly as with the channel_logger
@@ -86,11 +96,21 @@ BOOST_LOG_INLINE_GLOBAL_LOGGER_INIT(protobufsyncserver_logger_c1, startup_severi
     return startup_severity_channel_logger_mt(keywords::channel = "server1\t");
 }
 
+BOOST_LOG_INLINE_GLOBAL_LOGGER_INIT(train_internal_comm_logger_c1, startup_severity_channel_logger_mt)
+{
+    // Specify the channel name on construction, similarly as with the channel_logger
+    return startup_severity_channel_logger_mt(keywords::channel = "train_internal\t");
+}
+
 class log
 {
     public:
         log();
+        log(config const *);
         virtual ~log();
+        boost::shared_ptr< sink_t > startupSink;
+        boost::shared_ptr< sink_t > afterConfigSink;
+        void RemoveStartupSink(void);
     protected:
     private:
 };
