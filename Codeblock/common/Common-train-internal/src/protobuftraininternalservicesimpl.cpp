@@ -1,11 +1,15 @@
 #include <protobuftraininternalservicesimpl.hpp>
 #include <unordered_map>
+#include "TrainSession.hpp"
 
 using namespace std;
 using namespace google::protobuf;
 
-extern uint16_t g_commSessionMutexLockTimeoutMilliseconds;
-
+SetOperationModeImpl::SetOperationModeImpl(config const * config, std::unordered_map<std::string, TrainSession> * trainsSessions )
+{
+    softwareConfig_ = config;
+    trainsSessions_ = trainsSessions;
+}
 
 // PositionInformation() method implementation.
 void SetOperationModeImpl::SetOperationMode(  RpcController *                             controller,
@@ -14,7 +18,7 @@ void SetOperationModeImpl::SetOperationMode(  RpcController *                   
                                                     Closure *                                   done)
 {
 
-    startup_severity_channel_logger_mt& lg = train_internal_comm_logger_c1::get();
+    startup_severity_channel_logger_mt& lg = server_logger::get();
 
     BOOST_LOG_SEV(lg, notification) << "Set operation Mode received !!! ";
 
@@ -29,6 +33,34 @@ void SetOperationModeImpl::SetOperationMode(  RpcController *                   
     // Send response back to the client.
     done->Run();
 
-    BOOST_LOG_SEV(lg, warning) << "Train Communication Session Lock failed !!!";
+    //Retrieve session info and store them in global trainsSessions unordered_map
+    //trainsSessions is keyed by train IP addresses
+    std::string ipaddressmask = rcfSession.getClientAddress().string();
+    std::size_t pos = ipaddressmask.find(":");      // position of "/" in string
+    std::string ipaddress = ipaddressmask.substr (0,pos);
+
+    TrainSession & trainSession = (*trainsSessions_)[ipaddress];
+
+    //retrieve a ref to train comm session
+    TrainCommSession & traincommsession = trainSession.GetTrainCommSessionRef();
+
+    if(traincommsession.TryLockCommSessionMutexFor(softwareConfig_->commSessionMutexLockTimeoutMilliseconds_))
+    {
+        traincommsession.SetSessionActive();
+        traincommsession.SetIpAddress(ipaddress);
+        BOOST_LOG_SEV(lg, notification) << "remote address: " << traincommsession.GetIpAddress();
+        time_t timeraw = rcfSession.getConnectedAtTime();
+        if(timeraw != traincommsession.GetSessionConnectionTime() && traincommsession.GetSessionRemoteCallCount() != 0)  traincommsession.IncConnectionLossCount();
+        traincommsession.SetSessionConnectionTime(timeraw);
+        traincommsession.SetSessionConnectionDuration(pprotoSession->getConnectionDuration());
+        traincommsession.SetSessionRemoteCallCount(pprotoSession->getRemoteCallCount());
+        traincommsession.SetSessionTotalBytesReceived(pprotoSession->getTotalBytesReceived() );
+        traincommsession.SetSessionTotalBytesSent(pprotoSession->getTotalBytesSent());
+        traincommsession.UnlockCommSessionMutex();
+    }
+    else
+    {
+        BOOST_LOG_SEV(lg, warning) << "Train Communication Session Lock failed !!!";
+    }
 }
 

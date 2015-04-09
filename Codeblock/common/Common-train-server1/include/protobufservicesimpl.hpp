@@ -20,5 +20,4 @@ public:
         google::protobuf::Closure *                 done);
 };
 
-
 #endif // PROTOBUFTRAINSERVERIMPL_HPP

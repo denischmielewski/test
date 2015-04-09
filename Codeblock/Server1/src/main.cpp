@@ -14,7 +14,7 @@
 
 volatile int g_signal_received = 0;
 std::unordered_map<std::string, TrainSession>    g_trains;
-uint16_t g_commSessionMutexLockTimeoutMilliseconds = 111;
+extern uint16_t g_commSessionMutexLockTimeoutMilliseconds;
 
 void sighandler( int sig, siginfo_t * siginfo, void * context)
 {

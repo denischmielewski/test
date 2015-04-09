@@ -1,13 +1,13 @@
 #include <protobufservicesimpl.hpp>
 #include <unordered_map>
 #include "TrainSession.hpp"
-#include "TrainCommSession.hpp"
 
 using namespace std;
 using namespace google::protobuf;
 
 extern std::unordered_map<std::string, TrainSession>    g_trains;
-extern uint16_t g_commSessionMutexLockTimeoutMilliseconds;
+uint16_t g_commSessionMutexLockTimeoutMilliseconds = 111;
+
 
 
 // PositionInformation() method implementation.
@@ -16,16 +16,16 @@ void PositionInformationImpl::PositionInformation(  RpcController *             
                                                     PositionInformationReceive *                response,
                                                     Closure *                                   done)
 {
-    startup_severity_channel_logger_mt& lg = protobufsyncserver_logger_c1::get();
+    startup_severity_channel_logger_mt& lg = server_logger::get();
 
-    BOOST_LOG_SEV(lg, notification) << "message received from train !";
+    BOOST_LOG_SEV(lg, notification) << "position received from train !";
 
     RCF::RcfProtoController * rcfController = static_cast<RCF::RcfProtoController *>(controller);
     RCF::RcfProtoSession * pprotoSession = rcfController->getSession();
     RCF::RcfSession & rcfSession = rcfController->getSession()->getRcfSession();
 
     // Fill in the response.
-    response->set_servername("server");
+    response->set_servername("Position received OK !");
     // Send response back to the client.
     done->Run();
 
@@ -59,4 +59,3 @@ void PositionInformationImpl::PositionInformation(  RpcController *             
         BOOST_LOG_SEV(lg, warning) << "Train Communication Session Lock failed !!!";
     }
 }
-

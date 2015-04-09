@@ -37,7 +37,7 @@ ProtobufSyncServer::~ProtobufSyncServer()
 
 void ProtobufSyncServer::ProtobufSyncServerThreadsCode(void)   //RCF and protobuf will start other threads hence the thread(s)
 {
-    startup_severity_channel_logger_mt& lg = protobufsyncserver_logger_c1::get();
+    startup_severity_channel_logger_mt& lg = server_logger::get();
     std::chrono::seconds duration(1);
 
     this->session_.sessionactive_=true;
@@ -49,8 +49,8 @@ void ProtobufSyncServer::ProtobufSyncServerThreadsCode(void)   //RCF and protobu
         RCF::enableLogging( RCF::LogToFile("/home/train/programs/real/rcfproto.log"), 4, "");
         BOOST_LOG_SEV(lg, notification) << "RCF init !";
         // Create server.
-        RCF::RcfProtoServer server( RCF::TcpEndpoint("0.0.0.0", std::stoi(serverconf->listener_port_)));
-        BOOST_LOG_SEV(lg, notification) << "Protobuf server created ! listen on 0.0.0.0, port " << std::stoi(serverconf->listener_port_);
+        RCF::RcfProtoServer server( RCF::TcpEndpoint("0.0.0.0", std::stoi(serverconf->main_listener_port_)));
+        BOOST_LOG_SEV(lg, notification) << "Protobuf server created ! listen on 0.0.0.0, port " << std::stoi(serverconf->main_listener_port_);
         // Bind Protobuf service.
         PositionInformationImpl positionInformationImpl;
         server.bindService(positionInformationImpl);

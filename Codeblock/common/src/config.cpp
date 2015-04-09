@@ -85,8 +85,20 @@ config::config()
         BOOST_LOG_SEV(lg, notification) << "timeout on operation session mutex lock : " << operationSessionMutexLockTimeoutMilliseconds_ << " milliseconds";
 
         node = "TRAIN_CONFIG_DEV.COMMUNICATION_THREAD_SLEEP_DURATION";
-        communicationThreadsSleepDurationMilliseconds_= std::stoul(pt2.get<std::string>(node), nullptr, 10);
+        communicationThreadsSleepDurationMilliseconds_ = std::stoul(pt2.get<std::string>(node), nullptr, 10);
         BOOST_LOG_SEV(lg, notification) << "communication Threads sleep duration : " << communicationThreadsSleepDurationMilliseconds_ << " milliseconds";
+
+        node = "TRAIN_CONFIG_DEV.LINUX_SYS_CALL_SLEEP_DURATION";
+        linuxSysCallSleepDurationMilliseconds_ = std::stoul(pt2.get<std::string>(node), nullptr, 10);
+        BOOST_LOG_SEV(lg, notification) << "Linux system call sleep duration : " << linuxSysCallSleepDurationMilliseconds_ << " microseconds";
+
+        node = "TRAIN_CONFIG_DEV.THREADS_LOG_NOTIFICATION_FREQUENCY";
+        ThreadsLogNotificationFrequencyMilliseconds_ = std::stoul(pt2.get<std::string>(node), nullptr, 10);
+        BOOST_LOG_SEV(lg, notification) << "Threads log notification frequency : " << ThreadsLogNotificationFrequencyMilliseconds_ << " milliseconds";
+
+        node = "TRAIN_CONFIG_DEV.THREADS_EXIT_TIMEOUT";
+        ThreadsExitTimeoutMilliseconds_ = std::stoul(pt2.get<std::string>(node), nullptr, 10);
+        BOOST_LOG_SEV(lg, notification) << "Threads exit timeout value : " << ThreadsExitTimeoutMilliseconds_ << " milliseconds";
 
         char * hostname = nullptr;
         hostname = new char[linuxSysCallBufferSize_];   //deleted at the end of the block
@@ -110,8 +122,12 @@ config::config()
         BOOST_LOG_SEV(lg, notification) << "Network adapter to use : " << adapter_;
 
         node = "TRAIN_STARTUP_CONFIG.TRAINS_IP_CONFIG.MAIN_LISTENER_PORT";
-        listener_port_ = pt1.get<std::string>(node);
-        BOOST_LOG_SEV(lg, notification) << "Communication port to use : " << listener_port_;
+        main_listener_port_ = pt1.get<std::string>(node);
+        BOOST_LOG_SEV(lg, notification) << "Communication port to use for main Sw : " << main_listener_port_;
+
+        node = "TRAIN_STARTUP_CONFIG.TRAINS_IP_CONFIG.GUI_LISTENER_PORT";
+        gui_listener_port_ = pt1.get<std::string>(node);
+        BOOST_LOG_SEV(lg, notification) << "Communication port to use for GUI Sw : " << gui_listener_port_;
 
         node = "TRAIN_STARTUP_CONFIG.TRAINS_IP_CONFIG.SERVER1.IP_ADDRESSES_AND_SUBNET.MAIN_IP";
         std::string ipaddressmask = pt1.get<std::string>(node);
@@ -129,7 +145,7 @@ config::config()
         ipaddressmask = pt1.get<std::string>(node);
         pos = ipaddressmask.find("/");      // position of "/" in string
         server3_ipaddress_ = ipaddressmask.substr (0,pos);
-        BOOST_LOG_SEV(lg, notification) << "server1 Main sw IP address : " << server3_ipaddress_;
+        BOOST_LOG_SEV(lg, notification) << "server3 Main sw IP address : " << server3_ipaddress_;
 
         node = "TRAIN_STARTUP_CONFIG.LOG.LOG_COLLECTOR_FOLDER";
         boostLogCollectorFolder_ = pt1.get<std::string>(node);
@@ -184,12 +200,12 @@ int16_t config::configureMainIPPortMask_(void)
 
     if(ls.find(main_ipaddress_,0) == string::npos)
     {
-        BOOST_LOG_SEV(lg, critical) << "address not configured : " << main_ipaddress_;
+        BOOST_LOG_SEV(lg, critical) << "Train main IP address not configured : " << main_ipaddress_;
         return ERROR_MAIN_IP_CONFIGURATION;
     }
     else
     {
-        BOOST_LOG_SEV(lg, notification) << "address configured properly : " << main_ipaddress_;
+        BOOST_LOG_SEV(lg, notification) << "Train main IP address configured properly : " << main_ipaddress_;
         return NO_ERROR;
     }
 }
@@ -206,12 +222,12 @@ int16_t config::configureGUIIPPortMask_(void)
 
     if(ls.find(gui_ipaddress_,0) == string::npos)
     {
-        BOOST_LOG_SEV(lg, critical) << "address not configured : " << gui_ipaddress_;
+        BOOST_LOG_SEV(lg, critical) << "Train GUI IP address not configured : " << gui_ipaddress_;
         return ERROR_GUI_IP_CONFIGURATION;
     }
     else
     {
-        BOOST_LOG_SEV(lg, notification) << "address configured properly : " << gui_ipaddress_;
+        BOOST_LOG_SEV(lg, notification) << "Train GUI IP address configured properly : " << gui_ipaddress_;
         return NO_ERROR;
     }
 }
@@ -228,12 +244,12 @@ int16_t config::removeMainIPPortMask_(void)
 
     if(ls.find(main_ipaddress_,0) == string::npos)
     {
-        BOOST_LOG_SEV(lg, notification) << "IP address removed properly : " << main_ipaddress_;
+        BOOST_LOG_SEV(lg, notification) << "Train main IP address removed properly : " << main_ipaddress_;
         return NO_ERROR;
     }
     else
     {
-        BOOST_LOG_SEV(lg, critical) << "IP address not removed properly : " << main_ipaddress_;
+        BOOST_LOG_SEV(lg, critical) << "Train main IP address not removed properly : " << main_ipaddress_;
         return ERROR_MAIN_IP_CONFIGURATION;
     }
 }
@@ -250,12 +266,12 @@ int16_t config::removeGUIIPPortMask_(void)
 
     if(ls.find(main_ipaddress_,0) == string::npos)
     {
-        BOOST_LOG_SEV(lg, notification) << "IP address removed properly : " << gui_ipaddress_;
+        BOOST_LOG_SEV(lg, notification) << "Train GUI IP address removed properly : " << gui_ipaddress_;
         return NO_ERROR;
     }
     else
     {
-        BOOST_LOG_SEV(lg, critical) << "IP address not removed properly : " << gui_ipaddress_;
+        BOOST_LOG_SEV(lg, critical) << "train GUI IP address not removed properly : " << gui_ipaddress_;
         return ERROR_MAIN_IP_CONFIGURATION;
     }
 }

@@ -3,6 +3,7 @@
 #include "log.hpp"
 #include <iostream>
 #include "protobufsyncclient.hpp"
+#include "protobufsyncGUIclient.hpp"
 #include <thread>
 #include <chrono>
 #include <signal.h>
@@ -36,6 +37,7 @@ int main()
     class log * train_logs_start, * train_logs_after_configread;
     class config * train_configuration;
     ProtobufSyncClient * client;
+    ProtobufSyncGUIClient * client2;
 
     startup_severity_channel_logger_mt& lg = comm_logger_c1::get();
 
@@ -101,13 +103,26 @@ int main()
         BOOST_LOG_SEV(lg, critical) << "problem with ProtobufSyncClient !!!";
         return ERROR_CONFIG_FILE_HANDLING;
     }
+    BOOST_LOG_SEV(lg, notification) << "try to create ProtobufSyncGUIClient !!!";
+    try
+    {
+            client2 = new ProtobufSyncGUIClient(train_configuration);
+            client2->Start();
+    }
+    catch(int e)
+    {
+        BOOST_LOG_SEV(lg, critical) << "problem with ProtobufSyncGUIClient !!!";
+        return ERROR_CONFIG_FILE_HANDLING;
+    }
 
 //    if(client->ProtobufSyncClientThread.joinable()) client->Join();
     client->Join();
+    client2->Join();
 
     BOOST_LOG_SEV(lg, notification) << "All threads completed.";
 
     delete(client);
+    delete(client2);
     train_configuration->removeMainIPPortMask_();
     delete(train_configuration);
     delete(train_logs_start);

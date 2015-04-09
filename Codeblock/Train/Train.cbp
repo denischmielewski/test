@@ -28,6 +28,7 @@
 					<Add directory="../../lib/RCFProto-src-1.0.0.3/cpp/src" />
 					<Add directory="../common/Common-train-server1/include" />
 					<Add directory="../common/Common-train-internal/include" />
+					<Add directory="Codeblock/Train/include" />
 				</Compiler>
 				<Linker>
 					<Add option="`pkg-config --libs protobuf`" />
@@ -62,6 +63,7 @@
 					<Add directory="../../lib/RCFProto-src-1.0.0.3/cpp/src" />
 					<Add directory="../common/Common-train-server1/include" />
 					<Add directory="../common/Common-train-internal/include" />
+					<Add directory="Codeblock/Train/include" />
 				</Compiler>
 				<Linker>
 					<Add option="-s" />
@@ -90,7 +92,12 @@
 		<Unit filename="../../lib/RCFProto-src-1.0.0.3/cpp/src/RCFProto.cpp" />
 		<Unit filename="../common/Common-train-internal/include/protobuftraininternalservicesimpl.hpp" />
 		<Unit filename="../common/Common-train-internal/src/protobuftraininternalservicesimpl.cpp" />
+		<Unit filename="../common/Common-train-server1/include/TrainCommSession.hpp" />
 		<Unit filename="../common/Common-train-server1/include/TrainOperationSession.hpp" />
+		<Unit filename="../common/Common-train-server1/include/TrainSession.hpp" />
+		<Unit filename="../common/Common-train-server1/src/TrainCommSession.cpp" />
+		<Unit filename="../common/Common-train-server1/src/TrainOperationSession.cpp" />
+		<Unit filename="../common/Common-train-server1/src/TrainSession.cpp" />
 		<Unit filename="../common/include/config.hpp" />
 		<Unit filename="../common/include/errors.hpp" />
 		<Unit filename="../common/include/utils.hpp" />
@@ -99,9 +106,11 @@
 		<Unit filename="../common/src/config.cpp" />
 		<Unit filename="../common/src/utils.cpp" />
 		<Unit filename="include/log.hpp" />
+		<Unit filename="include/protobufsyncGUIclient.hpp" />
 		<Unit filename="include/protobufsyncclient.hpp" />
 		<Unit filename="src/log.cpp" />
 		<Unit filename="src/main.cpp" />
+		<Unit filename="src/protobufSyncGUIClient.cpp" />
 		<Unit filename="src/protobufsyncclient.cpp" />
 		<Extensions>
 			<code_completion />

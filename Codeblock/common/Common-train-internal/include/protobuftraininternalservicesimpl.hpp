@@ -3,28 +3,20 @@
 
 #include "log.hpp"
 #include <RCFProto.hpp>
+#include <unordered_map>
+#include "config.hpp"
+#include "TrainSession.hpp"
 
 // Include protoc-generated header.
 #include "TestRCFProto.pb.h"
 
 // PositionInformationService declaration.
-class PositionInformationImpl : public PositionInformationService
-{
-public:
-
-    // PositionInformation() method implementation.
-    void PositionInformation(
-        google::protobuf::RpcController *           controller,
-        const PositionInformationTransmit *         request,
-        PositionInformationReceive *                response,
-        google::protobuf::Closure *                 done);
-};
-
-// PositionInformationService declaration.
 class SetOperationModeImpl : public SetOperationModeService
 {
 public:
-
+    SetOperationModeImpl(config const *, std::unordered_map<std::string, TrainSession> *trainsSessions);
+    config const * softwareConfig_  = nullptr;
+    std::unordered_map<std::string, TrainSession> * trainsSessions_ = nullptr;
     // PositionInformation() method implementation.
     void SetOperationMode(
         google::protobuf::RpcController *           controller,

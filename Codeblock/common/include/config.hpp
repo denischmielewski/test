@@ -14,7 +14,8 @@ class config
         std::string main_ipaddress_ = "";
         std::string gui_ipaddressmask_ = "";
         std::string gui_ipaddress_ = "";
-        std::string listener_port_ = "";
+        std::string main_listener_port_ = "";
+        std::string gui_listener_port_ = "";
         int result = NO_ERROR;
         std::string boostLogCollectorFolder_ = "";
         uint16_t boostLogCollectorFolderMaxSizeInMbytes_ = 111; //111 Mbytes by default
@@ -25,10 +26,13 @@ class config
         std::string server1_ipaddress_ = "";
         std::string server2_ipaddress_ = "";
         std::string server3_ipaddress_ = "";
-        unsigned int linuxSysCallBufferSize_ = 8192;    //8192 bytes by default
-        uint16_t commSessionMutexLockTimeoutMilliseconds_ = 111; //111 ms by default
-        uint16_t operationSessionMutexLockTimeoutMilliseconds_ = 111; //111 ms by default
-        uint16_t communicationThreadsSleepDurationMilliseconds_ = 111; //111 ms by default
+        unsigned int linuxSysCallBufferSize_ = 8192;                    //8192 bytes by default
+        uint16_t commSessionMutexLockTimeoutMilliseconds_ = 111;        //111 ms by default
+        uint16_t operationSessionMutexLockTimeoutMilliseconds_ = 111;   //111 ms by default
+        uint16_t communicationThreadsSleepDurationMilliseconds_ = 111;  //111 ms by default
+        uint32_t linuxSysCallSleepDurationMilliseconds_ = 555;          //555 ms by default
+        uint32_t ThreadsLogNotificationFrequencyMilliseconds_ = 1111;               //1111 ms by default
+        uint32_t ThreadsExitTimeoutMilliseconds_ = 5555;                //5555 ms by default
         int16_t configureMainIPPortMask_(void);
         int16_t configureGUIIPPortMask_(void);
         int16_t removeMainIPPortMask_(void);

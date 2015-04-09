@@ -44,7 +44,7 @@ boost::shared_ptr< sink_t > init_logging_startup()
 
 
     logging::register_simple_formatter_factory<severity_level, char>("Severity");
-    std::string s = std::string(hostname) + "_SERVER_CONFIG_%Y%m%d_%H%M%S_%5N.log";
+    std::string s = std::string(hostname) + "_TRAINGUI_CONFIG_%Y%m%d_%H%M%S_%5N.log";
 
     // Create a text file sink
     boost::shared_ptr< file_sink > sink(new file_sink(
@@ -98,7 +98,7 @@ void init_logging_with_xml_config(config const * xmlconfig)
 
 
     logging::register_simple_formatter_factory<severity_level, char>("Severity");
-    std::string s = std::string(hostname) + "_SERVER_%Y%m%d_%H%M%S_%5N.log";
+    std::string s = std::string(hostname) + "_TRAINGUI_%Y%m%d_%H%M%S_%5N.log";
     delete [] hostname;
 
     // Create a text file sink
@@ -124,9 +124,6 @@ void init_logging_with_xml_config(config const * xmlconfig)
             % expr::smessage
     );
 
-// TODO (dev#1#15-03-27): Add filtering after adding several notification level
-
-
     if(xmlconfig->boostLogAutoFlush_) sink->locked_backend()->auto_flush(true);
     else    sink->locked_backend()->auto_flush(false);
 
@@ -144,8 +141,6 @@ void init_logging_with_xml_config(config const * xmlconfig)
 
     // Add the sink to the core
     logging::core::get()->add_sink(sink);
-
-
 }
 
 log::log()
