@@ -9,10 +9,11 @@
 #include <RCFProto.hpp>
 #include <ctime>
 #include <unordered_map>
-#include "protobufservicesimpl.hpp"
-#include "protobuftraininternalservicesimpl.hpp"
+#include "protobufpositioninformationserviceimpl.hpp"
+#include "protobufsettrainmodecommandserviceimpl.hpp"
 #include <QTimer>
 #include "TrainSession.hpp"
+#include <QString>
 
 // Include protoc-generated header.
 #include "TestRCFProto.pb.h"
@@ -32,6 +33,7 @@ public:
     ~TrainCommunicationsServer();
     TrainCommunicationsServer(config const * conf, std::unordered_map<std::string, TrainSession> * trainsSessions);
     void run(void);
+
 private:
     config const * serverconf=nullptr;
     std::unordered_map<std::string, TrainSession> * trainsSessions_;
@@ -41,6 +43,8 @@ public slots:
     void sendModeManual();
     void onCloseTrainGUI();
     void onThreadTimerShot();
+    void onPositionReceivedFromTrain(QString s);
+signals:
 
 };
 

@@ -39,6 +39,9 @@
 					<Add library="../../lib/libboostlog/libboost_system.so" />
 					<Add library="../../lib/libboostlog/libboost_thread.so" />
 				</Linker>
+				<ExtraCommands>
+					<Add after="../../batch/deploy_Server1_from_Codeblock_postbuild.sh" />
+				</ExtraCommands>
 			</Target>
 			<Target title="Release">
 				<Option output="bin/Release/Server1" prefix_auto="1" extension_auto="1" />
@@ -74,10 +77,6 @@
 					<Add library="../../lib/libboostlog/libboost_thread.so" />
 					<Add library="../../lib/libprotobuf/libprotobuf.so" />
 				</Linker>
-				<ExtraCommands>
-					<Add after="../../batch/deploy_Server1_from_Codeblock_postbuild.sh" />
-					<Mode after="always" />
-				</ExtraCommands>
 			</Target>
 		</Build>
 		<Compiler>
@@ -88,11 +87,9 @@
 		<Unit filename="../common/Common-train-server1/include/TrainCommSession.hpp" />
 		<Unit filename="../common/Common-train-server1/include/TrainOperationSession.hpp" />
 		<Unit filename="../common/Common-train-server1/include/TrainSession.hpp" />
-		<Unit filename="../common/Common-train-server1/include/protobufservicesimpl.hpp" />
 		<Unit filename="../common/Common-train-server1/src/TrainCommSession.cpp" />
 		<Unit filename="../common/Common-train-server1/src/TrainOperationSession.cpp" />
 		<Unit filename="../common/Common-train-server1/src/TrainSession.cpp" />
-		<Unit filename="../common/Common-train-server1/src/protobufservicesimpl.cpp" />
 		<Unit filename="../common/include/config.hpp" />
 		<Unit filename="../common/include/errors.hpp" />
 		<Unit filename="../common/include/utils.hpp" />
@@ -103,10 +100,14 @@
 		<Unit filename="include/TrainCommSession.hpp" />
 		<Unit filename="include/TrainSession.hpp" />
 		<Unit filename="include/log.hpp" />
+		<Unit filename="include/protobufservicesimpl.hpp" />
 		<Unit filename="include/protobufsyncserver.hpp" />
+		<Unit filename="include/protobuftraininternalservicesimpl.hpp" />
 		<Unit filename="src/log.cpp" />
 		<Unit filename="src/main.cpp" />
+		<Unit filename="src/protobufservicesimpl.cpp" />
 		<Unit filename="src/protobufsyncserver.cpp" />
+		<Unit filename="src/protobuftraininternalservicesimpl.cpp" />
 		<Extensions>
 			<code_completion />
 			<debugger />

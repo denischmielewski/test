@@ -43,6 +43,9 @@
 					<Add library="../../lib/libboostlog/libboost_system.so" />
 					<Add library="../../lib/libboostlog/libboost_thread.so" />
 				</Linker>
+				<ExtraCommands>
+					<Add before="../../batch/deploy_Train_from_Codeblock_postbuild.sh" />
+				</ExtraCommands>
 			</Target>
 			<Target title="Release">
 				<Option output="bin/Release/Train" prefix_auto="1" extension_auto="1" />
@@ -79,10 +82,6 @@
 					<Add library="../../lib/libboostlog/libboost_system.so" />
 					<Add library="../../lib/libboostlog/libboost_thread.so" />
 				</Linker>
-				<ExtraCommands>
-					<Add after="../../batch/deploy_Train_from_Codeblock_postbuild.sh" />
-					<Mode after="always" />
-				</ExtraCommands>
 			</Target>
 		</Build>
 		<Compiler>
@@ -90,8 +89,6 @@
 		</Compiler>
 		<Unit filename="../../lib/RCF-2.0.1.101/src/RCF/RCF.cpp" />
 		<Unit filename="../../lib/RCFProto-src-1.0.0.3/cpp/src/RCFProto.cpp" />
-		<Unit filename="../common/Common-train-internal/include/protobuftraininternalservicesimpl.hpp" />
-		<Unit filename="../common/Common-train-internal/src/protobuftraininternalservicesimpl.cpp" />
 		<Unit filename="../common/Common-train-server1/include/TrainCommSession.hpp" />
 		<Unit filename="../common/Common-train-server1/include/TrainOperationSession.hpp" />
 		<Unit filename="../common/Common-train-server1/include/TrainSession.hpp" />
@@ -106,11 +103,13 @@
 		<Unit filename="../common/src/config.cpp" />
 		<Unit filename="../common/src/utils.cpp" />
 		<Unit filename="include/log.hpp" />
+		<Unit filename="include/protobufservicesimpl.hpp" />
 		<Unit filename="include/protobufsyncGUIclient.hpp" />
 		<Unit filename="include/protobufsyncclient.hpp" />
 		<Unit filename="src/log.cpp" />
 		<Unit filename="src/main.cpp" />
 		<Unit filename="src/protobufSyncGUIClient.cpp" />
+		<Unit filename="src/protobufservicesimpl.cpp" />
 		<Unit filename="src/protobufsyncclient.cpp" />
 		<Extensions>
 			<code_completion />

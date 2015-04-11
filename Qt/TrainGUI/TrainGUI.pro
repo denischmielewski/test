@@ -23,12 +23,12 @@ SOURCES += main.cpp\
     ../../Codeblock/common/protobuf/TestRCFProto.pb.cc \
     ../../lib/RCF-2.0.1.101/src/RCF/RCF.cpp \
     ../../lib/RCFProto-src-1.0.0.3/cpp/src/RCFProto.cpp \
-    ../../Codeblock/common/Common-train-server1/src/protobufservicesimpl.cpp \
     ../../Codeblock/common/Common-train-server1/src/TrainCommSession.cpp \
     ../../Codeblock/common/Common-train-server1/src/TrainOperationSession.cpp \
     ../../Codeblock/common/Common-train-server1/src/TrainSession.cpp \
     traincommunicationsserver.cpp \
-    ../../Codeblock/common/Common-train-internal/src/protobuftraininternalservicesimpl.cpp
+    protobufpositioninformationserviceimpl.cpp \
+    protobufsettrainmodecommandserviceimpl.cpp
 
 HEADERS  += traincontrols.h \
     traincommunications.h \
@@ -37,12 +37,12 @@ HEADERS  += traincontrols.h \
     ../../Codeblock/common/include/errors.hpp \
     ../../Codeblock/common/include/utils.hpp \
     ../../Codeblock/common/protobuf/TestRCFProto.pb.h \
-    ../../Codeblock/common/Common-train-server1/include/protobufservicesimpl.hpp \
     ../../Codeblock/common/Common-train-server1/include/TrainCommSession.hpp \
     ../../Codeblock/common/Common-train-server1/include/TrainOperationSession.hpp \
     ../../Codeblock/common/Common-train-server1/include/TrainSession.hpp \
     traincommunicationsserver.h \
-    ../../Codeblock/common/Common-train-internal/include/protobuftraininternalservicesimpl.hpp
+    protobufpositioninformationserviceimpl.hpp \
+    protobufsettrainmodecommandserviceimpl.hpp
 
 FORMS    += traincontrols.ui
 

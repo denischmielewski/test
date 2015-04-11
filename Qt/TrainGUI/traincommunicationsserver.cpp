@@ -8,7 +8,7 @@ static startup_severity_channel_logger_mt * logger;
 TrainCommunicationsServer::TrainCommunicationsServer(config const * conf, std::unordered_map<std::string, TrainSession> * trainsSessions)
 {
     serverconf = conf;
-    startup_severity_channel_logger_mt& lg = trainGUI_logger::get();
+    startup_severity_channel_logger_mt& lg = comm_logger::get();
     trainsSessions_ = trainsSessions;
     logger = &lg;
 }
@@ -31,8 +31,9 @@ void TrainCommunicationsServer::run(void)
         RCF::RcfProtoServer server( RCF::TcpEndpoint("0.0.0.0", std::stoi(serverconf->gui_listener_port_)));
         BOOST_LOG_SEV(*logger, notification) << "trainGUI Protobuf server created ! listen on 0.0.0.0, port " << std::stoi(serverconf->gui_listener_port_);
         // Bind Protobuf services.
-        PositionInformationImpl positionInformationImpl;
+        PositionInformationImpl positionInformationImpl(serverconf, trainsSessions_);
         server.bindService(positionInformationImpl);
+        connect(&positionInformationImpl, SIGNAL(PositionReceivedFromTrain(QString)), this, SLOT(onPositionReceivedFromTrain(QString)));
         SetOperationModeImpl setOperationModeInformationImpl(serverconf, trainsSessions_);
         server.bindService(setOperationModeInformationImpl);
 
@@ -45,14 +46,8 @@ void TrainCommunicationsServer::run(void)
         QTimer * timer = new QTimer;
         connect(timer, &QTimer::timeout, this, &TrainCommunicationsServer::onThreadTimerShot);
         timer->start(serverconf->ThreadsLogNotificationFrequencyMilliseconds_);
-/*        while(!closeGUI)
-        {
-            this->thread()->msleep(serverconf->communicationThreadsSleepDurationMilliseconds_);
-            BOOST_LOG_SEV(*logger, notification) << "remaining timer time" << timer->remainingTime();
-        }
-        if(closeGUI) BOOST_LOG_SEV(*logger, notification) << "Closing GUI, terminating TrainCommunicationsServerThreads";
-*/
         exec();
+        BOOST_LOG_SEV(*logger, notification) << "TrainCommunicationsServerThread event loop terminated";
     }
     catch(const RCF::Exception & e)
     {
@@ -64,25 +59,39 @@ void TrainCommunicationsServer::run(void)
 void TrainCommunicationsServer::sendModeAutomatic()
 {
     //QMessageBox::information(0, "..", "pushed from automatic button !",0,0);
-    BOOST_LOG_SEV(*logger, notification) << "Automatic mode button pushed !";
+    //BOOST_LOG_SEV(*logger, notification) << "Automatic mode button pushed !";
 }
 
 void TrainCommunicationsServer::sendModeManual()
 {
     //QMessageBox::information(0, "..", "pushed from manual button !",0,0);
-    BOOST_LOG_SEV(*logger, notification) << "Manual mode button pushed !";
+    //BOOST_LOG_SEV(*logger, notification) << "Manual mode button pushed !";
 }
 
 void TrainCommunicationsServer::onCloseTrainGUI()
 {
+    //QMessageBox::information(0, "..", "onCloseTrainGUI ... !",0,0);
     closeGUI = true;
-    //QMessageBox::information(0, "..", "in communication ... !",0,0);
-    BOOST_LOG_SEV(*logger, notification) << "Close window button pushed !";
+    //BOOST_LOG_SEV(*logger, notification) << "Close window button event received in TrainCommunicationsServer thread !";
+    QMessageBox *mbox = new QMessageBox;
+    std::string s = "please wait " + std::to_string(serverconf->ThreadsExitTimeoutMilliseconds_/1000) + " seconds !";
+    mbox->setIcon(QMessageBox::Information);
+    mbox->setWindowTitle(QString::fromStdString(s));
+    mbox->setText("program is closing !");
+    QTimer::singleShot(serverconf->ThreadsExitTimeoutMilliseconds_, Qt::PreciseTimer, mbox, SLOT(close()));
+    mbox->show();
+
+    //this->thread()->msleep(serverconf->ThreadsExitTimeoutMilliseconds_);
     this->exit();
-    if(this->wait(serverconf->ThreadsExitTimeoutMilliseconds_) == false)    BOOST_LOG_SEV(*logger, warning) << "TrainCommunicationsServer Thread did not finished in allocated time !";;
+    if(this->wait(serverconf->ThreadsExitTimeoutMilliseconds_) == false) BOOST_LOG_SEV(*logger, warning) << "TrainCommunicationsServer Thread did not finished in allocated time !";
 }
 
 void TrainCommunicationsServer::onThreadTimerShot(void)
 {
-    BOOST_LOG_SEV(*logger, notification) << "hello from trainGUI server thread";
+    BOOST_LOG_SEV(*logger, notification) << "hello from trainGUI comm server thread";
+}
+
+void TrainCommunicationsServer::onPositionReceivedFromTrain(QString s)
+{
+    BOOST_LOG_SEV(*logger, notification) << "position received from train = " << s.toStdString();
 }

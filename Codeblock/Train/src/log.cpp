@@ -44,7 +44,7 @@ boost::shared_ptr< sink_t > init_logging_startup()
 
 
     logging::register_simple_formatter_factory<severity_level, char>("Severity");
-    std::string s = std::string(hostname) + "_MAIN_CONFIG_%Y%m%d_%H%M%S_%5N.log";
+    std::string s = std::string(hostname) + "_TRAIN_CONFIG_%Y%m%d_%H%M%S_%5N.log";
 
     // Create a text file sink
     boost::shared_ptr< file_sink > sink(new file_sink(
@@ -98,7 +98,7 @@ void init_logging_with_xml_config(config const * xmlconfig)
 
 
     logging::register_simple_formatter_factory<severity_level, char>("Severity");
-    std::string s = std::string(hostname) + "_MAIN_%Y%m%d_%H%M%S_%5N.log";
+    std::string s = std::string(hostname) + "_TRAIN_%Y%m%d_%H%M%S_%5N.log";
     delete [] hostname;
 
     // Create a text file sink

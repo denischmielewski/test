@@ -4,15 +4,17 @@
 #include "config.hpp"
 #include "log.hpp"
 #include <iostream>
-#include <thread>
+//#include <thread>
 #include <chrono>
 #include <unordered_map>
 #include "traincommunicationsserver.h"
 #include "TrainSession.hpp"
+#include <QObject>
+#include <QThread>
 
 #define VERSION     "0.0.1.2"
 
-std::unordered_map<std::string, TrainSession>    g_trains;
+//std::unordered_map<std::string, TrainSession>    g_trains;
 
 int main(int argc, char *argv[])
 {
@@ -72,51 +74,50 @@ int main(int argc, char *argv[])
 
     //now we can log
 
-    t = new TrainCommunicationsServer(trainGUI_configuration, &trainsSessions);
-    t->start();
-    TrainControls w(0, trainGUI_configuration, t);
+    TrainCommunicationsServer TrainCommunicationsServerThread(trainGUI_configuration, &trainsSessions);
+    TrainCommunicationsServerThread.start();
+
+    TrainControls w(0, trainGUI_configuration, &TrainCommunicationsServerThread);
     BOOST_LOG_SEV(*logger, notification) << "Program trainGUI started ! Version : " << VERSION << " date : " << __DATE__ << ":" << __TIME__;
     BOOST_LOG_SEV(*logger, notification) << "Everything configured, communication thread running ... !";
-
-
-/*    //Log Summary of communication sessions with trains
-    BOOST_LOG_SEV(lg, notification) << "train communication sessions summary :" << std::endl;
-    int i = 0;
-    for ( auto it = g_trains.begin(); it != g_trains.end(); ++it ){i++;};
-    BOOST_LOG_SEV(lg, notification) << "number of sessions :" << i;
-    for ( auto it = g_trains.begin(); it != g_trains.end(); ++it )
-    {
-        BOOST_LOG_SEV(lg, notification) << "Train IP address :" << it->first;
-        TrainSession trainsession = it->second;
-        TrainCommSession & traincommsession = trainsession.GetTrainCommSessionRef();
-        if(traincommsession.TryLockCommSessionMutexFor(server_configuration->commSessionMutexLockTimeoutMilliseconds_))
-        {
-            time_t timeraw = traincommsession.GetSessionConnectionTime();
-#warning TODO (dev#1#15-03-27): the following line add a carriage return in log file.
-            BOOST_LOG_SEV(lg, notification) << "Session connection at : " << ctime(&timeraw);
-            BOOST_LOG_SEV(lg, notification) << "Session connection duration : " << traincommsession.GetSessionConnectionDuration();
-            BOOST_LOG_SEV(lg, notification) << "Session remote calls count : " << traincommsession.GetSessionRemoteCallCount();
-            BOOST_LOG_SEV(lg, notification) << "Session total bytes received : " << traincommsession.GetSessionTotalBytesReceived();
-            BOOST_LOG_SEV(lg, notification) << "Session total bytes sent : " << traincommsession.GetSessionTotalBytesSent();
-            BOOST_LOG_SEV(lg, notification) << "Session connection lost count : " << traincommsession.GetSessionConnectionLossCount();
-            traincommsession.UnlockCommSessionMutex();
-        }
-        else
-        {
-            BOOST_LOG_SEV(lg, warning) << "Train Communication Session Lock failed !!!";
-        }
-    }
-*/
 
     w.show();
 
     int ret = a.exec();
 
-    t->wait();
+    TrainCommunicationsServerThread.wait();
     trainGUI_configuration->removeGUIIPPortMask_();
-    delete(t);
     delete(trainGUI_configuration);
     delete(trainGUI_logs_after_configread);
+
+    //Log Summary of communication sessions with trains
+    BOOST_LOG_SEV(*logger, notification) << "train communication sessions summary :" << std::endl;
+    int i = 0;
+    for ( auto it = trainsSessions.begin(); it != trainsSessions.end(); ++it ){i++;};
+    BOOST_LOG_SEV(*logger, notification) << "number of sessions :" << i;
+    for ( auto it = trainsSessions.begin(); it != trainsSessions.end(); ++it )
+    {
+        BOOST_LOG_SEV(*logger, notification) << "Train IP address :" << it->first;
+        TrainSession trainsession = it->second;
+        TrainCommSession & traincommsession = trainsession.GetTrainCommSessionRef();
+        if(traincommsession.TryLockCommSessionMutexFor(trainGUI_configuration->commSessionMutexLockTimeoutMilliseconds_))
+        {
+            time_t timeraw = traincommsession.GetSessionConnectionTime();
+#warning TODO (dev#1#15-03-27): the following line add a carriage return in log file.
+            BOOST_LOG_SEV(*logger, notification) << "Session connection at : " << ctime(&timeraw);
+            BOOST_LOG_SEV(*logger, notification) << "Session connection duration : " << traincommsession.GetSessionConnectionDuration();
+            BOOST_LOG_SEV(*logger, notification) << "Session remote calls count : " << traincommsession.GetSessionRemoteCallCount();
+            BOOST_LOG_SEV(*logger, notification) << "Session total bytes received : " << traincommsession.GetSessionTotalBytesReceived();
+            BOOST_LOG_SEV(*logger, notification) << "Session total bytes sent : " << traincommsession.GetSessionTotalBytesSent();
+            BOOST_LOG_SEV(*logger, notification) << "Session connection lost count : " << traincommsession.GetSessionConnectionLossCount();
+            traincommsession.UnlockCommSessionMutex();
+        }
+        else
+        {
+            BOOST_LOG_SEV(*logger, warning) << "Train Communication Session Lock failed !!!";
+        }
+    }
+
     BOOST_LOG_SEV(*logger, notification) << "EVERYTHING TERMINATED PROPERLY !!! GUI return code = " << ret;
 
     return NO_ERROR;

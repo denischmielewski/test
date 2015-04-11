@@ -53,23 +53,18 @@ TrainControls::~TrainControls()
 void TrainControls::on_Manual_clicked()
 {
     //QMessageBox::information(0, "..", "I have been pushed 0001 !",0,0);
+    BOOST_LOG_SEV(*logger, notification) << "GUI manual moe button clicked !";
 }
 
 void TrainControls::on_Automatic_clicked(bool checked)
 {
-    if(checked == true)
-    {
-        //QMessageBox::information(0, "..", "automatic button true !",0,0);
-    }
-    else
-    {
-        //QMessageBox::information(0, "..", "automatic button false !",0,0);
-    }
+    BOOST_LOG_SEV(*logger, notification) << "GUI automatic mode button clicked !";
 }
 
 void TrainControls::closeEvent(QCloseEvent * evt)
 {
     //QMessageBox::information(0, "..", "close event ...",0,0);
+    BOOST_LOG_SEV(*logger, notification) << "GUI close control clicked !";
     emit myclose();
     evt->accept();
 }

@@ -1,46 +1,50 @@
-#include <protobufservicesimpl.hpp>
+#include <protobufsettrainmodecommandserviceimpl.hpp>
 #include <unordered_map>
 #include "TrainSession.hpp"
 
 using namespace std;
 using namespace google::protobuf;
 
-extern std::unordered_map<std::string, TrainSession>    g_trains;
-uint16_t g_commSessionMutexLockTimeoutMilliseconds = 111;
-
-
+SetOperationModeImpl::SetOperationModeImpl(config const * config, std::unordered_map<std::string, TrainSession> * trainsSessions )
+{
+    softwareConfig_ = config;
+    trainsSessions_ = trainsSessions;
+}
 
 // PositionInformation() method implementation.
-void PositionInformationImpl::PositionInformation(  RpcController *                             controller,
-                                                    const PositionInformationTransmit *         request,
-                                                    PositionInformationReceive *                response,
+void SetOperationModeImpl::SetOperationMode(  RpcController *                             controller,
+                                                    const SetOperationModeCommand *         request,
+                                                    SetOperationModeResponse *                response,
                                                     Closure *                                   done)
 {
-    startup_severity_channel_logger_mt& lg = server_logger::get();
 
-    BOOST_LOG_SEV(lg, notification) << "position received from train !";
+    startup_severity_channel_logger_mt& lg = comm_logger::get();
 
     RCF::RcfProtoController * rcfController = static_cast<RCF::RcfProtoController *>(controller);
     RCF::RcfProtoSession * pprotoSession = rcfController->getSession();
     RCF::RcfSession & rcfSession = rcfController->getSession()->getRcfSession();
 
+    BOOST_LOG_SEV(lg, notification) << "position received from " << rcfSession.getClientAddress().string();
+
     // Fill in the response.
-    response->set_servername("Position received OK !");
+    response->set_previousmode("Manual");
+    response->set_newmode("Automatic");
+
     // Send response back to the client.
     done->Run();
 
-    //Retrieve session info and store them in global g_trains unordered_map
-    //g_trains is keyed by train IP addresses
+    //Retrieve session info and store them in global trainsSessions unordered_map
+    //trainsSessions is keyed by train IP addresses
     std::string ipaddressmask = rcfSession.getClientAddress().string();
     std::size_t pos = ipaddressmask.find(":");      // position of "/" in string
     std::string ipaddress = ipaddressmask.substr (0,pos);
 
-    TrainSession & trainSession = g_trains[ipaddress];
+    TrainSession & trainSession = (*trainsSessions_)[ipaddress];
 
     //retrieve a ref to train comm session
     TrainCommSession & traincommsession = trainSession.GetTrainCommSessionRef();
 
-    if(traincommsession.TryLockCommSessionMutexFor(g_commSessionMutexLockTimeoutMilliseconds))
+    if(traincommsession.TryLockCommSessionMutexFor(softwareConfig_->commSessionMutexLockTimeoutMilliseconds_))
     {
         traincommsession.SetSessionActive();
         traincommsession.SetIpAddress(ipaddress);
@@ -59,3 +63,4 @@ void PositionInformationImpl::PositionInformation(  RpcController *             
         BOOST_LOG_SEV(lg, warning) << "Train Communication Session Lock failed !!!";
     }
 }
+

@@ -7,11 +7,12 @@
 #include <thread>
 #include <chrono>
 #include <signal.h>
+#include <unordered_map>
+#include "TrainSession.hpp"
 
 #define VERSION     "0.0.1.2"
 
 volatile int g_signal_received = 0;
-uint16_t g_commSessionMutexLockTimeoutMilliseconds = 111;
 
 void sighandler( int sig, siginfo_t * siginfo, void * context)
 {
@@ -38,6 +39,7 @@ int main()
     class config * train_configuration;
     ProtobufSyncClient * client;
     ProtobufSyncGUIClient * client2;
+    std::unordered_map<std::string, TrainSession>    trainsSessions;
 
     startup_severity_channel_logger_mt& lg = comm_logger_c1::get();
 
