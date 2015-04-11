@@ -55,7 +55,7 @@ void ProtobufSyncGUIClient::ProtobufSyncGUIClientThreadsCode(void)   //RCF and p
     // Create response object.
     PositionInformationReceive response;
 
-    RCF::RcfProtoChannel channel( RCF::TcpEndpoint(clientconf->gui_ipaddressmask_, std::stoi(clientconf->gui_listener_port_)));
+    RCF::RcfProtoChannel channel( RCF::TcpEndpoint(clientconf->gui_ipaddress_, std::stoi(clientconf->gui_listener_port_)));
     BOOST_LOG_SEV(lg, notification) << "Message to GUI will be sent to : " << clientconf->gui_ipaddress_ << " on port : " << clientconf->gui_listener_port_;
     // connect timeout in ms.
     channel.setConnectTimeoutMs(3000);

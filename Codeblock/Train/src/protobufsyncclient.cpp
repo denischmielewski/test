@@ -57,6 +57,7 @@ void ProtobufSyncClient::ProtobufSyncClientThreadsCode(void)   //RCF and protobu
 
     RCF::RcfProtoChannel channel( RCF::TcpEndpoint(clientconf->gui_ipaddress_, std::stoi(clientconf->main_listener_port_)));
     BOOST_LOG_SEV(lg, notification) << "Message to server1 will be sent to : " << clientconf->main_ipaddress_ << " on port : " << clientconf->main_listener_port_;
+
     // connect timeout in ms.
     channel.setConnectTimeoutMs(3000);
     // remote call timeout in ms.
