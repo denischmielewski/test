@@ -16,6 +16,7 @@ class config
         std::string gui_ipaddress_ = "";
         std::string main_listener_port_ = "";
         std::string gui_listener_port_ = "";
+        std::string server1_listener_port_ = "";
         int result = NO_ERROR;
         std::string boostLogCollectorFolder_ = "";
         uint16_t boostLogCollectorFolderMaxSizeInMbytes_ = 111; //111 Mbytes by default

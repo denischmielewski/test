@@ -128,6 +128,10 @@ config::config()
         gui_listener_port_ = pt1.get<std::string>(node);
         BOOST_LOG_SEV(lg, notification) << "Communication port to use for GUI Sw : " << gui_listener_port_;
 
+        node = "TRAIN_STARTUP_CONFIG.TRAINS_IP_CONFIG.SERVER1_LISTENER_PORT";
+        server1_listener_port_ = pt1.get<std::string>(node);
+        BOOST_LOG_SEV(lg, notification) << "Communication port to use for Server1 : " << server1_listener_port_;
+
         node = "TRAIN_STARTUP_CONFIG.TRAINS_IP_CONFIG.SERVER1.IP_ADDRESSES_AND_SUBNET.MAIN_IP";
         std::string ipaddressmask = pt1.get<std::string>(node);
         pos = ipaddressmask.find("/");      // position of "/" in string

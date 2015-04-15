@@ -92,10 +92,12 @@
 		<Unit filename="../common/Common-train-server1/src/TrainSession.cpp" />
 		<Unit filename="../common/include/config.hpp" />
 		<Unit filename="../common/include/errors.hpp" />
+		<Unit filename="../common/include/protobufsynchronousserver.hpp" />
 		<Unit filename="../common/include/utils.hpp" />
 		<Unit filename="../common/protobuf/TestRCFProto.pb.cc" />
 		<Unit filename="../common/protobuf/TestRCFProto.pb.h" />
 		<Unit filename="../common/src/config.cpp" />
+		<Unit filename="../common/src/protobufsynchronousserver.cpp" />
 		<Unit filename="../common/src/utils.cpp" />
 		<Unit filename="include/TrainCommSession.hpp" />
 		<Unit filename="include/TrainSession.hpp" />

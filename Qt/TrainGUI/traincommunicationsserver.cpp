@@ -1,6 +1,5 @@
 #include "traincommunicationsserver.h"
 
-extern uint16_t g_commSessionMutexLockTimeoutMilliseconds;
 int closeGUI = false;
 static startup_severity_channel_logger_mt * logger;
 

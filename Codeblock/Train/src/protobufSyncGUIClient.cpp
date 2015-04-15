@@ -6,7 +6,7 @@
 using namespace std;
 using namespace google::protobuf;
 
-extern volatile int g_signal_received;
+//extern volatile int g_signal_received;
 
 void ProtobufSyncGUIClientThreads(void);
 
@@ -40,6 +40,8 @@ void ProtobufSyncGUIClient::Join()
 
 void ProtobufSyncGUIClient::ProtobufSyncGUIClientThreadsCode(void)   //RCF and protobuf will start other threads hence the thread(s)
 {
+    extern volatile int g_signal_received;
+
     startup_severity_channel_logger_mt& lg = comm_logger_c1::get();
     std::chrono::seconds duration(1);
 

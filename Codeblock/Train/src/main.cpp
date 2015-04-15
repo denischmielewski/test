@@ -9,6 +9,7 @@
 #include <signal.h>
 #include <unordered_map>
 #include "TrainSession.hpp"
+#include "trainprotobufsynchronousserver.hpp"
 
 #define VERSION     "0.0.1.2"
 
@@ -39,6 +40,7 @@ int main()
     class config * train_configuration;
     ProtobufSyncClient * client;
     ProtobufSyncGUIClient * client2;
+    TrainProtobufSynchronousServer * trainProtobufSynchronousServer;
     std::unordered_map<std::string, TrainSession>    trainsSessions;
 
     startup_severity_channel_logger_mt& lg = comm_logger_c1::get();
@@ -68,7 +70,7 @@ int main()
             return ERROR_CONFIG_FILE_HANDLING;
         }
         train_logs_start->RemoveStartupSink();
-        //delete(train_logs_start);
+        delete(train_logs_start);
 
     }
     catch(const std::exception& e)
@@ -94,43 +96,62 @@ int main()
 
     config_signal_management();
 
-    BOOST_LOG_SEV(lg, notification) << "try to create ProtobufSyncClient !!!";
+    BOOST_LOG_SEV(lg, notification) << "try to create TrainProtobufSynchronousServer !!!";
+    try
+    {
+            trainProtobufSynchronousServer = new TrainProtobufSynchronousServer(train_configuration, &trainsSessions);
+            trainProtobufSynchronousServer->Start();
+            BOOST_LOG_SEV(lg, notification) << "train Protobuf Synchronous Server properly initialized !!!";
+
+    }
+    catch(int e)
+    {
+        BOOST_LOG_SEV(lg, critical) << "PROBLEM creating train Protobuf Synchronous Server !!!";
+        return ERROR_WITH_PROTOCOL_BUFFER_SERVER;
+    }
+
+    BOOST_LOG_SEV(lg, notification) << "try to create Protobuf Synchronous Server1 client !!!";
     try
     {
             client = new ProtobufSyncClient(train_configuration);
             client->Start();
+            BOOST_LOG_SEV(lg, notification) << "train Protobuf Synchronous Server1 client properly initialized !!!";
     }
     catch(int e)
     {
-        BOOST_LOG_SEV(lg, critical) << "problem with ProtobufSyncClient !!!";
-        return ERROR_CONFIG_FILE_HANDLING;
+        BOOST_LOG_SEV(lg, critical) << "PROBLEM creating Protobuf Synchronous Server1 client !!!";
+        return ERROR_WITH_PROTOCOL_BUFFER_CLIENT;
     }
-    BOOST_LOG_SEV(lg, notification) << "try to create ProtobufSyncGUIClient !!!";
+
+    BOOST_LOG_SEV(lg, notification) << "try to create Protobuf Synchronous GUI client !!!";
     try
     {
             client2 = new ProtobufSyncGUIClient(train_configuration);
             client2->Start();
+            BOOST_LOG_SEV(lg, notification) << "train Protobuf Synchronous GUI client properly initialized !!!";
     }
     catch(int e)
     {
-        BOOST_LOG_SEV(lg, critical) << "problem with ProtobufSyncGUIClient !!!";
+        BOOST_LOG_SEV(lg, critical) << "PROBLEM creating Protobuf Synchronous GUI client !!!";
         return ERROR_CONFIG_FILE_HANDLING;
     }
 
 //    if(client->ProtobufSyncClientThread.joinable()) client->Join();
     client->Join();
     client2->Join();
+    trainProtobufSynchronousServer->Join();
 
     BOOST_LOG_SEV(lg, notification) << "All threads completed.";
 
     delete(client);
     delete(client2);
+    delete(trainProtobufSynchronousServer);
     train_configuration->removeMainIPPortMask_();
     delete(train_configuration);
-    delete(train_logs_start);
+//    delete(train_logs_start);
     delete(train_logs_after_configread);
 
-    BOOST_LOG_SEV(lg, notification) << "EVERYTHING TERMNATED PROPERLY !!!";
+    BOOST_LOG_SEV(lg, notification) << "EVERYTHING TERMINATED PROPERLY !!!";
 
     return NO_ERROR;
 }

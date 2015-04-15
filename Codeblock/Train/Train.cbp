@@ -29,6 +29,7 @@
 					<Add directory="../common/Common-train-server1/include" />
 					<Add directory="../common/Common-train-internal/include" />
 					<Add directory="Codeblock/Train/include" />
+					<Add directory="Codeblock/Train" />
 				</Compiler>
 				<Linker>
 					<Add option="`pkg-config --libs protobuf`" />
@@ -43,9 +44,6 @@
 					<Add library="../../lib/libboostlog/libboost_system.so" />
 					<Add library="../../lib/libboostlog/libboost_thread.so" />
 				</Linker>
-				<ExtraCommands>
-					<Add before="../../batch/deploy_Train_from_Codeblock_postbuild.sh" />
-				</ExtraCommands>
 			</Target>
 			<Target title="Release">
 				<Option output="bin/Release/Train" prefix_auto="1" extension_auto="1" />
@@ -67,6 +65,7 @@
 					<Add directory="../common/Common-train-server1/include" />
 					<Add directory="../common/Common-train-internal/include" />
 					<Add directory="Codeblock/Train/include" />
+					<Add directory="Codeblock/Train" />
 				</Compiler>
 				<Linker>
 					<Add option="-s" />
@@ -82,6 +81,10 @@
 					<Add library="../../lib/libboostlog/libboost_system.so" />
 					<Add library="../../lib/libboostlog/libboost_thread.so" />
 				</Linker>
+				<ExtraCommands>
+					<Add after="../../batch/deploy_Train_from_Codeblock_postbuild.sh" />
+					<Mode after="always" />
+				</ExtraCommands>
 			</Target>
 		</Build>
 		<Compiler>
@@ -97,20 +100,26 @@
 		<Unit filename="../common/Common-train-server1/src/TrainSession.cpp" />
 		<Unit filename="../common/include/config.hpp" />
 		<Unit filename="../common/include/errors.hpp" />
+		<Unit filename="../common/include/protobufpositioninformationserviceimpl.hpp" />
+		<Unit filename="../common/include/protobufsynchronousserver.hpp" />
 		<Unit filename="../common/include/utils.hpp" />
 		<Unit filename="../common/protobuf/TestRCFProto.pb.cc" />
 		<Unit filename="../common/protobuf/TestRCFProto.pb.h" />
 		<Unit filename="../common/src/config.cpp" />
+		<Unit filename="../common/src/protobufpositioninformationserviceimpl.cpp" />
+		<Unit filename="../common/src/protobufsynchronousserver.cpp" />
 		<Unit filename="../common/src/utils.cpp" />
 		<Unit filename="include/log.hpp" />
-		<Unit filename="include/protobufservicesimpl.hpp" />
 		<Unit filename="include/protobufsyncGUIclient.hpp" />
 		<Unit filename="include/protobufsyncclient.hpp" />
+		<Unit filename="include/trainprotobufpositioninformation.hpp" />
+		<Unit filename="include/trainprotobufsynchronousserver.hpp" />
 		<Unit filename="src/log.cpp" />
 		<Unit filename="src/main.cpp" />
 		<Unit filename="src/protobufSyncGUIClient.cpp" />
-		<Unit filename="src/protobufservicesimpl.cpp" />
 		<Unit filename="src/protobufsyncclient.cpp" />
+		<Unit filename="src/trainprotobufpositioninformation.cpp" />
+		<Unit filename="src/trainprotobufsynchronousserver.cpp" />
 		<Extensions>
 			<code_completion />
 			<debugger />

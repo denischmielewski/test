@@ -9,7 +9,7 @@
 		<LOG_COLLECTOR_FOLDER>/home/train/logs</LOG_COLLECTOR_FOLDER>
 		<LOG_COLLECTOR_FOLDER_MAX_SIZE_IN_MBYTES>100</LOG_COLLECTOR_FOLDER_MAX_SIZE_IN_MBYTES>	<!-- some log files will be deleted to get that maximum size -->
 		<DRIVE_MIN_FREE_SPACE_IN_MBYTES>1024</DRIVE_MIN_FREE_SPACE_IN_MBYTES> <!-- some log files will be deleted to get that minimum size -->
-		<LOG_AUTO_FLUSH>NO</LOG_AUTO_FLUSH>	<!-- YES = write to file after each log -->
+		<LOG_AUTO_FLUSH>YES</LOG_AUTO_FLUSH>	<!-- YES = write to file after each log -->
 		<MAX_LOG_FILE_SIZE_IN_KBYTES>100</MAX_LOG_FILE_SIZE_IN_KBYTES>	<!-- precision is +/- 10% -->
 		<!-- this parameter defines the lower log level included in logs. Levels are : -->
 		<!-- debug, debug_temporary, internal_message, external_message, Threads, notification, warning, error and critical -->
@@ -26,6 +26,7 @@
 	<TRAINS_IP_CONFIG>
 		<MAIN_LISTENER_PORT>44044</MAIN_LISTENER_PORT>
 		<GUI_LISTENER_PORT>44045</GUI_LISTENER_PORT>
+		<SERVER1_LISTENER_PORT>44046</SERVER1_LISTENER_PORT>
 		<dev-VM> <!-- Hostname of the linux OS, 1024 bytes MAX !!! -->
 			<IP_ADDRESSES_AND_SUBNET>
 				<ADAPTER>eth0</ADAPTER>
