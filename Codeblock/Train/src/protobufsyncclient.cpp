@@ -55,8 +55,8 @@ void ProtobufSyncClient::ProtobufSyncClientThreadsCode(void)   //RCF and protobu
     // Create response object.
     PositionInformationReceive response;
 
-    RCF::RcfProtoChannel channel( RCF::TcpEndpoint(clientconf->gui_ipaddress_, std::stoi(clientconf->server1_listener_port_)));
-    BOOST_LOG_SEV(lg, notification) << "Message to server1 will be sent to : " << clientconf->main_ipaddress_ << " on port : " << clientconf->server1_listener_port_;
+    RCF::RcfProtoChannel channel( RCF::TcpEndpoint(clientconf->server1_ipaddress_, std::stoi(clientconf->server1_listener_port_)));
+    BOOST_LOG_SEV(lg, notification) << "Message to server1 will be sent to : " << clientconf->server1_ipaddress_ << " on port : " << clientconf->server1_listener_port_;
 
     // connect timeout in ms.
     channel.setConnectTimeoutMs(3000);

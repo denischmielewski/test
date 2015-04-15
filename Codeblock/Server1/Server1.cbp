@@ -39,9 +39,6 @@
 					<Add library="../../lib/libboostlog/libboost_system.so" />
 					<Add library="../../lib/libboostlog/libboost_thread.so" />
 				</Linker>
-				<ExtraCommands>
-					<Add after="../../batch/deploy_Server1_from_Codeblock_postbuild.sh" />
-				</ExtraCommands>
 			</Target>
 			<Target title="Release">
 				<Option output="bin/Release/Server1" prefix_auto="1" extension_auto="1" />
@@ -77,6 +74,10 @@
 					<Add library="../../lib/libboostlog/libboost_thread.so" />
 					<Add library="../../lib/libprotobuf/libprotobuf.so" />
 				</Linker>
+				<ExtraCommands>
+					<Add after="../../batch/deploy_Server1_from_Codeblock_postbuild.sh" />
+					<Mode after="always" />
+				</ExtraCommands>
 			</Target>
 		</Build>
 		<Compiler>
