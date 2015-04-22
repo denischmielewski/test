@@ -23,6 +23,8 @@ public:
         const SetOperationModeCommand *         request,
         SetOperationModeResponse *                response,
         google::protobuf::Closure *                 done);
+    virtual void SetResponse(SetOperationModeResponse * response, google::protobuf::Closure * done);
+    virtual void UpdateSession(RCF::RcfProtoSession * pprotoSession, RCF::RcfSession &);
 };
 
 

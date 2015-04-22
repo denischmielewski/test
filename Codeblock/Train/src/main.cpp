@@ -10,6 +10,9 @@
 #include <unordered_map>
 #include "TrainSession.hpp"
 #include "trainprotobufsynchronousserver.hpp"
+#include "protobufsynchronousclientfortraingui.hpp"
+#include "protobufsynchronousclientforserver1.hpp"
+#include <RCFProto.hpp>
 
 #define VERSION     "0.0.1.2"
 
@@ -17,7 +20,7 @@ volatile int g_signal_received = 0;
 
 void sighandler( int sig, siginfo_t * siginfo, void * context)
 {
-    startup_severity_channel_logger_mt& lg = comm_logger_c1::get();
+    startup_severity_channel_logger_mt& lg = main_logger::get();
     if(sig == SIGINT) BOOST_LOG_SEV(lg, notification) << "SIGHANDLER: SIGINT (CTRL^C) received. terminate all threads...";
     if(sig == SIGTERM) BOOST_LOG_SEV(lg, notification) << "SIGHANDLER: SIGTERM (kill) received. terminate all threads...";
     g_signal_received = 1;
@@ -38,12 +41,12 @@ int main()
 #warning TODO (dev#5#15-03-27): warning: variable ‘train_logs_after_configread’ set but not used [-Wunused-but-set-variable]|
     class log * train_logs_start, * train_logs_after_configread;
     class config * train_configuration;
-    ProtobufSyncClient * client;
-    ProtobufSyncGUIClient * client2;
+    ProtobufSynchronousClientForServer1 * client1;
+    ProtobufSynchronousClientForTrainGUI * client2;
     TrainProtobufSynchronousServer * trainProtobufSynchronousServer;
     std::unordered_map<std::string, TrainSession>    trainsSessions;
 
-    startup_severity_channel_logger_mt& lg = comm_logger_c1::get();
+    startup_severity_channel_logger_mt& lg = main_logger::get();
 
     //First setup logs capability with raw parameters. We want to be able to inspect configuration in case of problem !
     try
@@ -96,6 +99,19 @@ int main()
 
     config_signal_management();
 
+    // Initialize RCFProto.
+    try
+    {
+        RCF::init();
+        BOOST_LOG_SEV(lg, notification) << "RCF init !";
+    }
+    catch(const RCF::Exception & e)
+    {
+        BOOST_LOG_SEV(lg, critical) << "problem during RCF Initialization : " << e.getErrorString() << std::endl;
+        BOOST_LOG_SEV(lg, critical) << "RCF::Exception: " << e.getErrorString() << std::endl;
+        return ERROR_RCF_INITIALIZATION;
+    }
+
     BOOST_LOG_SEV(lg, notification) << "try to create TrainProtobufSynchronousServer !!!";
     try
     {
@@ -110,11 +126,12 @@ int main()
         return ERROR_WITH_PROTOCOL_BUFFER_SERVER;
     }
 
+
     BOOST_LOG_SEV(lg, notification) << "try to create Protobuf Synchronous Server1 client !!!";
     try
     {
-            client = new ProtobufSyncClient(train_configuration);
-            client->Start();
+            client1 = new ProtobufSynchronousClientForServer1(train_configuration);
+            client1->Start();
             BOOST_LOG_SEV(lg, notification) << "train Protobuf Synchronous Server1 client properly initialized !!!";
     }
     catch(int e)
@@ -123,10 +140,11 @@ int main()
         return ERROR_WITH_PROTOCOL_BUFFER_CLIENT;
     }
 
+
     BOOST_LOG_SEV(lg, notification) << "try to create Protobuf Synchronous GUI client !!!";
     try
     {
-            client2 = new ProtobufSyncGUIClient(train_configuration);
+            client2 = new ProtobufSynchronousClientForTrainGUI(train_configuration);
             client2->Start();
             BOOST_LOG_SEV(lg, notification) << "train Protobuf Synchronous GUI client properly initialized !!!";
     }
@@ -136,19 +154,13 @@ int main()
         return ERROR_CONFIG_FILE_HANDLING;
     }
 
-//    if(client->ProtobufSyncClientThread.joinable()) client->Join();
-    client->Join();
-    client2->Join();
-    trainProtobufSynchronousServer->Join();
-
-    BOOST_LOG_SEV(lg, notification) << "All threads completed.";
-
-    delete(client);
+    //all threads are joined in the destructors below
+    delete(client1);
     delete(client2);
     delete(trainProtobufSynchronousServer);
+    BOOST_LOG_SEV(lg, notification) << "All threads completed.";
     train_configuration->removeMainIPPortMask_();
     delete(train_configuration);
-//    delete(train_logs_start);
     delete(train_logs_after_configread);
 
     BOOST_LOG_SEV(lg, notification) << "EVERYTHING TERMINATED PROPERLY !!!";

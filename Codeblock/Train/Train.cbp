@@ -30,6 +30,7 @@
 					<Add directory="../common/Common-train-internal/include" />
 					<Add directory="Codeblock/Train/include" />
 					<Add directory="Codeblock/Train" />
+					<Add directory="Codeblock/common/include" />
 				</Compiler>
 				<Linker>
 					<Add option="`pkg-config --libs protobuf`" />
@@ -66,6 +67,7 @@
 					<Add directory="../common/Common-train-internal/include" />
 					<Add directory="Codeblock/Train/include" />
 					<Add directory="Codeblock/Train" />
+					<Add directory="Codeblock/common/include" />
 				</Compiler>
 				<Linker>
 					<Add option="-s" />
@@ -101,24 +103,26 @@
 		<Unit filename="../common/include/config.hpp" />
 		<Unit filename="../common/include/errors.hpp" />
 		<Unit filename="../common/include/protobufpositioninformationserviceimpl.hpp" />
-		<Unit filename="../common/include/protobufsynchronousserver.hpp" />
+		<Unit filename="../common/include/protobufsettrainmodecommandserviceimpl.hpp" />
 		<Unit filename="../common/include/utils.hpp" />
 		<Unit filename="../common/protobuf/TestRCFProto.pb.cc" />
 		<Unit filename="../common/protobuf/TestRCFProto.pb.h" />
 		<Unit filename="../common/src/config.cpp" />
 		<Unit filename="../common/src/protobufpositioninformationserviceimpl.cpp" />
-		<Unit filename="../common/src/protobufsynchronousserver.cpp" />
+		<Unit filename="../common/src/protobufsettrainmodecommandserviceimpl.cpp" />
 		<Unit filename="../common/src/utils.cpp" />
 		<Unit filename="include/log.hpp" />
-		<Unit filename="include/protobufsyncGUIclient.hpp" />
-		<Unit filename="include/protobufsyncclient.hpp" />
+		<Unit filename="include/protobufsynchronousclientforserver1.hpp" />
+		<Unit filename="include/protobufsynchronousclientfortraingui.hpp" />
 		<Unit filename="include/trainprotobufpositioninformation.hpp" />
+		<Unit filename="include/trainprotobufsettrainmodecommand.hpp" />
 		<Unit filename="include/trainprotobufsynchronousserver.hpp" />
 		<Unit filename="src/log.cpp" />
 		<Unit filename="src/main.cpp" />
-		<Unit filename="src/protobufSyncGUIClient.cpp" />
-		<Unit filename="src/protobufsyncclient.cpp" />
+		<Unit filename="src/protobufsynchronousclientforserver1.cpp" />
+		<Unit filename="src/protobufsynchronousclientfortraingui.cpp" />
 		<Unit filename="src/trainprotobufpositioninformation.cpp" />
+		<Unit filename="src/trainprotobufsettrainmodecommand.cpp" />
 		<Unit filename="src/trainprotobufsynchronousserver.cpp" />
 		<Extensions>
 			<code_completion />

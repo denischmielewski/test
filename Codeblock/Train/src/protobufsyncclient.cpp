@@ -40,7 +40,7 @@ void ProtobufSyncClient::Join()
 
 void ProtobufSyncClient::ProtobufSyncClientThreadsCode(void)   //RCF and protobuf will start other threads hence the thread(s)
 {
-    startup_severity_channel_logger_mt& lg = comm_logger_c1::get();
+    startup_severity_channel_logger_mt& lg = client_comm_logger::get();
     std::chrono::seconds duration(1);
 
     // Initialize RCFProto.

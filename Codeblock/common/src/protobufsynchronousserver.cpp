@@ -25,7 +25,7 @@ ProtobufSynchronousServer::~ProtobufSynchronousServer()
 void ProtobufSynchronousServer::Start(void)
 {
     // This will start the thread. Notice move semantics!
-    ProtobufSynchronousServerThread = std::thread(&ProtobufSynchronousServer::ProtobufSynchronousServerThreadsCode,this);
+    ProtobufSynchronousServerThread = std::thread(&ProtobufSynchronousServer::ProtobufSynchronousServerThreadCode,this);
 }
 
 void ProtobufSynchronousServer::Join(void)
@@ -33,11 +33,11 @@ void ProtobufSynchronousServer::Join(void)
     // This will start the thread. Notice move semantics!
     ProtobufSynchronousServerThread.join();
 }
-
-void ProtobufSynchronousServer::ProtobufSynchronousServerThreadsCode(void)   //RCF and protobuf will start other threads hence the thread(s)
+/*
+void ProtobufSynchronousServer::ProtobufSynchronousServerThreadCode(void)   //RCF and protobuf will start other threads hence the thread(s)
 {
-    startup_severity_channel_logger_mt& lg = server_logger::get();
-    std::chrono::milliseconds duration(serverconf->ThreadsLogNotificationFrequencyMilliseconds_);
+    startup_severity_channel_logger_mt& lg = server_comm_logger::get();
+    std::chrono::milliseconds duration(serverconf->communicationThreadsSleepDurationMilliseconds_);
     RCF::RcfProtoServer * rcfProtoServer;
 
 
@@ -55,12 +55,11 @@ void ProtobufSynchronousServer::ProtobufSynchronousServerThreadsCode(void)   //R
         catch(google::protobuf::FatalException fe)
         {
             BOOST_LOG_SEV(lg, critical) << "UNSUCCESSFULL bind for PositionInformationServiceImpl!!!" << fe.what();
+            return;
         }
 
-
-
         // Bind Protobuf service.
-        if(BindProtobufServices(/*serverconf, sessions_*/*rcfProtoServer) == NO_ERROR)
+        if(BindProtobufServices(*rcfProtoServer) == NO_ERROR)
         {
             BOOST_LOG_SEV(lg, notification) << "RCF proto server declared and service bind !";
         }
@@ -73,10 +72,23 @@ void ProtobufSynchronousServer::ProtobufSynchronousServerThreadsCode(void)   //R
         rcfProtoServer->start();
         BOOST_LOG_SEV(lg, notification) << "RCF proto server started !";
 
+        time_t startTime = 0;
+        time_t now;
+        time(&now);
+        double elapsedTimeInSeconds = serverconf->ThreadsLogNotificationFrequencyMilliseconds_;
+
         while(!g_signal_received)
         {
+            //log frequency as per configuration so no pollution
+            if(elapsedTimeInSeconds >= serverconf->ThreadsLogNotificationFrequencyMilliseconds_)
+            {
+                time(&startTime);
+                BOOST_LOG_SEV(lg, notification) << "hello from protobufsynchronousserver thread";
+            }
+            time(&now);
+            elapsedTimeInSeconds = difftime(now, startTime)*1000;
+
             std::this_thread::sleep_for(duration);
-            BOOST_LOG_SEV(lg, notification) << "hello from protobufsynchronousserver thread";
         }
         if(g_signal_received)
         {
@@ -90,3 +102,4 @@ void ProtobufSynchronousServer::ProtobufSynchronousServerThreadsCode(void)   //R
         return;
     }
 }
+*/

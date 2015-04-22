@@ -1,43 +1,29 @@
-#include <protobuftraininternalservicesimpl.hpp>
-#include <unordered_map>
-#include "TrainSession.hpp"
+#include "trainprotobufsettrainmodecommand.hpp"
 
-using namespace std;
-using namespace google::protobuf;
-
-SetOperationModeImpl::SetOperationModeImpl(config const * config, std::unordered_map<std::string, TrainSession> * trainsSessions )
+TrainProtobufSetTrainModeCommand::~TrainProtobufSetTrainModeCommand()
 {
-    softwareConfig_ = config;
-    trainsSessions_ = trainsSessions;
+    //dtor
 }
 
-// PositionInformation() method implementation.
-void SetOperationModeImpl::SetOperationMode(  RpcController *                             controller,
-                                                    const SetOperationModeCommand *         request,
-                                                    SetOperationModeResponse *                response,
-                                                    Closure *                                   done)
+void TrainProtobufSetTrainModeCommand::SetResponse(SetOperationModeResponse * response, google::protobuf::Closure * done)
 {
-
-    startup_severity_channel_logger_mt& lg = server_comm_logger::get();
-
-    BOOST_LOG_SEV(lg, notification) << "Set operation Mode received !!! ";
-
-    RCF::RcfProtoController * rcfController = static_cast<RCF::RcfProtoController *>(controller);
-    RCF::RcfProtoSession * pprotoSession = rcfController->getSession();
-    RCF::RcfSession & rcfSession = rcfController->getSession()->getRcfSession();
-
     // Fill in the response.
     response->set_previousmode("Manual");
     response->set_newmode("Automatic");
 
     // Send response back to the client.
     done->Run();
+}
 
+void TrainProtobufSetTrainModeCommand::UpdateSession(RCF::RcfProtoSession * pprotoSession, RCF::RcfSession & rcfSession)
+{
     //Retrieve session info and store them in global trainsSessions unordered_map
     //trainsSessions is keyed by train IP addresses
     std::string ipaddressmask = rcfSession.getClientAddress().string();
     std::size_t pos = ipaddressmask.find(":");      // position of "/" in string
     std::string ipaddress = ipaddressmask.substr (0,pos);
+
+    startup_severity_channel_logger_mt& lg = server_comm_logger::get();
 
     TrainSession & trainSession = (*trainsSessions_)[ipaddress];
 
@@ -63,4 +49,3 @@ void SetOperationModeImpl::SetOperationMode(  RpcController *                   
         BOOST_LOG_SEV(lg, warning) << "Train Communication Session Lock failed !!!";
     }
 }
-

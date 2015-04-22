@@ -13,8 +13,8 @@
 				<Option compiler="gcc" />
 				<Compiler>
 					<Add option="-g" />
-					<Add directory="../../../boost_1_57_0" />
-					<Add directory="../../../RCF-2.0.1.101/include" />
+					<Add directory="../../../lib/boost_1_57_0" />
+					<Add directory="../../../lib/RCF-2.0.1.101/include" />
 				</Compiler>
 				<Linker>
 					<Add library="pthread" />
@@ -58,11 +58,12 @@
 			<Add option="-Wall" />
 			<Add option="-fexceptions" />
 		</Compiler>
-		<Unit filename="../../../RCF-2.0.1.101/src/RCF/RCF.cpp" />
+		<Unit filename="../../../lib/RCF-2.0.1.101/src/RCF/RCF.cpp" />
 		<Unit filename="main.cpp" />
 		<Extensions>
 			<code_completion />
 			<debugger />
+			<envvars />
 		</Extensions>
 	</Project>
 </CodeBlocks_project_file>

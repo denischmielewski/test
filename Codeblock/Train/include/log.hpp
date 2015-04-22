@@ -78,28 +78,28 @@ typedef src::severity_channel_logger_mt<
 
 typedef sinks::synchronous_sink< sinks::text_file_backend > sink_t;
 
-BOOST_LOG_INLINE_GLOBAL_LOGGER_INIT(startup_logger_c1, startup_severity_channel_logger_mt)
+BOOST_LOG_INLINE_GLOBAL_LOGGER_INIT(startup_logger, startup_severity_channel_logger_mt)
 {
     // Specify the channel name on construction, similarly as with the channel_logger
-    return startup_severity_channel_logger_mt(keywords::channel = "startup\t");
+    return startup_severity_channel_logger_mt(keywords::channel = "startup\t\t");
 }
 
-BOOST_LOG_INLINE_GLOBAL_LOGGER_INIT(comm_logger_c1, startup_severity_channel_logger_mt)
+BOOST_LOG_INLINE_GLOBAL_LOGGER_INIT(main_logger, startup_severity_channel_logger_mt)
 {
     // Specify the channel name on construction, similarly as with the channel_logger
-    return startup_severity_channel_logger_mt(keywords::channel = "main\t");
+    return startup_severity_channel_logger_mt(keywords::channel = "main\t\t");
 }
 
-BOOST_LOG_INLINE_GLOBAL_LOGGER_INIT(server_logger, startup_severity_channel_logger_mt)
+BOOST_LOG_INLINE_GLOBAL_LOGGER_INIT(server_comm_logger, startup_severity_channel_logger_mt)
 {
     // Specify the channel name on construction, similarly as with the channel_logger
-    return startup_severity_channel_logger_mt(keywords::channel = "server1\t");
+    return startup_severity_channel_logger_mt(keywords::channel = "server\t\t");
 }
 
-BOOST_LOG_INLINE_GLOBAL_LOGGER_INIT(comm_logger, startup_severity_channel_logger_mt)
+BOOST_LOG_INLINE_GLOBAL_LOGGER_INIT(client_comm_logger, startup_severity_channel_logger_mt)
 {
     // Specify the channel name on construction, similarly as with the channel_logger
-    return startup_severity_channel_logger_mt(keywords::channel = "comm\t\t");
+    return startup_severity_channel_logger_mt(keywords::channel = "client\t\t");
 }
 
 class log

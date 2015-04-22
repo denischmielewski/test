@@ -13,7 +13,7 @@
 	<!-- this parameter defines the communication threads sleep duration. The value here is n milliseconds -->
 	<COMMUNICATION_THREAD_SLEEP_DURATION>100</COMMUNICATION_THREAD_SLEEP_DURATION>
 	<!-- this parameter defines the communication threads sleep duration. The value here is n milliseconds -->
-	<THREADS_LOG_NOTIFICATION_FREQUENCY>1000</THREAD_LOGS_NOTIFICATION_FREQUENCY>
+	<THREADS_LOG_NOTIFICATION_FREQUENCY>10000</THREAD_LOGS_NOTIFICATION_FREQUENCY>
 	<!-- this parameter defines the threads exit timeout duration to ensure thread is terminated after call exit(). The value here is in milliseconds -->
 	<THREADS_EXIT_TIMEOUT>5000</THREADS_EXIT_TIMEOUT>
 	<!-- this parameter defines the sleep duration after a linux system call. The value here is in milliseconds -->

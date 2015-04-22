@@ -19,8 +19,8 @@ class ProtobufSynchronousServer
     public:
         ProtobufSynchronousServer();
         ProtobufSynchronousServer(config const *, std::unordered_map<std::string, TrainSession> *);
-        ~ProtobufSynchronousServer();
-        virtual void ProtobufSynchronousServerThreadsCode(void);
+        virtual ~ProtobufSynchronousServer();
+        virtual void ProtobufSynchronousServerThreadCode(void) = 0;
         virtual int BindProtobufServices(RCF::RcfProtoServer & rcfProtoServer) = 0;
         virtual int GetRCFProtoServerListeningPort(void) = 0;
         void Start(void);

@@ -18,7 +18,7 @@ extern uint16_t g_commSessionMutexLockTimeoutMilliseconds;
 
 void sighandler( int sig, siginfo_t * siginfo, void * context)
 {
-    startup_severity_channel_logger_mt& lg = comm_logger_c1::get();
+    startup_severity_channel_logger_mt& lg = main_logger::get();
     if(sig == SIGINT) BOOST_LOG_SEV(lg, notification) << "SIGHANDLER: SIGINT (CTRL^C) received. terminate all threads...";
     if(sig == SIGTERM) BOOST_LOG_SEV(lg, notification) << "SIGHANDLER: SIGTERM (kill) received. terminate all threads...";
     g_signal_received = 1;
@@ -36,7 +36,7 @@ void config_signal_management(void)
 
 void codeThread1(int x)
 {
-    startup_severity_channel_logger_mt& lg = comm_logger_c1::get();
+    startup_severity_channel_logger_mt& lg = main_logger::get();
     std::chrono::seconds duration(1);
     int i = 0;
     while(!g_signal_received && i < x)
@@ -50,7 +50,7 @@ void codeThread1(int x)
 
 void codeThread2(int x)
 {
-    startup_severity_channel_logger_mt& lg = comm_logger_c1::get();
+    startup_severity_channel_logger_mt& lg = main_logger::get();
     std::chrono::seconds duration(1);
     int i = 0;
     while(!g_signal_received && i < x)
@@ -69,7 +69,7 @@ int main()
     class config * server_configuration;
     ProtobufSyncServer * server;
 
-    startup_severity_channel_logger_mt& lg = comm_logger_c1::get();
+    startup_severity_channel_logger_mt& lg = main_logger::get();
 
     //First setup logs capability with raw parameters. We want to be able to inspect configuration in case of problem !
     try

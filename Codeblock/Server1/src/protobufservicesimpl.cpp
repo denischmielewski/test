@@ -16,7 +16,7 @@ void PositionInformationImpl::PositionInformation(  RpcController *             
                                                     PositionInformationReceive *                response,
                                                     Closure *                                   done)
 {
-    startup_severity_channel_logger_mt& lg = server_logger::get();
+    startup_severity_channel_logger_mt& lg = server_comm_logger::get();
 
     BOOST_LOG_SEV(lg, notification) << "position received from train !";
 

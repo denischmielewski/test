@@ -9,7 +9,7 @@ PositionInformationImpl::PositionInformationImpl(config const * config, std::uno
 {
     softwareConfig_ = config;
     trainsSessions_ = trainsSessions;
-    startup_severity_channel_logger_mt& lg = comm_logger::get();
+    startup_severity_channel_logger_mt& lg = server_comm_logger::get();
     logger = &lg;
 }
 

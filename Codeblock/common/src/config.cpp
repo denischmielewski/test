@@ -16,10 +16,8 @@ using namespace std;
 const std::string GLOBAL_STARTUP_CONFIG_XML_FILE = "/home/train/config/global/user_startup_config.xml";
 const std::string GLOBAL_DEV_CONFIG_XML_FILE = "/home/train/config/global/dev_config.xml";
 
-extern uint16_t g_commSessionMutexLockTimeoutMilliseconds;
-
 //retrieve BOOSTlogger
-startup_severity_channel_logger_mt& lg = startup_logger_c1::get();
+startup_severity_channel_logger_mt& lg = startup_logger::get();
 
 config::config()
 {
@@ -102,7 +100,8 @@ config::config()
         char * hostname = nullptr;
         hostname = new char[linuxSysCallBufferSize_];   //deleted at the end of the block
         gethostname(hostname, linuxSysCallBufferSize_);
-        BOOST_LOG_SEV(lg, notification) << "Computer hostname found : " << hostname;
+        hostname_ = std::string(hostname);
+        BOOST_LOG_SEV(lg, notification) << "Computer hostname found : " << hostname_;
 
         node = "TRAIN_STARTUP_CONFIG.TRAINS_IP_CONFIG." + string(hostname) + ".IP_ADDRESSES_AND_SUBNET.MAIN_IP";
         main_ipaddressmask_ = pt1.get<std::string>(node);
@@ -174,6 +173,22 @@ config::config()
         node = "TRAIN_STARTUP_CONFIG.LOG.LOG_LEVEL";
         boostLogLevel_ = pt1.get<std::string>(node);
         BOOST_LOG_SEV(lg, notification) << "log level ? : " << boostLogLevel_;
+
+        node = "TRAIN_STARTUP_CONFIG.TCPIP.TCPIP_CONNECTION_TIMEOUT";
+        TCPIP_Connection_Timeout_ = std::stoul(pt1.get<std::string>(node), nullptr, 10);
+        BOOST_LOG_SEV(lg, notification) << "TCPIP Connection timeout value : " << TCPIP_Connection_Timeout_ << " milliseconds";
+
+        node = "TRAIN_STARTUP_CONFIG.TCPIP.TCPIP_REPLY_TIMEOUT";
+        TCPIP_Reply_Timeout_ = std::stoul(pt1.get<std::string>(node), nullptr, 10);
+        BOOST_LOG_SEV(lg, notification) << "TCPIP Reply timeout value : " << TCPIP_Reply_Timeout_ << " milliseconds";
+
+        node = "TRAIN_STARTUP_CONFIG.SYNCHRONOUS_MESSAGES.TRAIN_TO_SERVER1_MESSAGES_FREQUENCY";
+        TrainToServer1MessagesFrequency_ = std::stoul(pt1.get<std::string>(node), nullptr, 10);
+        BOOST_LOG_SEV(lg, notification) << "train to Server1 messages frequency : " << TrainToServer1MessagesFrequency_ << " milliseconds";
+
+        node = "TRAIN_STARTUP_CONFIG.SYNCHRONOUS_MESSAGES.TRAIN_TO_TRAINGUI_MESSAGES_FREQUENCY";
+        TrainToTrainGUIMessagesFrequency_ = std::stoul(pt1.get<std::string>(node), nullptr, 10);
+        BOOST_LOG_SEV(lg, notification) << "train to TrainGUI messages frequency : " << TrainToTrainGUIMessagesFrequency_ << " milliseconds";
 
         delete [] hostname;
 

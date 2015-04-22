@@ -6,7 +6,7 @@
 using namespace std;
 using namespace google::protobuf;
 
-//extern volatile int g_signal_received;
+extern volatile int g_signal_received;
 
 void ProtobufSyncGUIClientThreads(void);
 
@@ -40,9 +40,7 @@ void ProtobufSyncGUIClient::Join()
 
 void ProtobufSyncGUIClient::ProtobufSyncGUIClientThreadsCode(void)   //RCF and protobuf will start other threads hence the thread(s)
 {
-    extern volatile int g_signal_received;
-
-    startup_severity_channel_logger_mt& lg = comm_logger_c1::get();
+    startup_severity_channel_logger_mt& lg = client_comm_logger::get();
     std::chrono::seconds duration(1);
 
     // Initialize RCFProto.
@@ -59,6 +57,7 @@ void ProtobufSyncGUIClient::ProtobufSyncGUIClientThreadsCode(void)   //RCF and p
 
     RCF::RcfProtoChannel channel( RCF::TcpEndpoint(clientconf->gui_ipaddress_, std::stoi(clientconf->gui_listener_port_)));
     BOOST_LOG_SEV(lg, notification) << "Message to GUI will be sent to : " << clientconf->gui_ipaddress_ << " on port : " << clientconf->gui_listener_port_;
+
     // connect timeout in ms.
     channel.setConnectTimeoutMs(3000);
     // remote call timeout in ms.

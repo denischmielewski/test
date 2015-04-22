@@ -37,7 +37,7 @@ ProtobufSyncServer::~ProtobufSyncServer()
 
 void ProtobufSyncServer::ProtobufSyncServerThreadsCode(void)   //RCF and protobuf will start other threads hence the thread(s)
 {
-    startup_severity_channel_logger_mt& lg = server_logger::get();
+    startup_severity_channel_logger_mt& lg = server_comm_logger::get();
     std::chrono::seconds duration(1);
 
     this->session_.sessionactive_=true;
