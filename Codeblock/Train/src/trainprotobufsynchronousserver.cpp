@@ -1,5 +1,4 @@
 #include "trainprotobufsynchronousserver.hpp"
-#include "trainprotobufsettrainmodecommand.hpp"
 
 using namespace google::protobuf;
 
@@ -27,27 +26,6 @@ void TrainProtobufSynchronousServer::Join(void)
     TrainProtobufSynchronousServerThread.join();
 }
 
-int TrainProtobufSynchronousServer::BindProtobufServices(RCF::RcfProtoServer & rcfProtoServer)
-{
-    startup_severity_channel_logger_mt& lg = server_comm_logger::get();
-
-    try
-    {
-        TrainProtobufPositionInformation trainProtobufPositionInformation(serverconf, sessions_);
-        rcfProtoServer.bindService(trainProtobufPositionInformation);
-        BOOST_LOG_SEV(lg, notification) << "Bind PositionInformationServiceImpl Successfull !!!";
-        TrainProtobufSetTrainModeCommand trainProtobufSetTrainModeCommand(serverconf, sessions_);
-        rcfProtoServer.bindService(trainProtobufSetTrainModeCommand);
-        BOOST_LOG_SEV(lg, notification) << "Bind SetTrainModeCommandServiceImpl Successfull !!!";
-        return NO_ERROR;
-    }
-    catch (google::protobuf::FatalException fe)
-    {
-        BOOST_LOG_SEV(lg, critical) << "UNSUCCESSFULL bind for PositionInformationServiceImpl!!!" << fe.what();
-        return ERROR_WITH_PROTOCOL_BUFFER_SERVER;
-    }
-}
-
 int TrainProtobufSynchronousServer::GetRCFProtoServerListeningPort(void)
 {
     return std::stoi(serverconf->main_listener_port_);
@@ -72,15 +50,13 @@ void TrainProtobufSynchronousServer::TrainProtobufSynchronousServerThreadCode(vo
         return;
     }
 
-    // Bind Protobuf service.
-    if(BindProtobufServices(*rcfProtoServer) == NO_ERROR)
-    {
-        BOOST_LOG_SEV(lg, notification) << "RCF proto server declared and services bind !";
-    }
-    else
-    {
-        BOOST_LOG_SEV(lg, critical) << "NOT POSSIBLE to IMPLEMENT OR BIND PROTOBUF SERVICES !!!!";
-    }
+    // Bind Protobuf services.
+    TrainProtobufPositionInformation trainProtobufPositionInformation(serverconf, sessions_);
+    rcfProtoServer->bindService(trainProtobufPositionInformation);
+    BOOST_LOG_SEV(lg, notification) << "Bind PositionInformationServiceImpl Successfull !!!";
+    TrainProtobufSetTrainModeCommand trainProtobufSetTrainModeCommand(serverconf, sessions_);
+    rcfProtoServer->bindService(trainProtobufSetTrainModeCommand);
+    BOOST_LOG_SEV(lg, notification) << "Bind SetTrainModeCommandServiceImpl Successfull !!!";
 
     // Start the server.
     rcfProtoServer->start();

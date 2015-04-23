@@ -16,7 +16,7 @@ void SetOperationModeImpl::SetOperationMode(  RpcController *                   
                                                     Closure *                                   done)
 {
 
-    startup_severity_channel_logger_mt& lg = comm_logger::get();
+    startup_severity_channel_logger_mt& lg = server_comm_logger::get();
 
     RCF::RcfProtoController * rcfController = static_cast<RCF::RcfProtoController *>(controller);
     RCF::RcfProtoSession * pprotoSession = rcfController->getSession();

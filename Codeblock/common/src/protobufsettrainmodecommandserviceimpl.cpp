@@ -1,6 +1,7 @@
 #include <protobufsettrainmodecommandserviceimpl.hpp>
 //#include <unordered_map>
 //#include "TrainSession.hpp"
+#include <protobufsettrainmodecommandserviceimpl.hpp>
 
 using namespace std;
 using namespace google::protobuf;
@@ -40,7 +41,6 @@ void SetOperationModeImpl::UpdateSession(RCF::RcfProtoSession * pprotoSession, R
     {
         traincommsession.SetSessionActive();
         traincommsession.SetIpAddress(ipaddress);
-        BOOST_LOG_SEV(lg, notification) << "remote address: " << traincommsession.GetIpAddress();
         time_t timeraw = rcfSession.getConnectedAtTime();
         if(timeraw != traincommsession.GetSessionConnectionTime() && traincommsession.GetSessionRemoteCallCount() != 0)  traincommsession.IncConnectionLossCount();
         traincommsession.SetSessionConnectionTime(timeraw);
@@ -63,14 +63,16 @@ void SetOperationModeImpl::SetOperationMode(  RpcController *                   
                                                     SetOperationModeResponse *                response,
                                                     Closure *                                   done)
 {
-
     startup_severity_channel_logger_mt& lg = server_comm_logger::get();
 
     RCF::RcfProtoController * rcfController = static_cast<RCF::RcfProtoController *>(controller);
     RCF::RcfProtoSession * pprotoSession = rcfController->getSession();
     RCF::RcfSession & rcfSession = rcfController->getSession()->getRcfSession();
 
-    BOOST_LOG_SEV(lg, notification) << "position received from " << rcfSession.getClientAddress().string();
+    std::string ipaddressmask = rcfSession.getClientAddress().string();
+    std::size_t pos = ipaddressmask.find(":");
+    std::string ipaddress = ipaddressmask.substr (0,pos);
+    BOOST_LOG_SEV(lg, notification) << "Set Mode Command received from  " << ipaddress << "Mode = " << request->mode();
 
     SetResponse(response, done);
 

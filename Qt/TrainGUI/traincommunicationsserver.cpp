@@ -1,13 +1,16 @@
 #include "traincommunicationsserver.h"
 
-int closeGUI = false;
+using namespace std;
+using namespace google::protobuf;
+
+static int closeGUI = false;
 static startup_severity_channel_logger_mt * logger;
 
 
 TrainCommunicationsServer::TrainCommunicationsServer(config const * conf, std::unordered_map<std::string, TrainSession> * trainsSessions)
 {
     serverconf = conf;
-    startup_severity_channel_logger_mt& lg = comm_logger::get();
+    startup_severity_channel_logger_mt& lg = server_comm_logger::get();
     trainsSessions_ = trainsSessions;
     logger = &lg;
 }
@@ -23,9 +26,7 @@ void TrainCommunicationsServer::run(void)
 
     try
     {
-        // Initialize RCFProto.
-        RCF::init();
-        BOOST_LOG_SEV(*logger, notification) << "TrainGUI RCF init !";
+        // RCFProto has been initialized in main().
         // Create server.
         RCF::RcfProtoServer server( RCF::TcpEndpoint("0.0.0.0", std::stoi(serverconf->gui_listener_port_)));
         BOOST_LOG_SEV(*logger, notification) << "trainGUI Protobuf server created ! listen on 0.0.0.0, port " << std::stoi(serverconf->gui_listener_port_);
@@ -54,7 +55,7 @@ void TrainCommunicationsServer::run(void)
         return;
     }
 }
-
+/*
 void TrainCommunicationsServer::sendModeAutomatic()
 {
     //QMessageBox::information(0, "..", "pushed from automatic button !",0,0);
@@ -66,7 +67,7 @@ void TrainCommunicationsServer::sendModeManual()
     //QMessageBox::information(0, "..", "pushed from manual button !",0,0);
     //BOOST_LOG_SEV(*logger, notification) << "Manual mode button pushed !";
 }
-
+*/
 void TrainCommunicationsServer::onCloseTrainGUI()
 {
     //QMessageBox::information(0, "..", "onCloseTrainGUI ... !",0,0);

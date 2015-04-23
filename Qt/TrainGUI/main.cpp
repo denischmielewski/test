@@ -1,20 +1,24 @@
 #include "traincontrols.h"
+
 #include <QApplication>
-#include "errors.hpp"
-#include "config.hpp"
-#include "log.hpp"
-#include <iostream>
-//#include <thread>
-#include <chrono>
-#include <unordered_map>
-#include "traincommunicationsserver.h"
-#include "TrainSession.hpp"
 #include <QObject>
 #include <QThread>
 
+#include <iostream>
+#include <chrono>
+#include <unordered_map>
+#include <RCFProto.hpp>
+
+#include "errors.hpp"
+#include "config.hpp"
+#include "log.hpp"
+#include "traincommunicationsserver.h"
+#include "traincommunicationclient.hpp"
+#include "TrainSession.hpp"
+
 #define VERSION     "0.0.1.2"
 
-//std::unordered_map<std::string, TrainSession>    g_trains;
+
 
 int main(int argc, char *argv[])
 {
@@ -73,11 +77,16 @@ int main(int argc, char *argv[])
     }
 
     //now we can log
+    // Initialize RCFProto.
+    RCF::init();
+    BOOST_LOG_SEV(*logger, notification) << "TrainGUI RCF init !";
 
     TrainCommunicationsServer TrainCommunicationsServerThread(trainGUI_configuration, &trainsSessions);
     TrainCommunicationsServerThread.start();
+    TrainCommunicationClient TrainCommunicationClientThread(trainGUI_configuration, &trainsSessions);
+    TrainCommunicationClientThread.start();
 
-    TrainControls w(0, trainGUI_configuration, &TrainCommunicationsServerThread);
+    TrainControls w(0, trainGUI_configuration, &TrainCommunicationsServerThread, &TrainCommunicationClientThread);
     BOOST_LOG_SEV(*logger, notification) << "Program trainGUI started ! Version : " << VERSION << " date : " << __DATE__ << ":" << __TIME__;
     BOOST_LOG_SEV(*logger, notification) << "Everything configured, communication thread running ... !";
 
@@ -86,9 +95,8 @@ int main(int argc, char *argv[])
     int ret = a.exec();
 
     TrainCommunicationsServerThread.wait();
+    TrainCommunicationClientThread.wait();
     trainGUI_configuration->removeGUIIPPortMask_();
-    delete(trainGUI_configuration);
-    delete(trainGUI_logs_after_configread);
 
     //Log Summary of communication sessions with trains
     BOOST_LOG_SEV(*logger, notification) << "train communication sessions summary :" << std::endl;
@@ -117,6 +125,9 @@ int main(int argc, char *argv[])
             BOOST_LOG_SEV(*logger, warning) << "Train Communication Session Lock failed !!!";
         }
     }
+
+    delete(trainGUI_configuration);
+    delete(trainGUI_logs_after_configread);
 
     BOOST_LOG_SEV(*logger, notification) << "EVERYTHING TERMINATED PROPERLY !!! GUI return code = " << ret;
 

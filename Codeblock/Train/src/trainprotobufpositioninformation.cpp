@@ -21,7 +21,7 @@ void TrainProtobufPositionInformation::UpdateSession(RCF::RcfProtoSession * ppro
     startup_severity_channel_logger_mt& logger = server_comm_logger::get();
 
     std::string ipaddressmask = rcfSession.getClientAddress().string();
-    std::size_t pos = ipaddressmask.find(":");      // position of "/" in string
+    std::size_t pos = ipaddressmask.find(":");
     std::string ipaddress = ipaddressmask.substr (0,pos);
 
     TrainSession & trainSession = (*trainsSessions_)[ipaddress];

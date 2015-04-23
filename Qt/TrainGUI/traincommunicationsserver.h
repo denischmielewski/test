@@ -4,7 +4,6 @@
 #include <QObject>
 #include "config.hpp"
 #include "log.hpp"
-#include <thread>
 #include <chrono>
 #include <RCFProto.hpp>
 #include <ctime>
@@ -18,12 +17,9 @@
 // Include protoc-generated header.
 #include "TestRCFProto.pb.h"
 
-#include<QThread>
+#include <QThread>
 #include <QMessageBox>
 #include <QTimer>
-
-using namespace std;
-using namespace google::protobuf;
 
 class TrainCommunicationsServer : public QThread
 {
@@ -39,8 +35,8 @@ private:
     std::unordered_map<std::string, TrainSession> * trainsSessions_;
     //class Session session_;
 public slots:
-    void sendModeAutomatic();
-    void sendModeManual();
+//    void sendModeAutomatic();
+//    void sendModeManual();
     void onCloseTrainGUI();
     void onThreadTimerShot();
     void onPositionReceivedFromTrain(QString s);

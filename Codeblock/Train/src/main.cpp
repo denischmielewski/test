@@ -160,6 +160,35 @@ int main()
     delete(trainProtobufSynchronousServer);
     BOOST_LOG_SEV(lg, notification) << "All threads completed.";
     train_configuration->removeMainIPPortMask_();
+
+    //Log Summary of communication sessions with trains
+    BOOST_LOG_SEV(lg, notification) << "train communication sessions summary :" << std::endl;
+    int i = 0;
+    for ( auto it = trainsSessions.begin(); it != trainsSessions.end(); ++it ){i++;};
+    BOOST_LOG_SEV(lg, notification) << "number of sessions :" << i;
+    for ( auto it = trainsSessions.begin(); it != trainsSessions.end(); ++it )
+    {
+        BOOST_LOG_SEV(lg, notification) << "Train IP address :" << it->first;
+        TrainSession trainsession = it->second;
+        TrainCommSession & traincommsession = trainsession.GetTrainCommSessionRef();
+        if(traincommsession.TryLockCommSessionMutexFor(train_configuration->commSessionMutexLockTimeoutMilliseconds_))
+        {
+            time_t timeraw = traincommsession.GetSessionConnectionTime();
+#warning TODO (dev#1#15-03-27): the following line add a carriage return in log file.
+            BOOST_LOG_SEV(lg, notification) << "Session connection at : " << ctime(&timeraw);
+            BOOST_LOG_SEV(lg, notification) << "Session connection duration : " << traincommsession.GetSessionConnectionDuration();
+            BOOST_LOG_SEV(lg, notification) << "Session remote calls count : " << traincommsession.GetSessionRemoteCallCount();
+            BOOST_LOG_SEV(lg, notification) << "Session total bytes received : " << traincommsession.GetSessionTotalBytesReceived();
+            BOOST_LOG_SEV(lg, notification) << "Session total bytes sent : " << traincommsession.GetSessionTotalBytesSent();
+            BOOST_LOG_SEV(lg, notification) << "Session connection lost count : " << traincommsession.GetSessionConnectionLossCount();
+            traincommsession.UnlockCommSessionMutex();
+        }
+        else
+        {
+            BOOST_LOG_SEV(lg, warning) << "Train Communication Session Lock failed !!!";
+        }
+    }
+
     delete(train_configuration);
     delete(train_logs_after_configread);
 

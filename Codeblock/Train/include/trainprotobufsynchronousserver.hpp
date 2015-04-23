@@ -14,6 +14,8 @@
 
 #include "trainprotobufpositioninformation.hpp"
 #include "protobufpositioninformationserviceimpl.hpp"
+#include "trainprotobufsettrainmodecommand.hpp"
+#include "protobufsettrainmodecommandserviceimpl.hpp"
 
 
 class TrainProtobufSynchronousServer
@@ -22,7 +24,6 @@ class TrainProtobufSynchronousServer
         TrainProtobufSynchronousServer(config const * config, std::unordered_map<std::string, TrainSession> * trainsSessions);
         ~TrainProtobufSynchronousServer();
         void TrainProtobufSynchronousServerThreadCode(void);
-        int BindProtobufServices(RCF::RcfProtoServer & rcfProtoServer);
         int GetRCFProtoServerListeningPort(void);
         void Start(void);
         void Join(void);

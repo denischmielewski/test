@@ -19,13 +19,19 @@ void PositionInformationImpl::PositionInformation(  RpcController *             
                                                     PositionInformationReceive *                response,
                                                     Closure *                                   done)
 {
-    startup_severity_channel_logger_mt& lg = comm_logger::get();
+    startup_severity_channel_logger_mt& lg = server_comm_logger::get();
 
     RCF::RcfProtoController * rcfController = static_cast<RCF::RcfProtoController *>(controller);
     RCF::RcfProtoSession * pprotoSession = rcfController->getSession();
     RCF::RcfSession & rcfSession = rcfController->getSession()->getRcfSession();
 
-    BOOST_LOG_SEV(lg, notification) << "position received from " << rcfSession.getClientAddress().string();
+    std::string ipaddressmask = rcfSession.getClientAddress().string();
+    std::size_t pos = ipaddressmask.find(":");
+    std::string ipaddress = ipaddressmask.substr (0,pos);
+    BOOST_LOG_SEV(lg, notification)     << "position received from " << ipaddress \
+                                        << " TrainID = " << request->trainid() \
+                                        << " Position = " << request->position() \
+                                        << " Status = " << request->status();
 
     // Fill in the response.
     response->set_servername("Position received OK !");
@@ -34,10 +40,6 @@ void PositionInformationImpl::PositionInformation(  RpcController *             
 
     //Retrieve session info and store them in unordered_map
     //g_trains is keyed by train IP addresses
-    std::string ipaddressmask = rcfSession.getClientAddress().string();
-    std::size_t pos = ipaddressmask.find(":");      // position of "/" in string
-    std::string ipaddress = ipaddressmask.substr (0,pos);
-
     TrainSession & trainSession = (*trainsSessions_)[ipaddress];
 
     //retrieve a ref to train comm session
@@ -47,7 +49,6 @@ void PositionInformationImpl::PositionInformation(  RpcController *             
     {
         traincommsession.SetSessionActive();
         traincommsession.SetIpAddress(ipaddress);
-        BOOST_LOG_SEV(lg, notification) << "remote address: " << traincommsession.GetIpAddress();
         time_t timeraw = rcfSession.getConnectedAtTime();
         if(timeraw != traincommsession.GetSessionConnectionTime() && traincommsession.GetSessionRemoteCallCount() != 0)  traincommsession.IncConnectionLossCount();
         traincommsession.SetSessionConnectionTime(timeraw);

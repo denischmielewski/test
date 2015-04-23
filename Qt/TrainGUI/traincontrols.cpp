@@ -1,14 +1,10 @@
 #include "traincontrols.h"
-#include "ui_traincontrols.h"
-#include <QMessageBox>
-#include "utils.hpp"
-#include <QProcess>
 
 class TrainCommunicationsServer const * traincomm;
 class config const * trainconf;
 static startup_severity_channel_logger_mt * logger;
 
-TrainControls::TrainControls(QWidget *parent, config const * trainGUI_configuration, TrainCommunicationsServer const * t) :
+TrainControls::TrainControls(QWidget *parent, config const * trainGUI_configuration, TrainCommunicationsServer const * t, const TrainCommunicationClient *c) :
     QMainWindow(parent),
     ui(new Ui::TrainControls)
 {
@@ -24,8 +20,8 @@ TrainControls::TrainControls(QWidget *parent, config const * trainGUI_configurat
 //    t->start();
 
     //connection = connect(ui->Automatic, SIGNAL(clicked()), &t, SLOT(sendMode()));
-    connection = connect(ui->Automatic, &QRadioButton::clicked, t, &TrainCommunicationsServer::sendModeAutomatic);
-    connection = connect(ui->Manual, &QRadioButton::clicked, t, &TrainCommunicationsServer::sendModeManual);
+//    connection = connect(ui->Automatic, &QRadioButton::clicked, t, &TrainCommunicationsServer::sendModeAutomatic);
+//    connection = connect(ui->Manual, &QRadioButton::clicked, t, &TrainCommunicationsServer::sendModeManual);
 /*  for Debug
     if(connection == true)
         QMessageBox::information(0, "..", "connect succeeded !",0,0);
@@ -33,6 +29,27 @@ TrainControls::TrainControls(QWidget *parent, config const * trainGUI_configurat
         QMessageBox::information(0, "..", "connect failed !",0,0);
 */
     connection = connect(this, &TrainControls::myclose, t, &TrainCommunicationsServer::onCloseTrainGUI);
+/*  for debug
+    if(connection == true)
+        QMessageBox::information(0, "..", "connect succeeded !",0,0);
+    else
+        QMessageBox::information(0, "..", "connect failed !",0,0);
+*/
+    connection = connect(this, &TrainControls::myclose, c, &TrainCommunicationClient::onCloseTrainGUI);
+/*  for debug
+    if(connection == true)
+        QMessageBox::information(0, "..", "connect succeeded !",0,0);
+    else
+        QMessageBox::information(0, "..", "connect failed !",0,0);
+*/
+    connection = connect(ui->Automatic, &QRadioButton::clicked, c, &TrainCommunicationClient::onChangeModeToManual);
+/*  for debug
+    if(connection == true)
+        QMessageBox::information(0, "..", "connect succeeded !",0,0);
+    else
+        QMessageBox::information(0, "..", "connect failed !",0,0);
+*/
+    connection = connect(ui->Manual, &QRadioButton::clicked, c, &TrainCommunicationClient::onChangeModeToAutomatic);
 /*  for debug
     if(connection == true)
         QMessageBox::information(0, "..", "connect succeeded !",0,0);
@@ -53,7 +70,7 @@ TrainControls::~TrainControls()
 void TrainControls::on_Manual_clicked()
 {
     //QMessageBox::information(0, "..", "I have been pushed 0001 !",0,0);
-    BOOST_LOG_SEV(*logger, notification) << "GUI manual moe button clicked !";
+    BOOST_LOG_SEV(*logger, notification) << "GUI manual mode button clicked !";
 }
 
 void TrainControls::on_Automatic_clicked(bool checked)
@@ -74,8 +91,8 @@ void TrainControls::closeEvent(QCloseEvent * evt)
 void TrainControls::on_PBStopTrainSw_clicked()
 {
     //First check if Train software is running
-    string command = "pgrep -x Train";
-    string ls = GetStdoutFromCommand(command, trainconf->linuxSysCallBufferSize_);
+    std::string command = "pgrep -x Train";
+    std::string ls = GetStdoutFromCommand(command, trainconf->linuxSysCallBufferSize_);
     //preg return empty if process not found
 
     if(ls.empty())
@@ -99,8 +116,8 @@ void TrainControls::on_PBStopTrainSw_clicked()
 void TrainControls::on_PBStartTrainSw_clicked()
 {
     //First check if Train software is running
-    string command = "pgrep -x Train";
-    string ls = GetStdoutFromCommand(command, trainconf->linuxSysCallBufferSize_);
+    std::string command = "pgrep -x Train";
+    std::string ls = GetStdoutFromCommand(command, trainconf->linuxSysCallBufferSize_);
     //preg return empty if process not found
     if(ls.empty() == false)
     {
