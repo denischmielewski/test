@@ -22,7 +22,6 @@ void TrainProtobufSynchronousServer::Start(void)
 
 void TrainProtobufSynchronousServer::Join(void)
 {
-    // This will start the thread. Notice move semantics!
     TrainProtobufSynchronousServerThread.join();
 }
 

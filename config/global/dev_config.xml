@@ -18,4 +18,9 @@
 	<THREADS_EXIT_TIMEOUT>5000</THREADS_EXIT_TIMEOUT>
 	<!-- this parameter defines the sleep duration after a linux system call. The value here is in milliseconds -->
 	<LINUX_SYS_CALL_SLEEP_DURATION>1000</LINUX_SYS_CALL_SLEEP_DURATION>
+	<!-- this parameter authorizes loading train operation data from defaultdata.xml file. -->
+	<!-- this is for development or test only ! Normally, data shall be loaded either from: -->
+	<!-- persistent data on disk, case when a scenario is in progress and has been interrupted. -->
+	<!-- scenario configuration process, case train is idle and a scenario is scheduled. -->
+	<LOAD_TRAIN_OP_DATA_FROM_DEFAULTDATA_XML_FILE>YES</LOAD_TRAIN_OP_DATA_FROM_DEFAULTDATA_XML_FILE>
 </TRAIN_CONFIG_DEV>

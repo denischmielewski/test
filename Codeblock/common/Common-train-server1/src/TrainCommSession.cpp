@@ -9,6 +9,7 @@ TrainCommSession::TrainCommSession()
 TrainCommSession::~TrainCommSession()
 {
     //dtor
+    delete pcommSessionTimed_Mutex;
 }
 
 //=========SET members===============================================================

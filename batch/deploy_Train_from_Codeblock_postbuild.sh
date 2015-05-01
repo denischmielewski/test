@@ -37,14 +37,19 @@ rsync -arzvhP ../../lib/libboostlog/libboost*.so train@train221:/home/train/prog
 #	all trains /home/train sub-folders
 echo "==========sync config files to local dev train"
 rsync -avz ../../config/global/*.xml /home/train/config/global
+rsync -avz ../../config/local/*.xml /home/train/config/local
 echo "==========sync config files to train 191"
 rsync -avz ../../config/global/*.xml train@train191:/home/train/config/global
+rsync -avz ../../config/local/*.xml train@train191:/home/train/config/local
 echo "==========sync config files to train 201"
 rsync -avz ../../config/global/*.xml train@train201:/home/train/config/global
+rsync -avz ../../config/local/*.xml train@train201:/home/train/config/local
 echo "==========sync config files to train 211"
 rsync -avz ../../config/global/*.xml train@train211:/home/train/config/global
+rsync -avz ../../config/local/*.xml train@train211:/home/train/config/local
 echo "==========sync config files to train 221"
 rsync -avz ../../config/global/*.xml train@train221:/home/train/config/global
+rsync -avz ../../config/local/*.xml train@train221:/home/train/config/local
 
 
 echo "Post-build deployment of Server1 from Codeblock termnated !!! Check if errors ..."

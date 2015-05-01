@@ -11,9 +11,9 @@ class TrainSession
         ~TrainSession();
         TrainCommSession & GetTrainCommSessionRef(void);
     protected:
-    private:    //as trainSeesion will be used as a static singleton I put everything private
+    private:
         TrainCommSession        trainCommSession;
-        TrainOperationSession   trainOperationSession;
+        TrainOperationSession   trainOperationSession(config const *);
 };
 
 #endif // TRAINSESSION_HPP

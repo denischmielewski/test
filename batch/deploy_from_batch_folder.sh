@@ -28,10 +28,14 @@ rsync -arzvhP ../lib/libboostlog/libboost*.so train@train221:/home/train/program
 #	dev-VM /home/train sub-folders
 #	all trains /home/train sub-folders
 rsync -avz ../config/global/*.xml /home/train/config/global
+rsync -avz ../config/local/*.xml /home/train/config/local
 rsync -avz ../config/global/*.xml train@train191:/home/train/config/global
+rsync -avz ../config/local/*.xml train@train191:/home/train/config/local
 rsync -avz ../config/global/*.xml train@train201:/home/train/config/global
+rsync -avz ../config/local/*.xml train@train201:/home/train/config/local
 rsync -avz ../config/global/*.xml train@train211:/home/train/config/global
+rsync -avz ../config/local/*.xml train@train211:/home/train/config/local
 rsync -avz ../config/global/*.xml train@train221:/home/train/config/global
-
+rsync -avz ../config/local/*.xml train@train221:/home/train/config/local
 
 read -p  "Post-build deployment of Server1, Train and config files termnated !!! Check if errors ...and press a key to terminate !"

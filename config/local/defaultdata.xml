@@ -1,0 +1,13 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<!-- This file is for development, test or recovery only ! -->
+<!-- in case no data are have been stored on disk, and no scheduled data are available, this file will be used -->
+
+<DEFAULT>
+	<MODE>AUTOMATIC</MODE>
+	<PATH>BlueLinePath1.xml</PATH>
+	<DIRECTION>1</DIRECTION>
+	<START>Bg1</START>
+	<STOP>Bg2</STOP>
+	<KPPOSITION>-20000.00</KPPOSITION>
+</DEFAULT>

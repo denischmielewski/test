@@ -1,0 +1,338 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<!-- This file contains information for Blue line scenario step -->
+<!-- from this information and the position in garage, software will calculate movement and forks settings -->
+
+<PATH>
+	<TOTAL_SEGMENTS>23</TOTAL_SEGMENTS>
+	<!-- when moving in direction 2, software can deduct all information from information below ! So less information to enter manually  -->
+	<DIRECTION>1</DIRECTION>
+	<!-- number of garage park lines  -->
+	<GARAGE_PARK_LINES>18</GARAGE_PARK_LINES>
+	<!-- number of garage park for each line  -->
+	<GARAGE_PARK_PER_GARAGE_PARK_LINE>2</GARAGE_PARK_PER_GARAGE_PARK_LINE>
+	<!-- in meters, Kp offset between each garage park line  -->
+	<GARAGE_PARK_LINE_OFFSET>10</GARAGE_PARK_LINE_OFFSET>
+	<!-- Values here will be used by default for all segment unless they are overwritten in the segment node -->
+	<SEGMENT_1>
+		<START>Bg1</START>			<!-- g = garage park, 1 to 35 -->
+		<START_Kp>-20000.00</START_Kp>		<!-- in meters. This is position of Bg1. Use park line offset and startKp-StopKp to calculate value for each park -->
+		<STOP>Bg2</STOP>
+		<STOP_Kp>-19900.00</STOP_Kp>		<!-- in meters. This is position of Bg2. Use park line offset and startKp-StopKp to calculate value for each park -->
+		<SPEED>15</SPEED>					<!-- in km/h -->	
+		<ACC>5</ACC>						<!-- acceleration in km/h/s -->
+		<BRK>-5</BRK>						<!-- brake force in km/h/s -->
+		<BRK_DISTANCE_FROM_STOP>50</BRK_DISTANCE_FROM_STOP>	<!-- in meters -->
+		<STOP_APPROACH_SPEED>5</STOP_APPROACH_SPEED>		<!-- in km/h -->
+		<STOP_DURATION>5</STOP_DURATION>			<!-- in seconds -->
+		<FORKS>0</FORKS>			<!-- numbers of forks in the move -->
+	</SEGMENT_1>
+	<SEGMENT_2>
+		<START>Bg2</START>			<!-- g = garage park, 2 to 36 -->
+		<START_Kp>-19900.00</START_Kp>		<!-- in meters -->
+		<STOP>B2M1</STOP>
+		<STOP_Kp>-19600.00</STOP_Kp>
+		<SPEED>15</SPEED>					<!-- in km/h -->	
+		<ACC>5</ACC>						<!-- acceleration in km/h/s -->
+		<BRK>-5</BRK>						<!-- brake force in km/h/s -->
+		<BRK_DISTANCE_FROM_STOP>50</BRK_DISTANCE_FROM_STOP>	<!-- in meters -->
+		<STOP_APPROACH_SPEED>5</STOP_APPROACH_SPEED>		<!-- in km/h -->
+		<STOP_DURATION>5</STOP_DURATION>			<!-- in seconds -->
+		<FORKS>18</FORKS>			<!-- numbers of forks in the move -->
+		<!-- list of all forks, some will be active as instructed below according to which BgEVEN train moves from -->
+		<INACTIVE_FORKS>Bf1;Bf2;Bf3;Bf4;Bf5;Bf6;Bf7;Bf8;Bf9;Bf10;Bf11;Bf12;Bf13;Bf14;Bf15;Bf16;Bf17;Bf18</INACTIVE_FORKS>
+		<ACTIVE_FORKS_Bg2>Bf1</ACTIVE_FORKS_Bg2>
+		<ACTIVE_FORKS_Bg4>Bf2</ACTIVE_FORKS_Bg4>
+		<ACTIVE_FORKS_Bg6>Bf3</ACTIVE_FORKS_Bg6>
+		<ACTIVE_FORKS_Bg8>Bf4</ACTIVE_FORKS_Bg8>
+		<ACTIVE_FORKS_Bg10>Bf5</ACTIVE_FORKS_Bg10>
+		<ACTIVE_FORKS_Bg12>Bf6</ACTIVE_FORKS_Bg12>
+		<ACTIVE_FORKS_Bg14>Bf7</ACTIVE_FORKS_Bg14>
+		<ACTIVE_FORKS_Bg16>Bf8</ACTIVE_FORKS_Bg16>
+		<ACTIVE_FORKS_Bg18>Bf9</ACTIVE_FORKS_Bg18>
+		<ACTIVE_FORKS_Bg20>Bf10</ACTIVE_FORKS_Bg20>
+		<ACTIVE_FORKS_Bg22>Bf11</ACTIVE_FORKS_Bg22>
+		<ACTIVE_FORKS_Bg24>Bf12</ACTIVE_FORKS_Bg24>
+		<ACTIVE_FORKS_Bg26>Bf13</ACTIVE_FORKS_Bg26>
+		<ACTIVE_FORKS_Bg28>Bf14</ACTIVE_FORKS_Bg28>
+		<ACTIVE_FORKS_Bg30>Bf15</ACTIVE_FORKS_Bg30>
+		<ACTIVE_FORKS_Bg32>Bf16</ACTIVE_FORKS_Bg32>
+		<ACTIVE_FORKS_Bg34>Bf17</ACTIVE_FORKS_Bg34>
+		<ACTIVE_FORKS_Bg36>Bf18</ACTIVE_FORKS_Bg36>
+	</SEGMENT_2>
+	<SEGMENT_3>
+		<START>B2M1</START>			<!-- M = maneuver zone -->
+		<START_Kp>-19600.00</START_Kp>		<!-- in meters -->
+		<STOP>B1S1</STOP>
+		<STOP_Kp>-19500.00</STOP_Kp>
+		<SPEED>60</SPEED>					<!-- in km/h -->	
+		<ACC>5</ACC>						<!-- acceleration in km/h/s -->
+		<BRK>-5</BRK>						<!-- brake force in km/h/s -->
+		<BRK_DISTANCE_FROM_STOP>100</BRK_DISTANCE_FROM_STOP>	<!-- in meters -->
+		<STOP_APPROACH_SPEED>5</STOP_APPROACH_SPEED>		<!-- in km/h -->
+		<STOP_DURATION>20</STOP_DURATION>			<!-- in seconds -->
+		<FORKS>1</FORKS>			<!-- numbers of forks in the move -->
+		<ACTIVE_FORKS>Bf101</ACTIVE_FORKS>
+	</SEGMENT_3>
+	<SEGMENT_4>
+		<START>B1S1</START>			
+		<START_Kp>-19500.00</START_Kp>		<!-- in meters -->
+		<STOP>B1S2</STOP>
+		<STOP_Kp>-16500.00</STOP_Kp>
+		<SPEED>60</SPEED>					<!-- in km/h -->	
+		<ACC>5</ACC>						<!-- acceleration in km/h/s -->
+		<BRK>-5</BRK>						<!-- brake force in km/h/s -->
+		<BRK_DISTANCE_FROM_STOP>100</BRK_DISTANCE_FROM_STOP>	<!-- in meters -->
+		<STOP_APPROACH_SPEED>5</STOP_APPROACH_SPEED>		<!-- in km/h -->
+		<STOP_DURATION>20</STOP_DURATION>			<!-- in seconds -->
+		<FORKS>0</FORKS>			<!-- numbers of forks in the move -->
+	</SEGMENT_4>
+	<SEGMENT_5>
+		<START>B1S2</START>			
+		<START_Kp>-16500.00</START_Kp>		<!-- in meters -->
+		<STOP>B1S3</STOP>
+		<STOP_Kp>-13500.00</STOP_Kp>
+		<SPEED>60</SPEED>					<!-- in km/h -->	
+		<ACC>5</ACC>						<!-- acceleration in km/h/s -->
+		<BRK>-5</BRK>						<!-- brake force in km/h/s -->
+		<BRK_DISTANCE_FROM_STOP>100</BRK_DISTANCE_FROM_STOP>	<!-- in meters -->
+		<STOP_APPROACH_SPEED>5</STOP_APPROACH_SPEED>		<!-- in km/h -->
+		<STOP_DURATION>20</STOP_DURATION>			<!-- in seconds -->
+		<FORKS>0</FORKS>			<!-- numbers of forks in the move -->
+	</SEGMENT_5>
+	<SEGMENT_6>
+		<START>B1S3</START>			
+		<START_Kp>-13500.00</START_Kp>		<!-- in meters -->
+		<STOP>B1S4</STOP>
+		<STOP_Kp>-10500.00</STOP_Kp>
+		<SPEED>60</SPEED>					<!-- in km/h -->	
+		<ACC>5</ACC>						<!-- acceleration in km/h/s -->
+		<BRK>-5</BRK>						<!-- brake force in km/h/s -->
+		<BRK_DISTANCE_FROM_STOP>100</BRK_DISTANCE_FROM_STOP>	<!-- in meters -->
+		<STOP_APPROACH_SPEED>5</STOP_APPROACH_SPEED>		<!-- in km/h -->
+		<STOP_DURATION>20</STOP_DURATION>			<!-- in seconds -->
+		<FORKS>0</FORKS>			<!-- numbers of forks in the move -->
+	</SEGMENT_6>
+	<SEGMENT_7>
+		<START>B1S4</START>			
+		<START_Kp>-10500.00</START_Kp>		<!-- in meters -->
+		<STOP>B1S5</STOP>
+		<STOP_Kp>-7500.00</STOP_Kp>
+		<SPEED>60</SPEED>					<!-- in km/h -->	
+		<ACC>5</ACC>						<!-- acceleration in km/h/s -->
+		<BRK>-5</BRK>						<!-- brake force in km/h/s -->
+		<BRK_DISTANCE_FROM_STOP>100</BRK_DISTANCE_FROM_STOP>	<!-- in meters -->
+		<STOP_APPROACH_SPEED>5</STOP_APPROACH_SPEED>		<!-- in km/h -->
+		<STOP_DURATION>20</STOP_DURATION>			<!-- in seconds -->
+		<FORKS>0</FORKS>			<!-- numbers of forks in the move -->
+	</SEGMENT_7>
+	<SEGMENT_8>
+		<START>B1S5</START>			
+		<START_Kp>-7500.00</START_Kp>		<!-- in meters -->
+		<STOP>B1S6</STOP>
+		<STOP_Kp>-5500.00</STOP_Kp>
+		<SPEED>60</SPEED>					<!-- in km/h -->	
+		<ACC>5</ACC>						<!-- acceleration in km/h/s -->
+		<BRK>-5</BRK>						<!-- brake force in km/h/s -->
+		<BRK_DISTANCE_FROM_STOP>100</BRK_DISTANCE_FROM_STOP>	<!-- in meters -->
+		<STOP_APPROACH_SPEED>5</STOP_APPROACH_SPEED>		<!-- in km/h -->
+		<STOP_DURATION>20</STOP_DURATION>			<!-- in seconds -->
+		<FORKS>0</FORKS>			<!-- numbers of forks in the move -->
+	</SEGMENT_8>
+	<SEGMENT_9>
+		<START>B1S6</START>			
+		<START_Kp>-5500.00</START_Kp>		<!-- in meters -->
+		<STOP>B1S7</STOP>
+		<STOP_Kp>-4000.00</STOP_Kp>
+		<SPEED>60</SPEED>					<!-- in km/h -->	
+		<ACC>5</ACC>						<!-- acceleration in km/h/s -->
+		<BRK>-5</BRK>						<!-- brake force in km/h/s -->
+		<BRK_DISTANCE_FROM_STOP>100</BRK_DISTANCE_FROM_STOP>	<!-- in meters -->
+		<STOP_APPROACH_SPEED>5</STOP_APPROACH_SPEED>		<!-- in km/h -->
+		<STOP_DURATION>20</STOP_DURATION>			<!-- in seconds -->
+		<FORKS>0</FORKS>			<!-- numbers of forks in the move -->
+	</SEGMENT_9>
+	<SEGMENT_10>
+		<START>B1S7</START>			
+		<START_Kp>-4000.00</START_Kp>		<!-- in meters -->
+		<STOP>B1S8</STOP>
+		<STOP_Kp>-3000.00</STOP_Kp>
+		<SPEED>60</SPEED>					<!-- in km/h -->	
+		<ACC>5</ACC>						<!-- acceleration in km/h/s -->
+		<BRK>-5</BRK>						<!-- brake force in km/h/s -->
+		<BRK_DISTANCE_FROM_STOP>100</BRK_DISTANCE_FROM_STOP>	<!-- in meters -->
+		<STOP_APPROACH_SPEED>5</STOP_APPROACH_SPEED>		<!-- in km/h -->
+		<STOP_DURATION>20</STOP_DURATION>			<!-- in seconds -->
+		<FORKS>0</FORKS>			<!-- numbers of forks in the move -->
+	</SEGMENT_10>
+	<SEGMENT_11>
+		<START>B1S8</START>			
+		<START_Kp>-3000.00</START_Kp>		<!-- in meters -->
+		<STOP>B1S9</STOP>
+		<STOP_Kp>-1500.00</STOP_Kp>
+		<SPEED>60</SPEED>					<!-- in km/h -->	
+		<ACC>5</ACC>						<!-- acceleration in km/h/s -->
+		<BRK>-5</BRK>						<!-- brake force in km/h/s -->
+		<BRK_DISTANCE_FROM_STOP>100</BRK_DISTANCE_FROM_STOP>	<!-- in meters -->
+		<STOP_APPROACH_SPEED>5</STOP_APPROACH_SPEED>		<!-- in km/h -->
+		<STOP_DURATION>20</STOP_DURATION>			<!-- in seconds -->
+		<FORKS>0</FORKS>			<!-- numbers of forks in the move -->
+	</SEGMENT_11>
+	<SEGMENT_12>
+		<START>B1S9</START>			
+		<START_Kp>-1500.00</START_Kp>		<!-- in meters -->
+		<STOP>B1S10</STOP>
+		<STOP_Kp>0.0</STOP_Kp>
+		<SPEED>60</SPEED>					<!-- in km/h -->	
+		<ACC>5</ACC>						<!-- acceleration in km/h/s -->
+		<BRK>-5</BRK>						<!-- brake force in km/h/s -->
+		<BRK_DISTANCE_FROM_STOP>100</BRK_DISTANCE_FROM_STOP>	<!-- in meters -->
+		<STOP_APPROACH_SPEED>5</STOP_APPROACH_SPEED>		<!-- in km/h -->
+		<STOP_DURATION>20</STOP_DURATION>			<!-- in seconds -->
+		<FORKS>0</FORKS>			<!-- numbers of forks in the move -->
+	</SEGMENT_12>
+	<SEGMENT_13>
+		<START>B1S10</START>			
+		<START_Kp>0.0</START_Kp>		<!-- in meters -->
+		<STOP>B1S11</STOP>
+		<STOP_Kp>+1500.00</STOP_Kp>
+		<SPEED>60</SPEED>					<!-- in km/h -->	
+		<ACC>5</ACC>						<!-- acceleration in km/h/s -->
+		<BRK>-5</BRK>						<!-- brake force in km/h/s -->
+		<BRK_DISTANCE_FROM_STOP>100</BRK_DISTANCE_FROM_STOP>	<!-- in meters -->
+		<STOP_APPROACH_SPEED>5</STOP_APPROACH_SPEED>		<!-- in km/h -->
+		<STOP_DURATION>20</STOP_DURATION>			<!-- in seconds -->
+		<FORKS>0</FORKS>			<!-- numbers of forks in the move -->
+	</SEGMENT_13>
+	<SEGMENT_14>
+		<START>B1S11</START>			
+		<START_Kp>+1500.00</START_Kp>		<!-- in meters -->
+		<STOP>B1S12</STOP>
+		<STOP_Kp>+3000.00</STOP_Kp>
+		<SPEED>60</SPEED>					<!-- in km/h -->	
+		<ACC>5</ACC>						<!-- acceleration in km/h/s -->
+		<BRK>-5</BRK>						<!-- brake force in km/h/s -->
+		<BRK_DISTANCE_FROM_STOP>100</BRK_DISTANCE_FROM_STOP>	<!-- in meters -->
+		<STOP_APPROACH_SPEED>5</STOP_APPROACH_SPEED>		<!-- in km/h -->
+		<STOP_DURATION>20</STOP_DURATION>			<!-- in seconds -->
+		<FORKS>0</FORKS>			<!-- numbers of forks in the move -->
+	</SEGMENT_14>
+	<SEGMENT_15>
+		<START>B1S12</START>			
+		<START_Kp>+3000.00</START_Kp>		<!-- in meters -->
+		<STOP>B1S13</STOP>
+		<STOP_Kp>+4000.00</STOP_Kp>
+		<SPEED>60</SPEED>					<!-- in km/h -->	
+		<ACC>5</ACC>						<!-- acceleration in km/h/s -->
+		<BRK>-5</BRK>						<!-- brake force in km/h/s -->
+		<BRK_DISTANCE_FROM_STOP>100</BRK_DISTANCE_FROM_STOP>	<!-- in meters -->
+		<STOP_APPROACH_SPEED>5</STOP_APPROACH_SPEED>		<!-- in km/h -->
+		<STOP_DURATION>20</STOP_DURATION>			<!-- in seconds -->
+		<FORKS>0</FORKS>			<!-- numbers of forks in the move -->
+	</SEGMENT_15>
+	<SEGMENT_16>
+		<START>B1S13</START>			
+		<START_Kp>+4000.00</START_Kp>		<!-- in meters -->
+		<STOP>B1S14</STOP>
+		<STOP_Kp>+5500.00</STOP_Kp>
+		<SPEED>60</SPEED>					<!-- in km/h -->	
+		<ACC>5</ACC>						<!-- acceleration in km/h/s -->
+		<BRK>-5</BRK>						<!-- brake force in km/h/s -->
+		<BRK_DISTANCE_FROM_STOP>100</BRK_DISTANCE_FROM_STOP>	<!-- in meters -->
+		<STOP_APPROACH_SPEED>5</STOP_APPROACH_SPEED>		<!-- in km/h -->
+		<STOP_DURATION>20</STOP_DURATION>			<!-- in seconds -->
+		<FORKS>0</FORKS>			<!-- numbers of forks in the move -->
+	</SEGMENT_16>
+	<SEGMENT_17>
+		<START>B1S14</START>			
+		<START_Kp>+5500.00</START_Kp>		<!-- in meters -->
+		<STOP>B1S15</STOP>
+		<STOP_Kp>+6500.00</STOP_Kp>
+		<SPEED>60</SPEED>					<!-- in km/h -->	
+		<ACC>5</ACC>						<!-- acceleration in km/h/s -->
+		<BRK>-5</BRK>						<!-- brake force in km/h/s -->
+		<BRK_DISTANCE_FROM_STOP>100</BRK_DISTANCE_FROM_STOP>	<!-- in meters -->
+		<STOP_APPROACH_SPEED>5</STOP_APPROACH_SPEED>		<!-- in km/h -->
+		<STOP_DURATION>20</STOP_DURATION>			<!-- in seconds -->
+		<FORKS>0</FORKS>			<!-- numbers of forks in the move -->
+	</SEGMENT_17>
+	<SEGMENT_18>
+		<START>B1S15</START>			
+		<START_Kp>+6500.00</START_Kp>		<!-- in meters -->
+		<STOP>B1S16</STOP>
+		<STOP_Kp>+8000.00</STOP_Kp>
+		<SPEED>60</SPEED>					<!-- in km/h -->	
+		<ACC>5</ACC>						<!-- acceleration in km/h/s -->
+		<BRK>-5</BRK>						<!-- brake force in km/h/s -->
+		<BRK_DISTANCE_FROM_STOP>100</BRK_DISTANCE_FROM_STOP>	<!-- in meters -->
+		<STOP_APPROACH_SPEED>5</STOP_APPROACH_SPEED>		<!-- in km/h -->
+		<STOP_DURATION>20</STOP_DURATION>			<!-- in seconds -->
+		<FORKS>0</FORKS>			<!-- numbers of forks in the move -->
+	</SEGMENT_18>
+	<SEGMENT_19>
+		<START>B1S16</START>			
+		<START_Kp>+8000.00</START_Kp>		<!-- in meters -->
+		<STOP>B1S17</STOP>
+		<STOP_Kp>+10000.00</STOP_Kp>
+		<SPEED>60</SPEED>					<!-- in km/h -->	
+		<ACC>5</ACC>						<!-- acceleration in km/h/s -->
+		<BRK>-5</BRK>						<!-- brake force in km/h/s -->
+		<BRK_DISTANCE_FROM_STOP>100</BRK_DISTANCE_FROM_STOP>	<!-- in meters -->
+		<STOP_APPROACH_SPEED>5</STOP_APPROACH_SPEED>		<!-- in km/h -->
+		<STOP_DURATION>20</STOP_DURATION>			<!-- in seconds -->
+		<FORKS>0</FORKS>			<!-- numbers of forks in the move -->
+	</SEGMENT_19>
+	<SEGMENT_20>
+		<START>B1S17</START>			
+		<START_Kp>+10000.00</START_Kp>		<!-- in meters -->
+		<STOP>B1S18</STOP>
+		<STOP_Kp>+12500.00</STOP_Kp>
+		<SPEED>60</SPEED>					<!-- in km/h -->	
+		<ACC>5</ACC>						<!-- acceleration in km/h/s -->
+		<BRK>-5</BRK>						<!-- brake force in km/h/s -->
+		<BRK_DISTANCE_FROM_STOP>100</BRK_DISTANCE_FROM_STOP>	<!-- in meters -->
+		<STOP_APPROACH_SPEED>5</STOP_APPROACH_SPEED>		<!-- in km/h -->
+		<STOP_DURATION>20</STOP_DURATION>			<!-- in seconds -->
+		<FORKS>0</FORKS>			<!-- numbers of forks in the move -->
+	</SEGMENT_20>
+	<SEGMENT_21>
+		<START>B1S18</START>			
+		<START_Kp>+12500.00</START_Kp>		<!-- in meters -->
+		<STOP>B1S19</STOP>
+		<STOP_Kp>+14500.00</STOP_Kp>
+		<SPEED>60</SPEED>					<!-- in km/h -->	
+		<ACC>5</ACC>						<!-- acceleration in km/h/s -->
+		<BRK>-5</BRK>						<!-- brake force in km/h/s -->
+		<BRK_DISTANCE_FROM_STOP>100</BRK_DISTANCE_FROM_STOP>	<!-- in meters -->
+		<STOP_APPROACH_SPEED>5</STOP_APPROACH_SPEED>		<!-- in km/h -->
+		<STOP_DURATION>20</STOP_DURATION>			<!-- in seconds -->
+		<FORKS>0</FORKS>			<!-- numbers of forks in the move -->
+	</SEGMENT_21>
+	<SEGMENT_22>
+		<START>B1S19</START>			
+		<START_Kp>+14500.00</START_Kp>		<!-- in meters -->
+		<STOP>B1S20</STOP>
+		<STOP_Kp>+18000.00</STOP_Kp>
+		<SPEED>60</SPEED>					<!-- in km/h -->	
+		<ACC>5</ACC>						<!-- acceleration in km/h/s -->
+		<BRK>-5</BRK>						<!-- brake force in km/h/s -->
+		<BRK_DISTANCE_FROM_STOP>100</BRK_DISTANCE_FROM_STOP>	<!-- in meters -->
+		<STOP_APPROACH_SPEED>5</STOP_APPROACH_SPEED>		<!-- in km/h -->
+		<STOP_DURATION>20</STOP_DURATION>			<!-- in seconds -->
+		<FORKS>0</FORKS>			<!-- numbers of forks in the move -->
+	</SEGMENT_22>
+	<SEGMENT_23>
+		<START>B1S20</START>			
+		<START_Kp>+18000.00</START_Kp>		<!-- in meters -->
+		<STOP>B1M2</STOP>
+		<STOP_Kp>+18500.00</STOP_Kp>
+		<SPEED>15</SPEED>					<!-- in km/h -->	
+		<ACC>5</ACC>						<!-- acceleration in km/h/s -->
+		<BRK>-5</BRK>						<!-- brake force in km/h/s -->
+		<BRK_DISTANCE_FROM_STOP>50</BRK_DISTANCE_FROM_STOP>	<!-- in meters -->
+		<STOP_APPROACH_SPEED>5</STOP_APPROACH_SPEED>		<!-- in km/h -->
+		<STOP_DURATION>20</STOP_DURATION>			<!-- in seconds -->
+		<FORKS>1</FORKS>			<!-- numbers of forks in the move -->
+		<INACTIVE_FORKS>Bf201</INACTIVE_FORKS>
+	</SEGMENT_23>
+</PATH>

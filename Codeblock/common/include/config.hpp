@@ -43,6 +43,13 @@ class config    //note: default value for members have no meaning. They will be 
         int16_t configureGUIIPPortMask_(void);
         int16_t removeMainIPPortMask_(void);
         int16_t removeGUIIPPortMask_(void);
+        bool loadTrainOperationDataFromDefaultDataXmlFile_ = 0;
+        int16_t defaultMode_ = 0;
+        std::string defaultPath_ = "";
+        int16_t defaultDirection_ = 0;
+        std::string defaultStart_ = "";
+        std::string defaultStop_ = "";
+        float defaultKpPosition_ = 0.0;
     protected:
     private:
 };

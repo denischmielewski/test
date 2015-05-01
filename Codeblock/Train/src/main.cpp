@@ -99,6 +99,9 @@ int main()
 
     config_signal_management();
 
+    TrainOperationSession trainOperationSession(train_configuration);
+    trainOperationSession.LoadTrainOperationSession();
+
     // Initialize RCFProto.
     try
     {
@@ -161,7 +164,7 @@ int main()
     BOOST_LOG_SEV(lg, notification) << "All threads completed.";
     train_configuration->removeMainIPPortMask_();
 
-    //Log Summary of communication sessions with trains
+    //Log Summary of communication sessions
     BOOST_LOG_SEV(lg, notification) << "train communication sessions summary :" << std::endl;
     int i = 0;
     for ( auto it = trainsSessions.begin(); it != trainsSessions.end(); ++it ){i++;};

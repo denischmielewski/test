@@ -1,0 +1,18 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<!-- This file contains information for Blue line scenario step -->
+<!-- from this information and the position in garage, software will calculate movement and forks settings -->
+
+<BLUE_LINE>
+	<TOTAL_PATHS>2</TOTAL_PATHS>
+	<START_TIME>08:00:00</START_TIME>
+	<STOP_TIME>20:00:00</STOP_TIME>
+	<PATH_1>
+		<SEGMENTS>BlueLinePath1.xml</SEGMENTS>
+		<DIRECTION>1</DIRECTION>
+	</PATH_1>
+	<PATH_2>
+		<SEGMENTS>BlueLinePath1.xml</SEGMENTS>
+		<DIRECTION>2</DIRECTION>
+	</PATH_2>
+</BLUE_LINE>
