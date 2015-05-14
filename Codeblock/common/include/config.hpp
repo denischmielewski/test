@@ -47,9 +47,8 @@ class config    //note: default value for members have no meaning. They will be 
         int16_t defaultMode_ = 0;
         std::string defaultPath_ = "";
         int16_t defaultDirection_ = 0;
-        std::string defaultStart_ = "";
-        std::string defaultStop_ = "";
         float defaultKpPosition_ = 0.0;
+        uint16_t movementThreadBeatMilliseconds_ = 22;
     protected:
     private:
 };

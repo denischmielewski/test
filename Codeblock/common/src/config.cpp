@@ -111,7 +111,7 @@ config::config()
         linuxSysCallSleepDurationMilliseconds_ = std::stoul(pt2.get<std::string>(node), nullptr, 10);
         BOOST_LOG_SEV(lg, notification) << "Linux system call sleep duration : " << linuxSysCallSleepDurationMilliseconds_ << " microseconds";
 
-        node = "TRAIN_CONFIG_DEV.THREADS_LOG_NOTIFICATION_FREQUENCY";
+        node = "TRAIN_CONFIG_DEV.THREADS_LOGS_NOTIFICATION_FREQUENCY";
         ThreadsLogNotificationFrequencyMilliseconds_ = std::stoul(pt2.get<std::string>(node), nullptr, 10);
         BOOST_LOG_SEV(lg, notification) << "Threads log notification frequency : " << ThreadsLogNotificationFrequencyMilliseconds_ << " milliseconds";
 
@@ -131,6 +131,10 @@ config::config()
             loadTrainOperationDataFromDefaultDataXmlFile_ = false;
             BOOST_LOG_SEV(lg, notification) << "train operation Data WILL NOT be loaded from defaultdata.xml file !!!";
         }
+
+        node = "TRAIN_CONFIG_DEV.MOVEMENT_THREAD_BEAT";
+        movementThreadBeatMilliseconds_ = std::stoul(pt2.get<std::string>(node), nullptr, 10);
+        BOOST_LOG_SEV(lg, notification) << "Movement Thread Beat period : " << movementThreadBeatMilliseconds_ << " milliseconds";
 
         char * hostname = nullptr;
         hostname = new char[linuxSysCallBufferSize_];   //deleted at the end of the block
@@ -242,14 +246,6 @@ config::config()
             node = "DEFAULT.DIRECTION";
             defaultDirection_ = stoi(pt3.get<std::string>(node), nullptr, 10);
             BOOST_LOG_SEV(lg, critical) << "Default direction : " << defaultDirection_;
-
-            node = "DEFAULT.START";
-            defaultStart_ = pt3.get<std::string>(node);
-            BOOST_LOG_SEV(lg, critical) << "Default start : " << defaultStart_;
-
-            node = "DEFAULT.STOP";
-            defaultStop_ = pt3.get<std::string>(node);
-            BOOST_LOG_SEV(lg, critical) << "Default stop : " << defaultStop_;
 
             node = "DEFAULT.KPPOSITION";
             defaultKpPosition_ = stof(pt3.get<std::string>(node), nullptr);

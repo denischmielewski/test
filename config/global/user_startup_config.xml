@@ -10,7 +10,7 @@
 		<LOG_COLLECTOR_FOLDER_MAX_SIZE_IN_MBYTES>100</LOG_COLLECTOR_FOLDER_MAX_SIZE_IN_MBYTES>	<!-- some log files will be deleted to get that maximum size -->
 		<DRIVE_MIN_FREE_SPACE_IN_MBYTES>1024</DRIVE_MIN_FREE_SPACE_IN_MBYTES> <!-- some log files will be deleted to get that minimum size -->
 		<LOG_AUTO_FLUSH>YES</LOG_AUTO_FLUSH>	<!-- YES = write to file after each log -->
-		<MAX_LOG_FILE_SIZE_IN_KBYTES>100</MAX_LOG_FILE_SIZE_IN_KBYTES>	<!-- precision is +/- 10% -->
+		<MAX_LOG_FILE_SIZE_IN_KBYTES>1000</MAX_LOG_FILE_SIZE_IN_KBYTES>	<!-- precision is +/- 10% -->
 		<!-- this parameter defines the lower log level included in logs. Levels are : -->
 		<!-- debug, debug_temporary, internal_message, external_message, Threads, notification, warning, error and critical -->
 		<LOG_LEVEL>internal_message</LOG_LEVEL>		

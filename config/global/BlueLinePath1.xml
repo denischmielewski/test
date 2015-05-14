@@ -19,11 +19,11 @@
 		<START_Kp>-20000.00</START_Kp>		<!-- in meters. This is position of Bg1. Use park line offset and startKp-StopKp to calculate value for each park -->
 		<STOP>Bg2</STOP>
 		<STOP_Kp>-19900.00</STOP_Kp>		<!-- in meters. This is position of Bg2. Use park line offset and startKp-StopKp to calculate value for each park -->
-		<SPEED>15</SPEED>					<!-- in km/h -->	
-		<ACC>5</ACC>						<!-- acceleration in km/h/s -->
-		<BRK>-5</BRK>						<!-- brake force in km/h/s -->
-		<BRK_DISTANCE_FROM_STOP>50</BRK_DISTANCE_FROM_STOP>	<!-- in meters -->
-		<STOP_APPROACH_SPEED>5</STOP_APPROACH_SPEED>		<!-- in km/h -->
+		<SPEED>25</SPEED>					<!-- in km/h -->	
+		<ACC>2</ACC>						<!-- acceleration in m/s/s -->
+		<BRK>-3</BRK>						<!-- brake force in m/s/s -->
+		<BRK_DISTANCE_FROM_STOP>15</BRK_DISTANCE_FROM_STOP>	<!-- in meters -->
+		<STOP_APPROACH_SPEED>3</STOP_APPROACH_SPEED>		<!-- in km/h -->
 		<STOP_DURATION>5</STOP_DURATION>			<!-- in seconds -->
 		<FORKS>0</FORKS>			<!-- numbers of forks in the move -->
 	</SEGMENT_1>
@@ -32,10 +32,10 @@
 		<START_Kp>-19900.00</START_Kp>		<!-- in meters -->
 		<STOP>B2M1</STOP>
 		<STOP_Kp>-19600.00</STOP_Kp>
-		<SPEED>15</SPEED>					<!-- in km/h -->	
-		<ACC>5</ACC>						<!-- acceleration in km/h/s -->
-		<BRK>-5</BRK>						<!-- brake force in km/h/s -->
-		<BRK_DISTANCE_FROM_STOP>50</BRK_DISTANCE_FROM_STOP>	<!-- in meters -->
+		<SPEED>25</SPEED>					<!-- in km/h -->	
+		<ACC>2</ACC>						<!-- acceleration in m/s/s -->
+		<BRK>-3</BRK>						<!-- brake force in m/s/s -->
+		<BRK_DISTANCE_FROM_STOP>10</BRK_DISTANCE_FROM_STOP>	<!-- in meters -->
 		<STOP_APPROACH_SPEED>5</STOP_APPROACH_SPEED>		<!-- in km/h -->
 		<STOP_DURATION>5</STOP_DURATION>			<!-- in seconds -->
 		<FORKS>18</FORKS>			<!-- numbers of forks in the move -->
@@ -66,8 +66,8 @@
 		<STOP>B1S1</STOP>
 		<STOP_Kp>-19500.00</STOP_Kp>
 		<SPEED>60</SPEED>					<!-- in km/h -->	
-		<ACC>5</ACC>						<!-- acceleration in km/h/s -->
-		<BRK>-5</BRK>						<!-- brake force in km/h/s -->
+		<ACC>2</ACC>						<!-- acceleration in m/s/s -->
+		<BRK>-3</BRK>						<!-- brake force in m/s/s -->
 		<BRK_DISTANCE_FROM_STOP>100</BRK_DISTANCE_FROM_STOP>	<!-- in meters -->
 		<STOP_APPROACH_SPEED>5</STOP_APPROACH_SPEED>		<!-- in km/h -->
 		<STOP_DURATION>20</STOP_DURATION>			<!-- in seconds -->
@@ -80,8 +80,8 @@
 		<STOP>B1S2</STOP>
 		<STOP_Kp>-16500.00</STOP_Kp>
 		<SPEED>60</SPEED>					<!-- in km/h -->	
-		<ACC>5</ACC>						<!-- acceleration in km/h/s -->
-		<BRK>-5</BRK>						<!-- brake force in km/h/s -->
+		<ACC>2</ACC>						<!-- acceleration in m/s/s -->
+		<BRK>-3</BRK>						<!-- brake force in m/s/s -->
 		<BRK_DISTANCE_FROM_STOP>100</BRK_DISTANCE_FROM_STOP>	<!-- in meters -->
 		<STOP_APPROACH_SPEED>5</STOP_APPROACH_SPEED>		<!-- in km/h -->
 		<STOP_DURATION>20</STOP_DURATION>			<!-- in seconds -->
@@ -93,8 +93,8 @@
 		<STOP>B1S3</STOP>
 		<STOP_Kp>-13500.00</STOP_Kp>
 		<SPEED>60</SPEED>					<!-- in km/h -->	
-		<ACC>5</ACC>						<!-- acceleration in km/h/s -->
-		<BRK>-5</BRK>						<!-- brake force in km/h/s -->
+		<ACC>2</ACC>						<!-- acceleration in m/s/s -->
+		<BRK>-3</BRK>						<!-- brake force in m/s/s -->
 		<BRK_DISTANCE_FROM_STOP>100</BRK_DISTANCE_FROM_STOP>	<!-- in meters -->
 		<STOP_APPROACH_SPEED>5</STOP_APPROACH_SPEED>		<!-- in km/h -->
 		<STOP_DURATION>20</STOP_DURATION>			<!-- in seconds -->
@@ -106,8 +106,8 @@
 		<STOP>B1S4</STOP>
 		<STOP_Kp>-10500.00</STOP_Kp>
 		<SPEED>60</SPEED>					<!-- in km/h -->	
-		<ACC>5</ACC>						<!-- acceleration in km/h/s -->
-		<BRK>-5</BRK>						<!-- brake force in km/h/s -->
+		<ACC>2</ACC>						<!-- acceleration in m/s/s -->
+		<BRK>-3</BRK>						<!-- brake force in m/s/s -->
 		<BRK_DISTANCE_FROM_STOP>100</BRK_DISTANCE_FROM_STOP>	<!-- in meters -->
 		<STOP_APPROACH_SPEED>5</STOP_APPROACH_SPEED>		<!-- in km/h -->
 		<STOP_DURATION>20</STOP_DURATION>			<!-- in seconds -->
@@ -119,8 +119,8 @@
 		<STOP>B1S5</STOP>
 		<STOP_Kp>-7500.00</STOP_Kp>
 		<SPEED>60</SPEED>					<!-- in km/h -->	
-		<ACC>5</ACC>						<!-- acceleration in km/h/s -->
-		<BRK>-5</BRK>						<!-- brake force in km/h/s -->
+		<ACC>2</ACC>						<!-- acceleration in m/s/s -->
+		<BRK>-3</BRK>						<!-- brake force in m/s/s -->
 		<BRK_DISTANCE_FROM_STOP>100</BRK_DISTANCE_FROM_STOP>	<!-- in meters -->
 		<STOP_APPROACH_SPEED>5</STOP_APPROACH_SPEED>		<!-- in km/h -->
 		<STOP_DURATION>20</STOP_DURATION>			<!-- in seconds -->
@@ -132,8 +132,8 @@
 		<STOP>B1S6</STOP>
 		<STOP_Kp>-5500.00</STOP_Kp>
 		<SPEED>60</SPEED>					<!-- in km/h -->	
-		<ACC>5</ACC>						<!-- acceleration in km/h/s -->
-		<BRK>-5</BRK>						<!-- brake force in km/h/s -->
+		<ACC>2</ACC>						<!-- acceleration in m/s/s -->
+		<BRK>-3</BRK>						<!-- brake force in m/s/s -->
 		<BRK_DISTANCE_FROM_STOP>100</BRK_DISTANCE_FROM_STOP>	<!-- in meters -->
 		<STOP_APPROACH_SPEED>5</STOP_APPROACH_SPEED>		<!-- in km/h -->
 		<STOP_DURATION>20</STOP_DURATION>			<!-- in seconds -->
@@ -145,8 +145,8 @@
 		<STOP>B1S7</STOP>
 		<STOP_Kp>-4000.00</STOP_Kp>
 		<SPEED>60</SPEED>					<!-- in km/h -->	
-		<ACC>5</ACC>						<!-- acceleration in km/h/s -->
-		<BRK>-5</BRK>						<!-- brake force in km/h/s -->
+		<ACC>2</ACC>						<!-- acceleration in m/s/s -->
+		<BRK>-3</BRK>						<!-- brake force in m/s/s -->
 		<BRK_DISTANCE_FROM_STOP>100</BRK_DISTANCE_FROM_STOP>	<!-- in meters -->
 		<STOP_APPROACH_SPEED>5</STOP_APPROACH_SPEED>		<!-- in km/h -->
 		<STOP_DURATION>20</STOP_DURATION>			<!-- in seconds -->
@@ -158,8 +158,8 @@
 		<STOP>B1S8</STOP>
 		<STOP_Kp>-3000.00</STOP_Kp>
 		<SPEED>60</SPEED>					<!-- in km/h -->	
-		<ACC>5</ACC>						<!-- acceleration in km/h/s -->
-		<BRK>-5</BRK>						<!-- brake force in km/h/s -->
+		<ACC>2</ACC>						<!-- acceleration in m/s/s -->
+		<BRK>-3</BRK>						<!-- brake force in m/s/s -->
 		<BRK_DISTANCE_FROM_STOP>100</BRK_DISTANCE_FROM_STOP>	<!-- in meters -->
 		<STOP_APPROACH_SPEED>5</STOP_APPROACH_SPEED>		<!-- in km/h -->
 		<STOP_DURATION>20</STOP_DURATION>			<!-- in seconds -->
@@ -171,8 +171,8 @@
 		<STOP>B1S9</STOP>
 		<STOP_Kp>-1500.00</STOP_Kp>
 		<SPEED>60</SPEED>					<!-- in km/h -->	
-		<ACC>5</ACC>						<!-- acceleration in km/h/s -->
-		<BRK>-5</BRK>						<!-- brake force in km/h/s -->
+		<ACC>2</ACC>						<!-- acceleration in m/s/s -->
+		<BRK>-3</BRK>						<!-- brake force in m/s/s -->
 		<BRK_DISTANCE_FROM_STOP>100</BRK_DISTANCE_FROM_STOP>	<!-- in meters -->
 		<STOP_APPROACH_SPEED>5</STOP_APPROACH_SPEED>		<!-- in km/h -->
 		<STOP_DURATION>20</STOP_DURATION>			<!-- in seconds -->
@@ -184,8 +184,8 @@
 		<STOP>B1S10</STOP>
 		<STOP_Kp>0.0</STOP_Kp>
 		<SPEED>60</SPEED>					<!-- in km/h -->	
-		<ACC>5</ACC>						<!-- acceleration in km/h/s -->
-		<BRK>-5</BRK>						<!-- brake force in km/h/s -->
+		<ACC>2</ACC>						<!-- acceleration in m/s/s -->
+		<BRK>-3</BRK>						<!-- brake force in m/s/s -->
 		<BRK_DISTANCE_FROM_STOP>100</BRK_DISTANCE_FROM_STOP>	<!-- in meters -->
 		<STOP_APPROACH_SPEED>5</STOP_APPROACH_SPEED>		<!-- in km/h -->
 		<STOP_DURATION>20</STOP_DURATION>			<!-- in seconds -->
@@ -197,8 +197,8 @@
 		<STOP>B1S11</STOP>
 		<STOP_Kp>+1500.00</STOP_Kp>
 		<SPEED>60</SPEED>					<!-- in km/h -->	
-		<ACC>5</ACC>						<!-- acceleration in km/h/s -->
-		<BRK>-5</BRK>						<!-- brake force in km/h/s -->
+		<ACC>2</ACC>						<!-- acceleration in m/s/s -->
+		<BRK>-3</BRK>						<!-- brake force in m/s/s -->
 		<BRK_DISTANCE_FROM_STOP>100</BRK_DISTANCE_FROM_STOP>	<!-- in meters -->
 		<STOP_APPROACH_SPEED>5</STOP_APPROACH_SPEED>		<!-- in km/h -->
 		<STOP_DURATION>20</STOP_DURATION>			<!-- in seconds -->
@@ -210,8 +210,8 @@
 		<STOP>B1S12</STOP>
 		<STOP_Kp>+3000.00</STOP_Kp>
 		<SPEED>60</SPEED>					<!-- in km/h -->	
-		<ACC>5</ACC>						<!-- acceleration in km/h/s -->
-		<BRK>-5</BRK>						<!-- brake force in km/h/s -->
+		<ACC>2</ACC>						<!-- acceleration in m/s/s -->
+		<BRK>-3</BRK>						<!-- brake force in m/s/s -->
 		<BRK_DISTANCE_FROM_STOP>100</BRK_DISTANCE_FROM_STOP>	<!-- in meters -->
 		<STOP_APPROACH_SPEED>5</STOP_APPROACH_SPEED>		<!-- in km/h -->
 		<STOP_DURATION>20</STOP_DURATION>			<!-- in seconds -->
@@ -223,8 +223,8 @@
 		<STOP>B1S13</STOP>
 		<STOP_Kp>+4000.00</STOP_Kp>
 		<SPEED>60</SPEED>					<!-- in km/h -->	
-		<ACC>5</ACC>						<!-- acceleration in km/h/s -->
-		<BRK>-5</BRK>						<!-- brake force in km/h/s -->
+		<ACC>2</ACC>						<!-- acceleration in m/s/s -->
+		<BRK>-3</BRK>						<!-- brake force in m/s/s -->
 		<BRK_DISTANCE_FROM_STOP>100</BRK_DISTANCE_FROM_STOP>	<!-- in meters -->
 		<STOP_APPROACH_SPEED>5</STOP_APPROACH_SPEED>		<!-- in km/h -->
 		<STOP_DURATION>20</STOP_DURATION>			<!-- in seconds -->
@@ -236,8 +236,8 @@
 		<STOP>B1S14</STOP>
 		<STOP_Kp>+5500.00</STOP_Kp>
 		<SPEED>60</SPEED>					<!-- in km/h -->	
-		<ACC>5</ACC>						<!-- acceleration in km/h/s -->
-		<BRK>-5</BRK>						<!-- brake force in km/h/s -->
+		<ACC>2</ACC>						<!-- acceleration in m/s/s -->
+		<BRK>-3</BRK>						<!-- brake force in m/s/s -->
 		<BRK_DISTANCE_FROM_STOP>100</BRK_DISTANCE_FROM_STOP>	<!-- in meters -->
 		<STOP_APPROACH_SPEED>5</STOP_APPROACH_SPEED>		<!-- in km/h -->
 		<STOP_DURATION>20</STOP_DURATION>			<!-- in seconds -->
@@ -249,8 +249,8 @@
 		<STOP>B1S15</STOP>
 		<STOP_Kp>+6500.00</STOP_Kp>
 		<SPEED>60</SPEED>					<!-- in km/h -->	
-		<ACC>5</ACC>						<!-- acceleration in km/h/s -->
-		<BRK>-5</BRK>						<!-- brake force in km/h/s -->
+		<ACC>2</ACC>						<!-- acceleration in m/s/s -->
+		<BRK>-3</BRK>						<!-- brake force in m/s/s -->
 		<BRK_DISTANCE_FROM_STOP>100</BRK_DISTANCE_FROM_STOP>	<!-- in meters -->
 		<STOP_APPROACH_SPEED>5</STOP_APPROACH_SPEED>		<!-- in km/h -->
 		<STOP_DURATION>20</STOP_DURATION>			<!-- in seconds -->
@@ -262,8 +262,8 @@
 		<STOP>B1S16</STOP>
 		<STOP_Kp>+8000.00</STOP_Kp>
 		<SPEED>60</SPEED>					<!-- in km/h -->	
-		<ACC>5</ACC>						<!-- acceleration in km/h/s -->
-		<BRK>-5</BRK>						<!-- brake force in km/h/s -->
+		<ACC>2</ACC>						<!-- acceleration in m/s/s -->
+		<BRK>-3</BRK>						<!-- brake force in m/s/s -->
 		<BRK_DISTANCE_FROM_STOP>100</BRK_DISTANCE_FROM_STOP>	<!-- in meters -->
 		<STOP_APPROACH_SPEED>5</STOP_APPROACH_SPEED>		<!-- in km/h -->
 		<STOP_DURATION>20</STOP_DURATION>			<!-- in seconds -->
@@ -275,8 +275,8 @@
 		<STOP>B1S17</STOP>
 		<STOP_Kp>+10000.00</STOP_Kp>
 		<SPEED>60</SPEED>					<!-- in km/h -->	
-		<ACC>5</ACC>						<!-- acceleration in km/h/s -->
-		<BRK>-5</BRK>						<!-- brake force in km/h/s -->
+		<ACC>2</ACC>						<!-- acceleration in m/s/s -->
+		<BRK>-3</BRK>						<!-- brake force in m/s/s -->
 		<BRK_DISTANCE_FROM_STOP>100</BRK_DISTANCE_FROM_STOP>	<!-- in meters -->
 		<STOP_APPROACH_SPEED>5</STOP_APPROACH_SPEED>		<!-- in km/h -->
 		<STOP_DURATION>20</STOP_DURATION>			<!-- in seconds -->
@@ -288,8 +288,8 @@
 		<STOP>B1S18</STOP>
 		<STOP_Kp>+12500.00</STOP_Kp>
 		<SPEED>60</SPEED>					<!-- in km/h -->	
-		<ACC>5</ACC>						<!-- acceleration in km/h/s -->
-		<BRK>-5</BRK>						<!-- brake force in km/h/s -->
+		<ACC>2</ACC>						<!-- acceleration in m/s/s -->
+		<BRK>-3</BRK>						<!-- brake force in m/s/s -->
 		<BRK_DISTANCE_FROM_STOP>100</BRK_DISTANCE_FROM_STOP>	<!-- in meters -->
 		<STOP_APPROACH_SPEED>5</STOP_APPROACH_SPEED>		<!-- in km/h -->
 		<STOP_DURATION>20</STOP_DURATION>			<!-- in seconds -->
@@ -301,8 +301,8 @@
 		<STOP>B1S19</STOP>
 		<STOP_Kp>+14500.00</STOP_Kp>
 		<SPEED>60</SPEED>					<!-- in km/h -->	
-		<ACC>5</ACC>						<!-- acceleration in km/h/s -->
-		<BRK>-5</BRK>						<!-- brake force in km/h/s -->
+		<ACC>2</ACC>						<!-- acceleration in m/s/s -->
+		<BRK>-3</BRK>						<!-- brake force in m/s/s -->
 		<BRK_DISTANCE_FROM_STOP>100</BRK_DISTANCE_FROM_STOP>	<!-- in meters -->
 		<STOP_APPROACH_SPEED>5</STOP_APPROACH_SPEED>		<!-- in km/h -->
 		<STOP_DURATION>20</STOP_DURATION>			<!-- in seconds -->
@@ -314,8 +314,8 @@
 		<STOP>B1S20</STOP>
 		<STOP_Kp>+18000.00</STOP_Kp>
 		<SPEED>60</SPEED>					<!-- in km/h -->	
-		<ACC>5</ACC>						<!-- acceleration in km/h/s -->
-		<BRK>-5</BRK>						<!-- brake force in km/h/s -->
+		<ACC>2</ACC>						<!-- acceleration in m/s/s -->
+		<BRK>-3</BRK>						<!-- brake force in m/s/s -->
 		<BRK_DISTANCE_FROM_STOP>100</BRK_DISTANCE_FROM_STOP>	<!-- in meters -->
 		<STOP_APPROACH_SPEED>5</STOP_APPROACH_SPEED>		<!-- in km/h -->
 		<STOP_DURATION>20</STOP_DURATION>			<!-- in seconds -->
@@ -327,8 +327,8 @@
 		<STOP>B1M2</STOP>
 		<STOP_Kp>+18500.00</STOP_Kp>
 		<SPEED>15</SPEED>					<!-- in km/h -->	
-		<ACC>5</ACC>						<!-- acceleration in km/h/s -->
-		<BRK>-5</BRK>						<!-- brake force in km/h/s -->
+		<ACC>2</ACC>						<!-- acceleration in m/s/s -->
+		<BRK>-3</BRK>						<!-- brake force in m/s/s -->
 		<BRK_DISTANCE_FROM_STOP>50</BRK_DISTANCE_FROM_STOP>	<!-- in meters -->
 		<STOP_APPROACH_SPEED>5</STOP_APPROACH_SPEED>		<!-- in km/h -->
 		<STOP_DURATION>20</STOP_DURATION>			<!-- in seconds -->

@@ -13,7 +13,7 @@
 	<!-- this parameter defines the communication threads sleep duration. The value here is n milliseconds -->
 	<COMMUNICATION_THREAD_SLEEP_DURATION>100</COMMUNICATION_THREAD_SLEEP_DURATION>
 	<!-- this parameter defines the communication threads sleep duration. The value here is n milliseconds -->
-	<THREADS_LOG_NOTIFICATION_FREQUENCY>10000</THREAD_LOGS_NOTIFICATION_FREQUENCY>
+	<THREADS_LOGS_NOTIFICATION_FREQUENCY>60000</THREADS_LOGS_NOTIFICATION_FREQUENCY>
 	<!-- this parameter defines the threads exit timeout duration to ensure thread is terminated after call exit(). The value here is in milliseconds -->
 	<THREADS_EXIT_TIMEOUT>5000</THREADS_EXIT_TIMEOUT>
 	<!-- this parameter defines the sleep duration after a linux system call. The value here is in milliseconds -->
@@ -23,4 +23,7 @@
 	<!-- persistent data on disk, case when a scenario is in progress and has been interrupted. -->
 	<!-- scenario configuration process, case train is idle and a scenario is scheduled. -->
 	<LOAD_TRAIN_OP_DATA_FROM_DEFAULTDATA_XML_FILE>YES</LOAD_TRAIN_OP_DATA_FROM_DEFAULTDATA_XML_FILE>
+	<!-- definition of the movement thread beat in milliseconds. This the frequency the movement thread will check what to do (accelerate, brake, stop.... -->
+	<MOVEMENT_THREAD_BEAT>25</MOVEMENT_THREAD_BEAT>
+
 </TRAIN_CONFIG_DEV>

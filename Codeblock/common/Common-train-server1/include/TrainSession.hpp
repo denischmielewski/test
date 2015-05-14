@@ -10,10 +10,11 @@ class TrainSession
         TrainSession();
         ~TrainSession();
         TrainCommSession & GetTrainCommSessionRef(void);
+        TrainOperationSession & GetTrainOperationSessionRef(void);
     protected:
     private:
         TrainCommSession        trainCommSession;
-        TrainOperationSession   trainOperationSession(config const *);
+        TrainOperationSession   trainOperationSession;
 };
 
 #endif // TRAINSESSION_HPP

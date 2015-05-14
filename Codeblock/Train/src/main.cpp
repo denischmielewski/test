@@ -9,6 +9,7 @@
 #include <signal.h>
 #include <unordered_map>
 #include "TrainSession.hpp"
+#include "TrainOperationSession.hpp"
 #include "trainprotobufsynchronousserver.hpp"
 #include "protobufsynchronousclientfortraingui.hpp"
 #include "protobufsynchronousclientforserver1.hpp"
@@ -99,9 +100,6 @@ int main()
 
     config_signal_management();
 
-    TrainOperationSession trainOperationSession(train_configuration);
-    trainOperationSession.LoadTrainOperationSession();
-
     // Initialize RCFProto.
     try
     {
@@ -157,6 +155,14 @@ int main()
         return ERROR_CONFIG_FILE_HANDLING;
     }
 
+    TrainSession & trainSession = trainsSessions[train_configuration->main_ipaddress_];
+    //retrieve a ref to train comm session
+    TrainOperationSession & trainoperationsession = trainSession.GetTrainOperationSessionRef();
+    trainoperationsession.SetSoftwareConfig(train_configuration);
+    //load data, identify current segment then run the thread to move !!!
+    trainoperationsession.LoadTrainOperationSession();
+    trainoperationsession.StartTrainOperationSessionThreadCode();
+    trainoperationsession.JoinTrainOperationSessionThreadCode();
     //all threads are joined in the destructors below
     delete(client1);
     delete(client2);
