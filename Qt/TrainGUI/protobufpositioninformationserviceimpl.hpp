@@ -17,7 +17,8 @@ class PositionInformationImpl : public QObject, public PositionInformationServic
 {
     Q_OBJECT
 public:
-    PositionInformationImpl(config const *, std::unordered_map<std::string, TrainSession> *trainsSessions);
+//1    PositionInformationImpl(config const *, std::unordered_map<std::string, TrainSession> *trainsSessions);
+    PositionInformationImpl();
     config const * softwareConfig_  = nullptr;
     std::unordered_map<std::string, TrainSession> * trainsSessions_ = nullptr;
     // PositionInformation() method implementation.
@@ -26,6 +27,8 @@ public:
         const PositionInformationTransmit *         request,
         PositionInformationReceive *                response,
         google::protobuf::Closure *                 done);
+    void SetSoftwareConfigPointer(config const *);
+    void SetTrainSessionpointer(std::unordered_map<std::string, TrainSession> *);
 signals:
     void PositionReceivedFromTrain(QString);
 };

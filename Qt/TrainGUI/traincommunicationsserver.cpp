@@ -31,7 +31,9 @@ void TrainCommunicationsServer::run(void)
         RCF::RcfProtoServer server( RCF::TcpEndpoint("0.0.0.0", std::stoi(serverconf->gui_listener_port_)));
         BOOST_LOG_SEV(*logger, notification) << "trainGUI Protobuf server created ! listen on 0.0.0.0, port " << std::stoi(serverconf->gui_listener_port_);
         // Bind Protobuf services.
-        PositionInformationImpl positionInformationImpl(serverconf, trainsSessions_);
+        PositionInformationImpl positionInformationImpl;
+        positionInformationImpl.SetSoftwareConfigPointer(serverconf);
+        positionInformationImpl.SetTrainSessionpointer(trainsSessions_);
         server.bindService(positionInformationImpl);
         connect(&positionInformationImpl, SIGNAL(PositionReceivedFromTrain(QString)), this, SLOT(onPositionReceivedFromTrain(QString)));
         SetOperationModeImpl setOperationModeInformationImpl(serverconf, trainsSessions_);

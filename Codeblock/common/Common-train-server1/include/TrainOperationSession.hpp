@@ -88,8 +88,8 @@ class TrainOperationSession
         void JoinTrainOperationSessionWatchdogThreadCode(void);
         int16_t LoadTrainOperationSession(void);
         int16_t LoadPathSegmentsData(void);
-        std::list<MoveSegment> segmentsList;
 
+        std::list<MoveSegment> segmentsList;
     protected:
     private:
         std::timed_mutex * operationSessionTimed_Mutex_ = nullptr;
@@ -106,6 +106,7 @@ class TrainOperationSession
         float currentSpeed_ = 0;
         std::thread * trainOperationSessionThreadCode_;
         std::thread * TrainOperationSessionWatchdogThreadCode_;
+
 };
 
 #endif // TRAINOPERATIONSESSION_HPP

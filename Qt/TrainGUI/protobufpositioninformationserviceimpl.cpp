@@ -6,11 +6,17 @@ using namespace google::protobuf;
 
 //extern std::unordered_map<std::string, TrainSession>    g_trains;
 //uint16_t g_commSessionMutexLockTimeoutMilliseconds = 111;
-
+/*
 PositionInformationImpl::PositionInformationImpl(config const * config, std::unordered_map<std::string, TrainSession> * trainsSessions )
 {
     softwareConfig_ = config;
     trainsSessions_ = trainsSessions;
+}
+*/
+
+PositionInformationImpl::PositionInformationImpl()
+{
+
 }
 
 // PositionInformation() method implementation.
@@ -62,5 +68,16 @@ void PositionInformationImpl::PositionInformation(  RpcController *             
     {
         BOOST_LOG_SEV(lg, warning) << "Train Communication Session Lock failed !!!";
     }
+
     emit PositionReceivedFromTrain(QString::fromStdString(request->position()));
+}
+
+void PositionInformationImpl::SetSoftwareConfigPointer(config const * conf)
+{
+    softwareConfig_ = conf;
+}
+
+void PositionInformationImpl::SetTrainSessionpointer(std::unordered_map<std::string, TrainSession> * trainsSessions)
+{
+    trainsSessions_ = trainsSessions;
 }

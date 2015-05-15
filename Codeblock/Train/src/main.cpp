@@ -15,7 +15,7 @@
 #include "protobufsynchronousclientforserver1.hpp"
 #include <RCFProto.hpp>
 
-#define VERSION     "0.0.1.2"
+#define VERSION     "0.0.1.3"
 
 volatile int g_signal_received = 0;
 

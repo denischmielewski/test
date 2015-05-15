@@ -9,7 +9,7 @@
 #include <signal.h>
 #include <unordered_map>
 
-#define VERSION     "0.0.1.2"
+#define VERSION     "0.0.1.3"
 #define DATE        "20150404"
 
 volatile int g_signal_received = 0;

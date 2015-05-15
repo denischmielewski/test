@@ -19,9 +19,9 @@
 	<TCPIP>
 		<!-- some TCP/IP global config parameters -->	
 		<!-- this parameter defines the timeout when a protobuf synchronous client tries to connect to a server. The value here is in milliseconds -->
-		<TCPIP_CONNECTION_TIMEOUT>3000</TCPIP_CONNECTION_TIMEOUT>
+		<TCPIP_CONNECTION_TIMEOUT>250</TCPIP_CONNECTION_TIMEOUT>
 		<!-- this parameter defines the timeout waiting for answer to a protobuf synchronous client request. The value here is in milliseconds -->
-		<TCPIP_REPLY_TIMEOUT>2000</TCPIP_REPLY_TIMEOUT>
+		<TCPIP_REPLY_TIMEOUT>100</TCPIP_REPLY_TIMEOUT>
 	</TCPIP>
 
 	<SYNCHRONOUS_MESSAGES>
@@ -81,22 +81,22 @@
 		<SERVER1> <!-- Hostname of the linux OS, 1024 bytes MAX !!! -->
 			<IP_ADDRESSES_AND_SUBNET>
 				<ADAPTER>eth0</ADAPTER>
-				<MAIN_IP>192.168.1.11/24</MAIN_CLIENT_IP>
-				<GUI_IP>192.168.1.12/24</GUI_CLIENT_IP>
+				<MAIN_IP>192.168.1.11/24</MAIN_IP>
+				<GUI_IP>192.168.1.12/24</GUI_IP>
 			</IP_ADDRESSES_AND_SUBNET>
 		</SERVER1>
 		<SERVER2> <!-- Hostname of the linux OS, 1024 bytes MAX !!! -->
 			<IP_ADDRESSES_AND_SUBNET>
 				<ADAPTER>eth0</ADAPTER>
-				<MAIN_IP>192.168.1.15/24</MAIN_CLIENT_IP>
-				<GUI_IP>192.168.1.16/24</GUI_CLIENT_IP>
+				<MAIN_IP>192.168.1.15/24</MAIN_IP>
+				<GUI_IP>192.168.1.16/24</GUI_IP>
 			</IP_ADDRESSES_AND_SUBNET>
 		</SERVER2>
 		<SERVER3> <!-- Hostname of the linux OS, 1024 bytes MAX !!! -->
 			<IP_ADDRESSES_AND_SUBNET>
 				<ADAPTER>eth0</ADAPTER>
-				<MAIN_IP>192.168.1.20/24</MAIN_CLIENT_IP>
-				<GUI_IP>192.168.1.21/24</GUI_CLIENT_IP>
+				<MAIN_IP>192.168.1.20/24</MAIN_IP>
+				<GUI_IP>192.168.1.21/24</GUI_IP>
 			</IP_ADDRESSES_AND_SUBNET>
 		</SERVER3>
 	</TRAINS_IP_CONFIG>

@@ -19,6 +19,7 @@ echo "==========sync protobuf lib to train191"
 rsync -arzvhP ../../lib/libprotobuf/libprotobuf.so* train@train191:/home/train/programs/lib/libprotobuf/
 echo "==========sync boost logs lib to train191"
 rsync -arzvhP ../../lib/libboostlog/libboost*.so train@train191:/home/train/programs/lib/libboostlog/
+
 echo "==========sync protobuf lib to train201"
 rsync -arzvhP ../../lib/libprotobuf/libprotobuf.so* train@train201:/home/train/programs/lib/libprotobuf/
 echo "==========sync boost logs lib to train201"
@@ -31,6 +32,20 @@ echo "==========sync protobuf lib to train221"
 rsync -arzvhP ../../lib/libprotobuf/libprotobuf.so* train@train221:/home/train/programs/lib/libprotobuf/
 echo "==========sync boost logs lib to train221"
 rsync -arzvhP ../../lib/libboostlog/libboost*.so train@train221:/home/train/programs/lib/libboostlog/
+
+# deploy from trainGUI Release build to:
+#	dev-VM /home/train sub-folders
+#	all trains /home/train sub-folders
+echo "==========sync TrainGUI files to local dev train"
+rsync -avz ../../Qt/build-TrainGUI-Desktop_Qt_5_4_1_GCC_64bit-Release/TrainGUI /home/train/programs/real
+echo "==========sync TrainGUI files to train 191"
+rsync -avz ../../Qt/build-TrainGUI-Desktop_Qt_5_4_1_GCC_64bit-Release/TrainGUI train@train191:/home/train/programs/real/
+echo "==========sync TrainGUI files to train 201"
+rsync -avz ../../Qt/build-TrainGUI-Desktop_Qt_5_4_1_GCC_64bit-Release/TrainGUI train@train201:/home/train/programs/real/
+echo "==========sync TrainGUI files to train 211"
+rsync -avz ../../Qt/build-TrainGUI-Desktop_Qt_5_4_1_GCC_64bit-Release/TrainGUI train@train211:/home/train/programs/real/
+echo "==========sync TrainGUI files to train 221"
+rsync -avz ../../Qt/build-TrainGUI-Desktop_Qt_5_4_1_GCC_64bit-Release/TrainGUI train@train221:/home/train/programs/real/
 
 # deploy config files to:
 #	dev-VM /home/train sub-folders

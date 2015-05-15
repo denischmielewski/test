@@ -14,14 +14,13 @@ TrainOperationSession::TrainOperationSession()
 TrainOperationSession::~TrainOperationSession()
 {
     //dtor
-    if(trainOperationSessionThreadCode_->joinable()) trainOperationSessionThreadCode_->join();
-    //if(TrainOperationSessionWatchdogThreadCode_->joinable()) TrainOperationSessionWatchdogThreadCode_->join();
     delete operationSessionTimed_Mutex_;
 }
 
 void TrainOperationSession::SetSoftwareConfig(config const * config)
 {
     softwareConfig_ = config;
+    operationSessionTimed_Mutex_ = new(std::timed_mutex);
 }
 
 bool TrainOperationSession::TryLockCommSessionMutexFor(size_t milliseconds)
@@ -135,6 +134,7 @@ uint16_t TrainOperationSession::getCurrentSegmentID(void)
     return currentSegmentID_;
 }
 
+
 void TrainOperationSession::TrainOperationSessionThreadCode(void)
 {
     extern volatile int g_signal_received;
@@ -145,7 +145,7 @@ void TrainOperationSession::TrainOperationSessionThreadCode(void)
     uint16_t threadBeat = softwareConfig_->movementThreadBeatMilliseconds_;
     std::chrono::high_resolution_clock::time_point tTimePointForStationStop;
 
-    BOOST_LOG_SEV(logger_, notification) << "+++++++++++ hello from movement thread !!! +++++++++++++++";
+    BOOST_LOG_SEV(logger_, notification) << "+++++++++++ hello from move thread !!! +++++++++++++++";
 
     std::list<MoveSegment>::iterator it = segmentsList.begin();
     std::advance(it, currentSegmentID_ - 1);
@@ -170,14 +170,14 @@ void TrainOperationSession::TrainOperationSessionThreadCode(void)
                             if(KpPosition_ >= (*it).stopKp_)
                             {
                                 //yes we are
-                                BOOST_LOG_SEV(logger_, notification) << loop << " Segment #" << (currentSegmentID_) \
+                                BOOST_LOG_SEV(logger_, notification) << loop << " move status :  " << currentSegmentMoveStatus_ << " Segment #" << (currentSegmentID_) \
                                                                     << " Train arrived to Stop :" << KpPosition_ << " Direction " << direction_ \
                                                                     << " Speed " << currentSpeed_ << " km/h";
                                 currentSegmentMoveStatus_ = ARRIVED;
                             }
                             else
                             {
-                                BOOST_LOG_SEV(logger_, notification) << loop << " Segment #" << (currentSegmentID_) \
+                                BOOST_LOG_SEV(logger_, notification) << loop << " move status :  " << currentSegmentMoveStatus_ << " Segment #" << (currentSegmentID_) \
                                                                     << " acceleration from position :" << KpPosition_ << " Direction " << direction_ \
                                                                     << " Speed " << currentSpeed_ << " km/h";
                                 currentSpeed_ = 0;
@@ -188,7 +188,7 @@ void TrainOperationSession::TrainOperationSessionThreadCode(void)
                         {
                             if(KpPosition_ >= (*it).startKp_)
                             {
-                                BOOST_LOG_SEV(logger_, notification) << loop << " Segment #" << (currentSegmentID_) \
+                                BOOST_LOG_SEV(logger_, notification) << loop << " move status :  " << currentSegmentMoveStatus_ << " Segment #" << (currentSegmentID_) \
                                                                     << " acceleration from position :" << KpPosition_ << " Direction " << direction_ \
                                                                     << " Speed " << currentSpeed_ << " km/h";
                                 currentSpeed_ = 0;
@@ -197,13 +197,13 @@ void TrainOperationSession::TrainOperationSessionThreadCode(void)
                             }
                             else
                             {
-                                BOOST_LOG_SEV(logger_, notification) << loop << " Segment #" << (currentSegmentID_) \
+                                BOOST_LOG_SEV(logger_, notification) << loop << " move status :  " << currentSegmentMoveStatus_ << " Segment #" << (currentSegmentID_) \
                                                                     << " Train arrived to Stop " << KpPosition_ << " Direction " << direction_ \
                                                                     << " Speed " << currentSpeed_ << " km/h";
                                 currentSegmentMoveStatus_ = ARRIVED;
                             }
                         }
-                        else BOOST_LOG_SEV(logger_, critical)    << "unknown movement direction :  " << direction_;
+                        else BOOST_LOG_SEV(logger_, critical)    << "unknown 1 movement direction :  " << direction_;
                         break;
                     case ACCELERATION:
                         //integrate position from speed as per direction
@@ -216,13 +216,13 @@ void TrainOperationSession::TrainOperationSessionThreadCode(void)
                         {
                             KpPosition_ -= currentSpeed_/3.6 * (float)(softwareConfig_->movementThreadBeatMilliseconds_)/(float)1000;
                         }
-                        else BOOST_LOG_SEV(logger_, critical)    << "unknown movement direction :  " << direction_;
+                        else BOOST_LOG_SEV(logger_, critical)    << "unknown 2 movement direction :  " << direction_;
                         //verify if cruise speed as been reached
                         //BOOST_LOG_SEV(logger_, notification) << loop << " speed " << currentSpeed_ << " cruise speed " << (*it).speed_;
                         if(currentSpeed_ >= (*it).speed_)
                         {
                             //cruise speed reached, no more acceleration
-                            BOOST_LOG_SEV(logger_, notification) << loop << " Segment #" << (currentSegmentID_) \
+                            BOOST_LOG_SEV(logger_, notification) << loop << " move status :  " << currentSegmentMoveStatus_ << " Segment #" << (currentSegmentID_) \
                                                                     << " Train cruising " << KpPosition_ << " Direction " << direction_ \
                                                                     << " Speed " << currentSpeed_ << " km/h";
                             currentSegmentMoveStatus_ = CRUISE;
@@ -237,14 +237,14 @@ void TrainOperationSession::TrainOperationSessionThreadCode(void)
                             {
                                 if(currentSpeed_ > (*it).stopApproachSpeed_)
                                 {
-                                    BOOST_LOG_SEV(logger_, notification) << loop << " Segment #" << (currentSegmentID_) \
+                                    BOOST_LOG_SEV(logger_, notification) << loop << " move status :  " << currentSegmentMoveStatus_ << " Segment #" << (currentSegmentID_) \
                                                                     << " Train braking1 " << KpPosition_ << " Direction " << direction_ \
                                                                     << " Speed " << currentSpeed_ << " km/h";
                                     currentSegmentMoveStatus_ = BRAKING;
                                 }
                                 else
                                 {
-                                    BOOST_LOG_SEV(logger_, notification) << loop << " Segment #" << (currentSegmentID_) \
+                                    BOOST_LOG_SEV(logger_, notification) << loop << " move status :  " << currentSegmentMoveStatus_ << " Segment #" << (currentSegmentID_) \
                                                                     << " Train approaching stop " << KpPosition_ << " Direction " << direction_ \
                                                                     << " Speed " << currentSpeed_ << " km/h";
                                     currentSegmentMoveStatus_ = APPROCHING;
@@ -258,14 +258,14 @@ void TrainOperationSession::TrainOperationSessionThreadCode(void)
                             {
                                 if(currentSpeed_ > (*it).stopApproachSpeed_)
                                 {
-                                    BOOST_LOG_SEV(logger_, notification) << loop << " Segment #" << (currentSegmentID_) \
+                                    BOOST_LOG_SEV(logger_, notification) << loop << " move status :  " << currentSegmentMoveStatus_ << " Segment #" << (currentSegmentID_) \
                                                                     << " Train braking2 " << KpPosition_ << " Direction " << direction_ \
                                                                     << " Speed " << currentSpeed_ << " km/h";
                                     currentSegmentMoveStatus_ = BRAKING;
                                 }
                                 else
                                 {
-                                    BOOST_LOG_SEV(logger_, notification) << loop << " Segment #" << (currentSegmentID_) \
+                                    BOOST_LOG_SEV(logger_, notification) << loop << " move status :  " << currentSegmentMoveStatus_ << " Segment #" << (currentSegmentID_) \
                                                                     << " Train approaching stop " << KpPosition_ << " Direction " << direction_ \
                                                                     << " Speed " << currentSpeed_ << " km/h";
                                     currentSegmentMoveStatus_ = APPROCHING;
@@ -273,14 +273,14 @@ void TrainOperationSession::TrainOperationSessionThreadCode(void)
                                 }
                             }
                         }
-                        else BOOST_LOG_SEV(logger_, critical)    << "unknown movement direction :  " << direction_;
+                        else BOOST_LOG_SEV(logger_, critical)    << "unknown 3 movement direction :  " << direction_;
                         break;
                     case CRUISE:
                         //BOOST_LOG_SEV(logger_, notification) << loop << "*************************enter CRUISE STATUS !!!  ";
                         //integrate position from speed as per direction
                         if(direction_ == 1) KpPosition_ += currentSpeed_/3.6 * (softwareConfig_->movementThreadBeatMilliseconds_)/1000;
                         else if (direction_ == 2) KpPosition_ -= currentSpeed_/3.6 * (softwareConfig_->movementThreadBeatMilliseconds_)/1000;
-                        else BOOST_LOG_SEV(logger_, critical)    << "unknown movement direction :  " << direction_;
+                        else BOOST_LOG_SEV(logger_, critical)    << "unknown 4 movement direction :  " << direction_;
                         //verify if brake area has been reached
                         if(direction_ == 1)
                         {
@@ -288,15 +288,14 @@ void TrainOperationSession::TrainOperationSessionThreadCode(void)
                             {
                                 if(currentSpeed_ > (*it).stopApproachSpeed_)
                                 {
-                                    BOOST_LOG_SEV(logger_, notification) << loop << " Segment #" << (currentSegmentID_) \
+                                    BOOST_LOG_SEV(logger_, notification) << loop << " move status :  " << currentSegmentMoveStatus_ << " Segment #" << (currentSegmentID_) \
                                                                     << " Train braking3 " << KpPosition_ << " Direction " << direction_ \
                                                                     << " Speed " << currentSpeed_ << " km/h";
-                                    BOOST_LOG_SEV(logger_, notification) << loop << "  " << currentSegmentMoveStatus_ << " " <<  "Segment #" << (currentSegmentID_) << " Train braking3 :" << KpPosition_;
                                     currentSegmentMoveStatus_ = BRAKING;
                                 }
                                 else
                                 {
-                                    BOOST_LOG_SEV(logger_, notification) << loop << " Segment #" << (currentSegmentID_) \
+                                    BOOST_LOG_SEV(logger_, notification) << loop << " move status :  " << currentSegmentMoveStatus_ << " Segment #" << (currentSegmentID_) \
                                                                     << " Train approaching stop " << KpPosition_ << " Direction " << direction_ \
                                                                     << " Speed " << currentSpeed_ << " km/h";
                                     currentSegmentMoveStatus_ = APPROCHING;
@@ -310,14 +309,14 @@ void TrainOperationSession::TrainOperationSessionThreadCode(void)
                             {
                                 if(currentSpeed_ > (*it).stopApproachSpeed_)
                                 {
-                                    BOOST_LOG_SEV(logger_, notification) << loop << " Segment #" << (currentSegmentID_) \
+                                    BOOST_LOG_SEV(logger_, notification) << loop << " move status :  " << currentSegmentMoveStatus_ << " Segment #" << (currentSegmentID_) \
                                                                     << " Train braking4 " << KpPosition_ << " Direction " << direction_ \
                                                                     << " Speed " << currentSpeed_ << " km/h";
                                     currentSegmentMoveStatus_ = BRAKING;
                                 }
                                 else
                                 {
-                                    BOOST_LOG_SEV(logger_, notification) << loop << " Segment #" << (currentSegmentID_) \
+                                    BOOST_LOG_SEV(logger_, notification) << loop << " move status :  " << currentSegmentMoveStatus_ << " Segment #" << (currentSegmentID_) \
                                                                     << " Train approaching stop " << KpPosition_ << " Direction " << direction_ \
                                                                     << " Speed " << currentSpeed_ << " km/h";
                                     currentSegmentMoveStatus_ = APPROCHING;
@@ -325,7 +324,7 @@ void TrainOperationSession::TrainOperationSessionThreadCode(void)
                                 }
                             }
                         }
-                        else BOOST_LOG_SEV(logger_, critical)    << "unknown movement direction :  " << direction_;
+                        else BOOST_LOG_SEV(logger_, critical)    << "unknown 5 movement direction :  " << direction_;
                         break;
                     case BRAKING:
                         //BOOST_LOG_SEV(logger_, notification) << loop << "*************************enter BRAKING STATUS !!!  ";
@@ -338,12 +337,12 @@ void TrainOperationSession::TrainOperationSessionThreadCode(void)
                         {
                             KpPosition_ -= (float)currentSpeed_/3.6 * (float)(softwareConfig_->movementThreadBeatMilliseconds_)/(float)1000;
                         }
-                        else BOOST_LOG_SEV(logger_, critical)    << "unknown movement direction :  " << direction_;
+                        else BOOST_LOG_SEV(logger_, critical)    << "unknown 6 movement direction :  " << direction_;
                         //verify approaching speed reached
                         if(currentSpeed_ <= (*it).stopApproachSpeed_)
                         {
 
-                            BOOST_LOG_SEV(logger_, notification) << loop << " Segment #" << (currentSegmentID_) \
+                            BOOST_LOG_SEV(logger_, notification) << loop << " move status :  " << currentSegmentMoveStatus_ << " Segment #" << (currentSegmentID_) \
                                                                     << " Train approaching stop " << KpPosition_ << " Direction " << direction_ \
                                                                     << " Speed " << currentSpeed_ << " km/h";
                             currentSegmentMoveStatus_ = APPROCHING;
@@ -363,7 +362,7 @@ void TrainOperationSession::TrainOperationSessionThreadCode(void)
                         {
                             if(KpPosition_ > ((*it).stopKp_ - 0.1) && KpPosition_ < ((*it).stopKp_ + 0.1))
                             {
-                                BOOST_LOG_SEV(logger_, notification) << loop << " Segment #" << (currentSegmentID_) \
+                                BOOST_LOG_SEV(logger_, notification) << loop << " move status :  " << currentSegmentMoveStatus_ << " Segment #" << (currentSegmentID_) \
                                                                     << " Train Arrived1 " << KpPosition_ << " Direction " << direction_ \
                                                                     << " Speed " << currentSpeed_ << " km/h";
                                 currentSegmentMoveStatus_ = ARRIVED;
@@ -375,7 +374,7 @@ void TrainOperationSession::TrainOperationSessionThreadCode(void)
                         {
                             if(KpPosition_ > ((*it).startKp_ - 0.1) && KpPosition_ < ((*it).startKp_ + 0.1))
                             {
-                                BOOST_LOG_SEV(logger_, notification) << loop << " Segment #" << (currentSegmentID_) \
+                                BOOST_LOG_SEV(logger_, notification) << loop << " move status :  " << currentSegmentMoveStatus_ << " Segment #" << (currentSegmentID_) \
                                                                     << " Train Arrived2 " << KpPosition_ << " Direction " << direction_ \
                                                                     << " Speed " << currentSpeed_ << " km/h";
                                 currentSegmentMoveStatus_ = ARRIVED;
@@ -383,7 +382,7 @@ void TrainOperationSession::TrainOperationSessionThreadCode(void)
                                 tTimePointForStationStop = std::chrono::high_resolution_clock::now();
                             }
                         }
-                        else BOOST_LOG_SEV(logger_, critical)    << "unknown movement direction :  " << direction_;
+                        else BOOST_LOG_SEV(logger_, critical)    << "unknown 7 movement direction :  " << direction_;
                         //integrate position from speed as per direction
                         if(direction_ == 1)
                         {
@@ -393,7 +392,7 @@ void TrainOperationSession::TrainOperationSessionThreadCode(void)
                         {
                             KpPosition_ -= (float)currentSpeed_/3.6 * (float)(softwareConfig_->movementThreadBeatMilliseconds_)/(float)1000;
                         }
-                        else BOOST_LOG_SEV(logger_, critical)    << "unknown movement direction :  " << direction_;
+                        else BOOST_LOG_SEV(logger_, critical)    << "unknown 8 movement direction :  " << direction_;
                         //BOOST_LOG_SEV(logger_, notification) << loop << " position " << KpPosition_;
                         //BOOST_LOG_SEV(logger_, notification) << loop << " speed " << currentSpeed_ << " approach speed " << (*it).stopApproachSpeed_;
                         break;
@@ -405,37 +404,37 @@ void TrainOperationSession::TrainOperationSessionThreadCode(void)
                             currentSegmentMoveStatus_ = STOPPED;
                             if (direction_ == 1 && currentSegmentID_ < numberOfSegments_)
                             {
-                                BOOST_LOG_SEV(logger_, notification) << loop << " Segment #" << (currentSegmentID_) \
-                                                                    << " *************************next segment !!! " << KpPosition_ << " New Direction = " << direction_ \
+                                BOOST_LOG_SEV(logger_, notification) << loop << " move status :  " << currentSegmentMoveStatus_ << " Segment #" << (currentSegmentID_) \
+                                                                    << " *************************NEXT SEGMENT !!!*********************** " << KpPosition_ << " Direction = " << direction_ \
                                                                     << " Speed " << currentSpeed_ << " km/h";
                                 currentSegmentID_++;
                                 std::advance(it, 1);
                             }
                             else if (direction_ == 2 && currentSegmentID_ > 1)
                             {
-                                BOOST_LOG_SEV(logger_, notification) << loop << " Segment #" << (currentSegmentID_) \
-                                                                    << " *************************next segment !!! " << KpPosition_ << " New Direction = " << direction_ \
+                                BOOST_LOG_SEV(logger_, notification) << loop << " move status :  " << currentSegmentMoveStatus_ << " Segment #" << (currentSegmentID_) \
+                                                                    << " *************************NEXT SEGMENT !!!*********************** " << KpPosition_ << " Direction = " << direction_ \
                                                                     << " Speed " << currentSpeed_ << " km/h";
                                 currentSegmentID_--;
                                 it = segmentsList.begin();
                                 std::advance(it, currentSegmentID_ - 1);
 
                             }
-                            if (direction_ == 1 && currentSegmentID_ == numberOfSegments_)
+                            else if (direction_ == 1 && currentSegmentID_ == numberOfSegments_)
                             {
                                 direction_ = 2;
-                                BOOST_LOG_SEV(logger_, notification) << loop << " Segment #" << (currentSegmentID_) \
-                                                                    << " *************************reverse direction !!! " << KpPosition_ << " New Direction = " << direction_ \
+                                BOOST_LOG_SEV(logger_, notification) << loop << " move status :  " << currentSegmentMoveStatus_ << " Segment #" << (currentSegmentID_) \
+                                                                    << " *************************REVERSE DIRECTION !!!*********************** " << KpPosition_ << " New Direction = " << direction_ \
                                                                     << " Speed " << currentSpeed_ << " km/h";
                             }
-                            if (direction_ == 2 && currentSegmentID_ == 1)
+                            else if (direction_ == 2 && currentSegmentID_ == 1)
                             {
                                 direction_ = 1;
-                                BOOST_LOG_SEV(logger_, notification) << loop << " Segment #" << (currentSegmentID_) \
-                                                                    << " *************************reverse direction !!! " << KpPosition_ << " New Direction = " << direction_ \
+                                BOOST_LOG_SEV(logger_, notification) << loop << " move status :  " << currentSegmentMoveStatus_ << " Segment #" << (currentSegmentID_) \
+                                                                    << " *************************REVERSE DIRECTION !!!*********************** " << KpPosition_ << " New Direction = " << direction_ \
                                                                     << " Speed " << currentSpeed_ << " km/h";
                             }
-                            else BOOST_LOG_SEV(logger_, critical) << loop << " Segment #" << (currentSegmentID_) \
+                            else BOOST_LOG_SEV(logger_, critical) << loop << " move status :  " << currentSegmentMoveStatus_ << " Segment #" << (currentSegmentID_) \
                                                                     << " IMPOSSIBLE direction/segmentID combination !!!" << KpPosition_ << " Direction = " << direction_ \
                                                                     << " Speed " << currentSpeed_ << " km/h";
                         }
@@ -672,4 +671,3 @@ int16_t TrainOperationSession::LoadPathSegmentsData(void)
 
     return NO_ERROR;
 }
-

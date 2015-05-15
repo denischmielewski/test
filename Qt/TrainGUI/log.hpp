@@ -110,6 +110,12 @@ BOOST_LOG_INLINE_GLOBAL_LOGGER_INIT(trainGUI_logger, startup_severity_channel_lo
     return startup_severity_channel_logger_mt(keywords::channel = "GUI\t\t");
 }
 
+BOOST_LOG_INLINE_GLOBAL_LOGGER_INIT(movement_logger, startup_severity_channel_logger_mt)
+{
+    // Specify the channel name on construction, similarly as with the channel_logger
+    return startup_severity_channel_logger_mt(keywords::channel = "movement\t");
+}
+
 class log
 {
     public:

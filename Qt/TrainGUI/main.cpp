@@ -16,9 +16,12 @@
 #include "traincommunicationclient.hpp"
 #include "TrainSession.hpp"
 
-#define VERSION     "0.0.1.2"
+#define VERSION     "0.0.1.3"
 
-
+// FIXME this variable is declared only to compile. It is not used in the GUI context.
+// To be fixed in codeblock train and server sw, for example by removing the thread code from TrainOperationSession.cpp and put it in
+// another file specific to train.
+volatile int g_signal_received = 0;
 
 int main(int argc, char *argv[])
 {
@@ -78,6 +81,7 @@ int main(int argc, char *argv[])
 
     //now we can log
     // Initialize RCFProto.
+
     RCF::init();
     BOOST_LOG_SEV(*logger, notification) << "TrainGUI RCF init !";
 
@@ -96,6 +100,7 @@ int main(int argc, char *argv[])
 
     TrainCommunicationsServerThread.wait();
     TrainCommunicationClientThread.wait();
+
     trainGUI_configuration->removeGUIIPPortMask_();
 
     //Log Summary of communication sessions with trains
@@ -103,6 +108,7 @@ int main(int argc, char *argv[])
     int i = 0;
     for ( auto it = trainsSessions.begin(); it != trainsSessions.end(); ++it ){i++;};
     BOOST_LOG_SEV(*logger, notification) << "number of sessions :" << i;
+
     for ( auto it = trainsSessions.begin(); it != trainsSessions.end(); ++it )
     {
         BOOST_LOG_SEV(*logger, notification) << "Train IP address :" << it->first;
@@ -119,15 +125,19 @@ int main(int argc, char *argv[])
             BOOST_LOG_SEV(*logger, notification) << "Session total bytes sent : " << traincommsession.GetSessionTotalBytesSent();
             BOOST_LOG_SEV(*logger, notification) << "Session connection lost count : " << traincommsession.GetSessionConnectionLossCount();
             traincommsession.UnlockCommSessionMutex();
+            BOOST_LOG_SEV(*logger, notification) << "111111111111111111111111111111111111111111111111111111111111111111111111111111111111111";
         }
         else
         {
             BOOST_LOG_SEV(*logger, warning) << "Train Communication Session Lock failed !!!";
         }
+        BOOST_LOG_SEV(*logger, notification) << "222222222222222222222222222222222222222222222222222222222222222222222222222222222";
     }
 
     delete(trainGUI_configuration);
+    BOOST_LOG_SEV(*logger, notification) << "333333333333333333333333333333333333333333333333333333333333333333333333333333333";
     delete(trainGUI_logs_after_configread);
+    BOOST_LOG_SEV(*logger, notification) << "444444444444444444444444444444444444444444444444444444444444444444444444444444444";
 
     BOOST_LOG_SEV(*logger, notification) << "EVERYTHING TERMINATED PROPERLY !!! GUI return code = " << ret;
 
