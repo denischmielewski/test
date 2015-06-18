@@ -14,6 +14,8 @@
 #include "protobufsynchronousclientfortraingui.hpp"
 #include "protobufsynchronousclientforserver1.hpp"
 #include <RCFProto.hpp>
+#include <string>
+#include <ctime>
 
 #define VERSION     "0.0.1.3"
 
@@ -175,17 +177,21 @@ int main()
     int i = 0;
     for ( auto it = trainsSessions.begin(); it != trainsSessions.end(); ++it ){i++;};
     BOOST_LOG_SEV(lg, notification) << "number of sessions :" << i;
+    i = 0;
     for ( auto it = trainsSessions.begin(); it != trainsSessions.end(); ++it )
     {
+        i++;
+        BOOST_LOG_SEV(lg, notification) << "========================== SESSION : " << i;
         BOOST_LOG_SEV(lg, notification) << "Train IP address :" << it->first;
-        TrainSession trainsession = it->second;
-        TrainCommSession & traincommsession = trainsession.GetTrainCommSessionRef();
+        TrainCommSession & traincommsession = (it->second).GetTrainCommSessionRef();
         if(traincommsession.TryLockCommSessionMutexFor(train_configuration->commSessionMutexLockTimeoutMilliseconds_))
         {
             time_t timeraw = traincommsession.GetSessionConnectionTime();
-#warning TODO (dev#1#15-03-27): the following line add a carriage return in log file.
-            BOOST_LOG_SEV(lg, notification) << "Session connection at : " << ctime(&timeraw);
-            BOOST_LOG_SEV(lg, notification) << "Session connection duration : " << traincommsession.GetSessionConnectionDuration();
+            char buff[20];
+            strftime(buff, 20, "%Y-%m-%d %H:%M:%S", localtime(&timeraw));
+            std::string s(buff);
+            BOOST_LOG_SEV(lg, notification) << "Session connection at : " <<  s;
+            BOOST_LOG_SEV(lg, notification) << "Session connection duration : " << traincommsession.GetSessionConnectionDuration() << " seconds.";
             BOOST_LOG_SEV(lg, notification) << "Session remote calls count : " << traincommsession.GetSessionRemoteCallCount();
             BOOST_LOG_SEV(lg, notification) << "Session total bytes received : " << traincommsession.GetSessionTotalBytesReceived();
             BOOST_LOG_SEV(lg, notification) << "Session total bytes sent : " << traincommsession.GetSessionTotalBytesSent();

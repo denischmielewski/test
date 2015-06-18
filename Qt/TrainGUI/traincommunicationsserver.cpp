@@ -19,6 +19,8 @@ TrainCommunicationsServer::~TrainCommunicationsServer()
 {
     //dtor
     //if(TrainCommunicationsServerThread.joinable()) TrainCommunicationsServerThread.join();
+    BOOST_LOG_SEV(*logger, notification) << "enter DESTRUCTOR TrainCommunicationsServer class";
+    BOOST_LOG_SEV(*logger, notification) << "leave DESTRUCTOR TrainCommunicationsServer class";
 }
 
 void TrainCommunicationsServer::run(void)
@@ -35,7 +37,7 @@ void TrainCommunicationsServer::run(void)
         positionInformationImpl.SetSoftwareConfigPointer(serverconf);
         positionInformationImpl.SetTrainSessionpointer(trainsSessions_);
         server.bindService(positionInformationImpl);
-        connect(&positionInformationImpl, SIGNAL(PositionReceivedFromTrain(QString)), this, SLOT(onPositionReceivedFromTrain(QString)));
+        connect(&positionInformationImpl, SIGNAL(PositionReceivedFromTrain(std::string)), this, SLOT(onPositionReceivedFromTrain(std::string)));
         SetOperationModeImpl setOperationModeInformationImpl(serverconf, trainsSessions_);
         server.bindService(setOperationModeInformationImpl);
 
@@ -93,7 +95,7 @@ void TrainCommunicationsServer::onThreadTimerShot(void)
     BOOST_LOG_SEV(*logger, notification) << "hello from trainGUI comm server thread";
 }
 
-void TrainCommunicationsServer::onPositionReceivedFromTrain(QString s)
+void TrainCommunicationsServer::onPositionReceivedFromTrain(string s)
 {
-    BOOST_LOG_SEV(*logger, notification) << "position received from train = " << s.toStdString();
+    BOOST_LOG_SEV(*logger, notification) << "position received from train = " << s;
 }

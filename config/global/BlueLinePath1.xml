@@ -4,6 +4,7 @@
 <!-- from this information and the position in garage, software will calculate movement and forks settings -->
 
 <PATH>
+	<TOTAL_DISTANCE>38500</TOTAL_DISTANCE>	<!-- in meters !  -->
 	<TOTAL_SEGMENTS>23</TOTAL_SEGMENTS>
 	<!-- when moving in direction 2, software can deduct all information from information below ! So less information to enter manually  -->
 	<DIRECTION>1</DIRECTION>

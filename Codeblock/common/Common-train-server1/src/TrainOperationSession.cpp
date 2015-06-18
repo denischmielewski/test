@@ -13,8 +13,10 @@ TrainOperationSession::TrainOperationSession()
 
 TrainOperationSession::~TrainOperationSession()
 {
+    BOOST_LOG_SEV(logger_, notification) << "enter DESTRUCTOR TrainOperationSession class";
     //dtor
     delete operationSessionTimed_Mutex_;
+    BOOST_LOG_SEV(logger_, notification) << "leave DESTRUCTOR TrainOperationSession class";
 }
 
 void TrainOperationSession::SetSoftwareConfig(config const * config)

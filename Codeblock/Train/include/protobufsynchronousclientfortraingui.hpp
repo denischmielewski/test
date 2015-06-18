@@ -9,7 +9,7 @@
 #include <ctime>
 
 // Include protoc-generated header.
-#include "TestRCFProto.pb.h"
+#include "RCFProtoServices.pb.h"
 #include <google/protobuf/text_format.h>
 
 class ProtobufSynchronousClientForTrainGUI

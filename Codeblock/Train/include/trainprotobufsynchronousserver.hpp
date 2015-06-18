@@ -10,7 +10,7 @@
 #include "TrainSession.hpp"
 
 // Include protoc-generated header.
-#include "TestRCFProto.pb.h"
+#include "RCFProtoServices.pb.h"
 
 #include "trainprotobufpositioninformation.hpp"
 #include "protobufpositioninformationserviceimpl.hpp"

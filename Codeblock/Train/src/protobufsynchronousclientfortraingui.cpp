@@ -33,8 +33,6 @@ void ProtobufSynchronousClientForTrainGUI::ProtobufSynchronousClientThreadCode(v
     // Create request object.
     PositionInformationTransmit request;
     request.set_trainid(clientconf->hostname_);
-    request.set_position("Line1");
-    request.set_status(444);
 
     // Create response object.
     PositionInformationReceive response;
@@ -63,7 +61,7 @@ void ProtobufSynchronousClientForTrainGUI::ProtobufSynchronousClientThreadCode(v
             if(sendingFrequency.count() >= clientconf->TrainToTrainGUIMessagesFrequency_)
             {
                 t0 = std::chrono::high_resolution_clock::now();
-                BOOST_LOG_SEV(lg, notification) << "Sending message to GUI : trainID = " << request.trainid() << " position = " << request.position() << " status = " << request.status();
+                BOOST_LOG_SEV(lg, notification) << "Sending message to GUI : trainID = " << request.trainid() << " position = " << "TODO"/*request.position()*/ << " status = " << "TODO"/*request.status()*/;
                 stub.PositionInformation(NULL, &request, &response, NULL);
                 // Process response.
                 BOOST_LOG_SEV(lg, notification) << "Received response from GUI : server name = " << response.servername();

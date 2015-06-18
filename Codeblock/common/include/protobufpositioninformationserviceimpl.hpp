@@ -3,7 +3,7 @@
 
 #include "log.hpp"
 #include <RCFProto.hpp>
-#include "TestRCFProto.pb.h"
+#include "RCFProtoServices.pb.h"
 #include <unordered_map>
 #include "TrainSession.hpp"
 

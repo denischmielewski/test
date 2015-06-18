@@ -73,4 +73,4 @@ echo "==========sync config files to train 221"
 rsync -avz ../config/global/*.xml train@train221:/home/train/config/global
 rsync -avz ../config/local/*.xml train@train221:/home/train/config/local
 
-read -p  "Post-build deployment of Server1, Train and config files termnated !!! Check if errors ...and press a key to terminate !"
+echo "Post-build deployment of Server1, Train and config files termnated !!! Check if errors !"

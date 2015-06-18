@@ -35,9 +35,9 @@ void PositionInformationImpl::PositionInformation(  RpcController *             
     std::size_t pos = ipaddressmask.find(":");
     std::string ipaddress = ipaddressmask.substr (0,pos);
     BOOST_LOG_SEV(lg, notification)     << "position received from " << ipaddress \
-                                        << " TrainID = " << request->trainid() \
-                                        << " Position = " << request->position() \
-                                        << " Status = " << request->status();
+                                        << " TrainID = " << "TODO"/*request->trainid()*/ \
+                                        << " Position = " << "TODO"/*request->position()*/ \
+                                        << " Status = " << "TODO"/*request->status()*/;
 
     // Fill in the response.
     response->set_servername("Position received OK !");
@@ -69,7 +69,7 @@ void PositionInformationImpl::PositionInformation(  RpcController *             
         BOOST_LOG_SEV(lg, warning) << "Train Communication Session Lock failed !!!";
     }
 
-    emit PositionReceivedFromTrain(QString::fromStdString(request->position()));
+    emit PositionReceivedFromTrain(111.111/*request->position()*/);
 }
 
 void PositionInformationImpl::SetSoftwareConfigPointer(config const * conf)

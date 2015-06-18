@@ -105,13 +105,15 @@
 		<Unit filename="../common/include/protobufpositioninformationserviceimpl.hpp" />
 		<Unit filename="../common/include/protobufsettrainmodecommandserviceimpl.hpp" />
 		<Unit filename="../common/include/utils.hpp" />
-		<Unit filename="../common/protobuf/TestRCFProto.pb.cc" />
-		<Unit filename="../common/protobuf/TestRCFProto.pb.h" />
+		<Unit filename="../common/protobuf/RCFProtoServices.pb.cc" />
+		<Unit filename="../common/protobuf/RCFProtoServices.pb.h" />
 		<Unit filename="../common/src/config.cpp" />
 		<Unit filename="../common/src/protobufpositioninformationserviceimpl.cpp" />
 		<Unit filename="../common/src/protobufsettrainmodecommandserviceimpl.cpp" />
 		<Unit filename="../common/src/utils.cpp" />
 		<Unit filename="include/log.hpp" />
+		<Unit filename="include/protobufsyncGUIclient.hpp" />
+		<Unit filename="include/protobufsyncclient.hpp" />
 		<Unit filename="include/protobufsynchronousclientforserver1.hpp" />
 		<Unit filename="include/protobufsynchronousclientfortraingui.hpp" />
 		<Unit filename="include/trainprotobufpositioninformation.hpp" />

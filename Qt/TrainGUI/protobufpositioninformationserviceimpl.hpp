@@ -5,10 +5,10 @@
 #include <RCFProto.hpp>
 
 // Include protoc-generated header.
-#include "TestRCFProto.pb.h"
+#include "RCFProtoServices.pb.h"
 
 #include <QObject>
-#include <QString>
+#include <string>
 #include <unordered_map>
 #include "TrainSession.hpp"
 
@@ -30,7 +30,7 @@ public:
     void SetSoftwareConfigPointer(config const *);
     void SetTrainSessionpointer(std::unordered_map<std::string, TrainSession> *);
 signals:
-    void PositionReceivedFromTrain(QString);
+    void PositionReceivedFromTrain(float);
 };
 
 #endif // PROTOBUFPOSITIONINFORMATIONSERVICEIMPL_HPP

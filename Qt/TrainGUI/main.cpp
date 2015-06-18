@@ -103,43 +103,48 @@ int main(int argc, char *argv[])
 
     trainGUI_configuration->removeGUIIPPortMask_();
 
+    RCF::deinit();
+    BOOST_LOG_SEV(*logger, notification) << "TrainGUI RCF deinit !";
+
+
     //Log Summary of communication sessions with trains
     BOOST_LOG_SEV(*logger, notification) << "train communication sessions summary :" << std::endl;
     int i = 0;
     for ( auto it = trainsSessions.begin(); it != trainsSessions.end(); ++it ){i++;};
     BOOST_LOG_SEV(*logger, notification) << "number of sessions :" << i;
+    i = 0;
 
     for ( auto it = trainsSessions.begin(); it != trainsSessions.end(); ++it )
     {
+        i++;
+        BOOST_LOG_SEV(*logger, notification) << "========================== SESSION : " << i;
         BOOST_LOG_SEV(*logger, notification) << "Train IP address :" << it->first;
-        TrainSession trainsession = it->second;
-        TrainCommSession & traincommsession = trainsession.GetTrainCommSessionRef();
+
+        //TrainSession trainsession = it->second;
+        //TrainCommSession & traincommsession = trainsession.GetTrainCommSessionRef();
+        TrainCommSession & traincommsession = (it->second).GetTrainCommSessionRef();
+
         if(traincommsession.TryLockCommSessionMutexFor(trainGUI_configuration->commSessionMutexLockTimeoutMilliseconds_))
         {
             time_t timeraw = traincommsession.GetSessionConnectionTime();
-#warning TODO (dev#1#15-03-27): the following line add a carriage return in log file.
-            BOOST_LOG_SEV(*logger, notification) << "Session connection at : " << ctime(&timeraw);
-            BOOST_LOG_SEV(*logger, notification) << "Session connection duration : " << traincommsession.GetSessionConnectionDuration();
+            char buff[20];
+            strftime(buff, 20, "%Y-%m-%d %H:%M:%S", localtime(&timeraw));
+            std::string s(buff);
+            BOOST_LOG_SEV(*logger, notification) << "Session connection at : " <<  s;
+            BOOST_LOG_SEV(*logger, notification) << "Session connection duration : " << traincommsession.GetSessionConnectionDuration() << " seconds.";
             BOOST_LOG_SEV(*logger, notification) << "Session remote calls count : " << traincommsession.GetSessionRemoteCallCount();
             BOOST_LOG_SEV(*logger, notification) << "Session total bytes received : " << traincommsession.GetSessionTotalBytesReceived();
             BOOST_LOG_SEV(*logger, notification) << "Session total bytes sent : " << traincommsession.GetSessionTotalBytesSent();
             BOOST_LOG_SEV(*logger, notification) << "Session connection lost count : " << traincommsession.GetSessionConnectionLossCount();
             traincommsession.UnlockCommSessionMutex();
-            BOOST_LOG_SEV(*logger, notification) << "111111111111111111111111111111111111111111111111111111111111111111111111111111111111111";
         }
         else
         {
             BOOST_LOG_SEV(*logger, warning) << "Train Communication Session Lock failed !!!";
         }
-        BOOST_LOG_SEV(*logger, notification) << "222222222222222222222222222222222222222222222222222222222222222222222222222222222";
     }
-
     delete(trainGUI_configuration);
-    BOOST_LOG_SEV(*logger, notification) << "333333333333333333333333333333333333333333333333333333333333333333333333333333333";
-    delete(trainGUI_logs_after_configread);
-    BOOST_LOG_SEV(*logger, notification) << "444444444444444444444444444444444444444444444444444444444444444444444444444444444";
-
     BOOST_LOG_SEV(*logger, notification) << "EVERYTHING TERMINATED PROPERLY !!! GUI return code = " << ret;
-
+    delete(trainGUI_logs_after_configread);
     return NO_ERROR;
 }

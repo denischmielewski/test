@@ -1,15 +1,21 @@
 #include "TrainCommSession.hpp"
 
+static startup_severity_channel_logger_mt * logger;
+
 TrainCommSession::TrainCommSession()
 {
     //ctor
     pcommSessionTimed_Mutex = new(std::timed_mutex);
+    startup_severity_channel_logger_mt& lg = client_comm_logger::get();
+    logger = &lg;
 }
 
 TrainCommSession::~TrainCommSession()
 {
+    BOOST_LOG_SEV(*logger, notification) << "enter DESTRUCTOR TrainCommSession class";
     //dtor
     delete pcommSessionTimed_Mutex;
+    BOOST_LOG_SEV(*logger, notification) << "leave DESTRUCTOR TrainCommSession class";
 }
 
 //=========SET members===============================================================

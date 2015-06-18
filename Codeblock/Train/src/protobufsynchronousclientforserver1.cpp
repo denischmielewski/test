@@ -31,8 +31,6 @@ void ProtobufSynchronousClientForServer1::ProtobufSynchronousClientThreadCode(vo
     // Create request object.
     PositionInformationTransmit request;
     request.set_trainid(clientconf->hostname_);
-    request.set_position("Line1");
-    request.set_status(444);
 
     // Create response object.
     PositionInformationReceive response;
@@ -61,7 +59,8 @@ void ProtobufSynchronousClientForServer1::ProtobufSynchronousClientThreadCode(vo
             if(sendingFrequency.count() >= clientconf->TrainToServer1MessagesFrequency_)
             {
                 t0 = std::chrono::high_resolution_clock::now();
-                BOOST_LOG_SEV(lg, notification) << "Sending message to Server1 : trainID = " << request.trainid() << " position = " << request.position() << " status = " << request.status();
+                BOOST_LOG_SEV(lg, notification) << "Sending message to Server1 : trainID = " << request.trainid() << " position = " << "TODO"/*request.position()*/ \
+                                                << " status = " << "TODO"/*request.status()*/;
                 stub.PositionInformation(NULL, &request, &response, NULL);
 
                 // Process response.

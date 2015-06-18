@@ -5,7 +5,7 @@
 #include <RCFProto.hpp>
 
 // Include protoc-generated header.
-#include "TestRCFProto.pb.h"
+#include "RCFProtoServices.pb.h"
 
 // PositionInformationService declaration.
 class PositionInformationImpl : public PositionInformationService

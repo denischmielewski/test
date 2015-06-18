@@ -38,7 +38,7 @@ ProtobufSyncServer::~ProtobufSyncServer()
 void ProtobufSyncServer::ProtobufSyncServerThreadsCode(void)   //RCF and protobuf will start other threads hence the thread(s)
 {
     startup_severity_channel_logger_mt& lg = server_comm_logger::get();
-    std::chrono::seconds duration(1);
+    std::chrono::milliseconds duration(serverconf->communicationThreadsSleepDurationMilliseconds_);
 
     this->session_.sessionactive_=true;
 
@@ -60,13 +60,23 @@ void ProtobufSyncServer::ProtobufSyncServerThreadsCode(void)   //RCF and protobu
         server.start();
         BOOST_LOG_SEV(lg, notification) << "RCF proto server started !";
 
+        std::chrono::high_resolution_clock::time_point t0 = std::chrono::high_resolution_clock::now();
+        std::chrono::high_resolution_clock::time_point t1 = std::chrono::high_resolution_clock::now();
+        std::chrono::milliseconds logFrequency(serverconf->ThreadsLogNotificationFrequencyMilliseconds_);
+
         while(!g_signal_received)
         {
+            //log frequency as per configuration so no pollution
+            if(logFrequency.count() >= serverconf->ThreadsLogNotificationFrequencyMilliseconds_)
+            {
+                t0 = std::chrono::high_resolution_clock::now();
+                BOOST_LOG_SEV(lg, notification) << "hello from protobufsyncserver thread";
+            }
             std::this_thread::sleep_for(duration);
-            BOOST_LOG_SEV(lg, notification) << "hello from protobufsyncserver thread";
+            t1 = std::chrono::high_resolution_clock::now();
+            logFrequency = std::chrono::duration_cast<std::chrono::milliseconds>(t1 - t0);
         }
         if(g_signal_received) BOOST_LOG_SEV(lg, notification) << "Signal received, terminating ProtobufSyncServerThreads";
-
     }
     catch(const RCF::Exception & e)
     {

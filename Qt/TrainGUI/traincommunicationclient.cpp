@@ -16,7 +16,8 @@ TrainCommunicationClient::TrainCommunicationClient(config const * conf, std::uno
 
 TrainCommunicationClient::~TrainCommunicationClient()
 {
-
+    BOOST_LOG_SEV(*logger, notification) << "enter DESTRUCTOR TrainCommunicationClient class";
+    BOOST_LOG_SEV(*logger, notification) << "leave DESTRUCTOR TrainCommunicationClient class";
 }
 
 void TrainCommunicationClient::TrainCommunicationClient::run(void)

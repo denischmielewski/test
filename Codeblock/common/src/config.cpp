@@ -264,6 +264,8 @@ config::config()
 config::~config()
 {
     //dtor
+    BOOST_LOG_SEV(lg, notification) << "enter DESTRUCTOR config class";
+    BOOST_LOG_SEV(lg, notification) << "leave DESTRUCTOR config class";
 }
 
 int16_t config::configureMainIPPortMask_(void)

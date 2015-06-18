@@ -34,34 +34,6 @@ void config_signal_management(void)
     sigaction(SIGTERM, &action, NULL);
 }
 
-void codeThread1(int x)
-{
-    startup_severity_channel_logger_mt& lg = main_logger::get();
-    std::chrono::seconds duration(1);
-    int i = 0;
-    while(!g_signal_received && i < x)
-    {
-        std::this_thread::sleep_for(duration);
-        BOOST_LOG_SEV(lg, notification) << "thread 1";
-        i++;
-    }
-    if(g_signal_received && i != x) BOOST_LOG_SEV(lg, notification) << "Signal received, terminating thread 1";
-}
-
-void codeThread2(int x)
-{
-    startup_severity_channel_logger_mt& lg = main_logger::get();
-    std::chrono::seconds duration(1);
-    int i = 0;
-    while(!g_signal_received && i < x)
-    {
-        std::this_thread::sleep_for(duration);
-        BOOST_LOG_SEV(lg, notification) << "thread 2";
-        i++;
-    }
-    if(g_signal_received && i != x) BOOST_LOG_SEV(lg, notification) << "Signal received, terminating thread 2";
-}
-
 int main()
 {
 #warning TODO (dev#5#15-03-27): warning: variable ‘train_logs_after_configread’ set but not used [-Wunused-but-set-variable]|
@@ -134,14 +106,9 @@ int main()
         return ERROR_CONFIG_FILE_HANDLING;
     }
 
-    std::thread thread1(codeThread1,10);
-    std::thread thread2(codeThread2,10);
-
     BOOST_LOG_SEV(lg, notification) << "main and all threads now execute concurrently...";
 
     // synchronize threads:
-    if(thread1.joinable()) thread1.join();               // pauses until first finishes
-    if(thread2.joinable()) thread2.join();               // pauses until second finishes
     server->Join();
 
     BOOST_LOG_SEV(lg, notification) << "All threads completed." << std::endl;
@@ -155,17 +122,23 @@ int main()
     int i = 0;
     for ( auto it = g_trains.begin(); it != g_trains.end(); ++it ){i++;};
     BOOST_LOG_SEV(lg, notification) << "number of sessions :" << i;
+    i = 0;
     for ( auto it = g_trains.begin(); it != g_trains.end(); ++it )
     {
+        i++;
+        BOOST_LOG_SEV(lg, notification) << "========================== SESSION : " << i;
         BOOST_LOG_SEV(lg, notification) << "Train IP address :" << it->first;
-        TrainSession trainsession = it->second;
-        TrainCommSession & traincommsession = trainsession.GetTrainCommSessionRef();
+        //TrainSession trainsession = it->second;
+        //TrainCommSession & traincommsession = trainsession.GetTrainCommSessionRef();
+        TrainCommSession & traincommsession = (it->second).GetTrainCommSessionRef();
         if(traincommsession.TryLockCommSessionMutexFor(server_configuration->commSessionMutexLockTimeoutMilliseconds_))
         {
             time_t timeraw = traincommsession.GetSessionConnectionTime();
-#warning TODO (dev#1#15-03-27): the following line add a carriage return in log file.
-            BOOST_LOG_SEV(lg, notification) << "Session connection at : " << ctime(&timeraw);
-            BOOST_LOG_SEV(lg, notification) << "Session connection duration : " << traincommsession.GetSessionConnectionDuration();
+            char buff[20];
+            strftime(buff, 20, "%Y-%m-%d %H:%M:%S", localtime(&timeraw));
+            std::string s(buff);
+            BOOST_LOG_SEV(lg, notification) << "Session connection at : " <<  s;
+            BOOST_LOG_SEV(lg, notification) << "Session connection duration : " << traincommsession.GetSessionConnectionDuration() << " seconds.";
             BOOST_LOG_SEV(lg, notification) << "Session remote calls count : " << traincommsession.GetSessionRemoteCallCount();
             BOOST_LOG_SEV(lg, notification) << "Session total bytes received : " << traincommsession.GetSessionTotalBytesReceived();
             BOOST_LOG_SEV(lg, notification) << "Session total bytes sent : " << traincommsession.GetSessionTotalBytesSent();

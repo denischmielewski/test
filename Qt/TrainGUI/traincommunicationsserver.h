@@ -12,10 +12,10 @@
 #include "protobufsettrainmodecommandserviceimpl.hpp"
 #include <QTimer>
 #include "TrainSession.hpp"
-#include <QString>
+#include <string>
 
 // Include protoc-generated header.
-#include "TestRCFProto.pb.h"
+#include "RCFProtoServices.pb.h"
 
 #include <QThread>
 #include <QMessageBox>
@@ -39,7 +39,7 @@ public slots:
 //    void sendModeManual();
     void onCloseTrainGUI();
     void onThreadTimerShot();
-    void onPositionReceivedFromTrain(QString s);
+    void onPositionReceivedFromTrain(std::string s);
 signals:
 
 };

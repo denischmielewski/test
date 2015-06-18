@@ -60,9 +60,11 @@ TrainControls::TrainControls(QWidget *parent, config const * trainGUI_configurat
 
 TrainControls::~TrainControls()
 {
+    BOOST_LOG_SEV(*logger, notification) << "enter DESTRUCTOR TrainControls class";
 //    t->wait();
 //    delete (t);
     delete ui;
+    BOOST_LOG_SEV(*logger, notification) << "leave DESTRUCTOR TrainControls class";
 }
 
 
