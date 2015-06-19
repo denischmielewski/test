@@ -133,7 +133,7 @@ int main()
     BOOST_LOG_SEV(lg, notification) << "try to create Protobuf Synchronous Server1 client !!!";
     try
     {
-            client1 = new ProtobufSynchronousClientForServer1(train_configuration);
+            client1 = new ProtobufSynchronousClientForServer1(train_configuration, &trainsSessions);
             client1->Start();
             BOOST_LOG_SEV(lg, notification) << "train Protobuf Synchronous Server1 client properly initialized !!!";
     }
@@ -147,7 +147,7 @@ int main()
     BOOST_LOG_SEV(lg, notification) << "try to create Protobuf Synchronous GUI client !!!";
     try
     {
-            client2 = new ProtobufSynchronousClientForTrainGUI(train_configuration);
+            client2 = new ProtobufSynchronousClientForTrainGUI(train_configuration, &trainsSessions);
             client2->Start();
             BOOST_LOG_SEV(lg, notification) << "train Protobuf Synchronous GUI client properly initialized !!!";
     }
@@ -158,7 +158,7 @@ int main()
     }
 
     TrainSession & trainSession = trainsSessions[train_configuration->main_ipaddress_];
-    //retrieve a ref to train comm session
+    //retrieve a ref to train operation session
     TrainOperationSession & trainoperationsession = trainSession.GetTrainOperationSessionRef();
     trainoperationsession.SetSoftwareConfig(train_configuration);
     //load data, identify current segment then run the thread to move !!!

@@ -34,10 +34,28 @@ void PositionInformationImpl::PositionInformation(  RpcController *             
     std::string ipaddressmask = rcfSession.getClientAddress().string();
     std::size_t pos = ipaddressmask.find(":");
     std::string ipaddress = ipaddressmask.substr (0,pos);
-    BOOST_LOG_SEV(lg, notification)     << "position received from " << ipaddress \
-                                        << " TrainID = " << "TODO"/*request->trainid()*/ \
-                                        << " Position = " << "TODO"/*request->position()*/ \
-                                        << " Status = " << "TODO"/*request->status()*/;
+    //make log user-friendly
+    std::string smode;
+    switch(request->mode())
+    {
+        case NONE: smode = "NONE";break;
+        case AUTOMATIC: smode = "AUTOMATIC";break;
+        case SEMIAUTOMATIC: smode = "SEMIAUTOMATIC";break;
+        case MANUAL: smode = "MANUAL";break;
+    }
+    std::string smove;
+    switch(request->movement())
+    {
+        case STOPPED: smove = "STOPPED";break;
+        case ACCELERATION: smove = "ACCELERATION";break;
+        case CRUISE: smove = "CRUISE";break;
+        case BRAKING: smove = "BRAKING";break;
+        case APPROCHING: smove = "APPROCHING";break;
+        case ARRIVED: smove = "ARRIVED";break;
+    }
+    BOOST_LOG_SEV(lg, notification) << "position received from train : " << request->trainid() << " " << request->kpposition() << " " \
+                                        << smode << " " << smove << " direction " << request->direction() << " " \
+                                        << request->path();
 
     // Fill in the response.
     response->set_servername("Position received OK !");

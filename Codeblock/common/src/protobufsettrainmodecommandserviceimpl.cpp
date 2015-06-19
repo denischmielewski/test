@@ -72,7 +72,7 @@ void SetOperationModeImpl::SetOperationMode(  RpcController *                   
     std::string ipaddressmask = rcfSession.getClientAddress().string();
     std::size_t pos = ipaddressmask.find(":");
     std::string ipaddress = ipaddressmask.substr (0,pos);
-    BOOST_LOG_SEV(lg, notification) << "Set Mode Command received from  " << ipaddress << "Mode = " << request->mode();
+    BOOST_LOG_SEV(lg, notification) << "Set Mode Command received "<< request->mode();
 
     SetResponse(response, done);
 

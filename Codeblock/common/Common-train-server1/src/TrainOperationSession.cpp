@@ -51,7 +51,7 @@ void TrainOperationSession::SetModemanual(void)
     mode_ = MANUAL;
 }
 
-int16_t TrainOperationSession::getMode(void)
+int16_t TrainOperationSession::GetMode(void)
 {
     return mode_;
 }
@@ -131,11 +131,20 @@ void TrainOperationSession::SetCurrentSegmentID(uint16_t i)
     currentSegmentID_ = i;
 }
 
-uint16_t TrainOperationSession::getCurrentSegmentID(void)
+uint16_t TrainOperationSession::GetCurrentSegmentID(void)
 {
     return currentSegmentID_;
 }
 
+uint16_t TrainOperationSession::GetCurrentSegmentMoveStatus(void)
+{
+    return currentSegmentMoveStatus_;
+}
+
+void TrainOperationSession::SetCurrentSegmentMoveStatus(uint16_t i)
+{
+    currentSegmentMoveStatus_ = i;
+}
 
 void TrainOperationSession::TrainOperationSessionThreadCode(void)
 {
@@ -154,291 +163,231 @@ void TrainOperationSession::TrainOperationSessionThreadCode(void)
 
     uint16_t loop = 0;
     float f = ((float)(softwareConfig_->movementThreadBeatMilliseconds_))/((float)(1000));
+    //a few tmp variable because we don't want to mess with mutex in the switch-case
+    uint16_t modetmp = mode_;
+    uint16_t currentSegmentMoveStatustmp = currentSegmentMoveStatus_;
+    float KpPositiontmp = KpPosition_;
+    uint16_t currentSegmentIDtmp = currentSegmentID_;
+    float currentSpeedtmp = currentSpeed_;
+    uint16_t directiontmp = direction_;
 
     while(!g_signal_received)
     {
         loop ++;
 
-        switch (mode_)
+        switch (modetmp)
         {
             case AUTOMATIC:
-                switch (currentSegmentMoveStatus_)
+                switch (currentSegmentMoveStatustmp)
                 {
                     case STOPPED:   //just start to accelerate. Next loop we'll calculate distance ran and speed
-                        //BOOST_LOG_SEV(logger_, notification) << loop << "*************************enter STOPPED STATUS !!!  ";
-                        if(direction_ == 1)
+                        if(directiontmp == 1)
                         {
                             //first verify if we are not stopped at end of segment, might happen in case of unexpected reboot
-                            if(KpPosition_ >= (*it).stopKp_)
+                            if(KpPositiontmp >= (*it).stopKp_)
                             {
                                 //yes we are
-                                BOOST_LOG_SEV(logger_, notification) << loop << " move status :  " << currentSegmentMoveStatus_ << " Segment #" << (currentSegmentID_) \
-                                                                    << " Train arrived to Stop :" << KpPosition_ << " Direction " << direction_ \
-                                                                    << " Speed " << currentSpeed_ << " km/h";
-                                currentSegmentMoveStatus_ = ARRIVED;
+                                currentSegmentMoveStatustmp = ARRIVED;
                             }
                             else
                             {
-                                BOOST_LOG_SEV(logger_, notification) << loop << " move status :  " << currentSegmentMoveStatus_ << " Segment #" << (currentSegmentID_) \
-                                                                    << " acceleration from position :" << KpPosition_ << " Direction " << direction_ \
-                                                                    << " Speed " << currentSpeed_ << " km/h";
                                 currentSpeed_ = 0;
-                                currentSegmentMoveStatus_ = ACCELERATION;
+                                currentSegmentMoveStatustmp = ACCELERATION;
                             }
                         }
-                        else if(direction_ == 2)
+                        else if(directiontmp == 2)
                         {
-                            if(KpPosition_ >= (*it).startKp_)
+                            if(KpPositiontmp >= (*it).startKp_)
                             {
-                                BOOST_LOG_SEV(logger_, notification) << loop << " move status :  " << currentSegmentMoveStatus_ << " Segment #" << (currentSegmentID_) \
-                                                                    << " acceleration from position :" << KpPosition_ << " Direction " << direction_ \
-                                                                    << " Speed " << currentSpeed_ << " km/h";
-                                currentSpeed_ = 0;
-                                currentSegmentMoveStatus_ = ACCELERATION;
+                                currentSpeedtmp = 0;
+                                currentSegmentMoveStatustmp = ACCELERATION;
 
                             }
                             else
                             {
-                                BOOST_LOG_SEV(logger_, notification) << loop << " move status :  " << currentSegmentMoveStatus_ << " Segment #" << (currentSegmentID_) \
-                                                                    << " Train arrived to Stop " << KpPosition_ << " Direction " << direction_ \
-                                                                    << " Speed " << currentSpeed_ << " km/h";
-                                currentSegmentMoveStatus_ = ARRIVED;
+                                currentSegmentMoveStatustmp = ARRIVED;
                             }
                         }
-                        else BOOST_LOG_SEV(logger_, critical)    << "unknown 1 movement direction :  " << direction_;
+                        else BOOST_LOG_SEV(logger_, critical)    << "unknown stopped movement direction :  " << directiontmp;
                         break;
                     case ACCELERATION:
                         //integrate position from speed as per direction
-                        if(direction_ == 1)
+                        if(directiontmp == 1)
                         {
-                            KpPosition_ += currentSpeed_/3.6 * (float)(softwareConfig_->movementThreadBeatMilliseconds_)/(float)1000;
-                            //BOOST_LOG_SEV(logger_, notification) << loop << " position " << KpPosition_;
+                            KpPositiontmp += currentSpeedtmp/3.6 * (float)(softwareConfig_->movementThreadBeatMilliseconds_)/(float)1000;
                         }
-                        else if (direction_ == 2)
+                        else if (directiontmp == 2)
                         {
-                            KpPosition_ -= currentSpeed_/3.6 * (float)(softwareConfig_->movementThreadBeatMilliseconds_)/(float)1000;
+                            KpPositiontmp -= currentSpeedtmp/3.6 * (float)(softwareConfig_->movementThreadBeatMilliseconds_)/(float)1000;
                         }
-                        else BOOST_LOG_SEV(logger_, critical)    << "unknown 2 movement direction :  " << direction_;
+                        else BOOST_LOG_SEV(logger_, critical)    << "unknown movement direction :  " << directiontmp;
                         //verify if cruise speed as been reached
-                        //BOOST_LOG_SEV(logger_, notification) << loop << " speed " << currentSpeed_ << " cruise speed " << (*it).speed_;
-                        if(currentSpeed_ >= (*it).speed_)
+                        if(currentSpeedtmp >= (*it).speed_)
                         {
                             //cruise speed reached, no more acceleration
-                            BOOST_LOG_SEV(logger_, notification) << loop << " move status :  " << currentSegmentMoveStatus_ << " Segment #" << (currentSegmentID_) \
-                                                                    << " Train cruising " << KpPosition_ << " Direction " << direction_ \
-                                                                    << " Speed " << currentSpeed_ << " km/h";
-                            currentSegmentMoveStatus_ = CRUISE;
+                            currentSegmentMoveStatustmp = CRUISE;
                         }
                         else
                         {
-                            currentSpeed_ += (float)((*it).acceleration_*3.6) * f;
+                            currentSpeedtmp += (float)((*it).acceleration_*3.6) * f;
                         }                        //verify if brake area has been reached
-                        if(direction_ == 1)
+                        if(directiontmp == 1)
                         {
-                            if(KpPosition_ >= (*it).stopKp_ - (*it).brakeDistanceFromStop_)
+                            if(KpPositiontmp >= (*it).stopKp_ - (*it).brakeDistanceFromStop_)
                             {
-                                if(currentSpeed_ > (*it).stopApproachSpeed_)
+                                if(currentSpeedtmp > (*it).stopApproachSpeed_)
                                 {
-                                    BOOST_LOG_SEV(logger_, notification) << loop << " move status :  " << currentSegmentMoveStatus_ << " Segment #" << (currentSegmentID_) \
-                                                                    << " Train braking1 " << KpPosition_ << " Direction " << direction_ \
-                                                                    << " Speed " << currentSpeed_ << " km/h";
-                                    currentSegmentMoveStatus_ = BRAKING;
+                                    currentSegmentMoveStatustmp = BRAKING;
                                 }
                                 else
                                 {
-                                    BOOST_LOG_SEV(logger_, notification) << loop << " move status :  " << currentSegmentMoveStatus_ << " Segment #" << (currentSegmentID_) \
-                                                                    << " Train approaching stop " << KpPosition_ << " Direction " << direction_ \
-                                                                    << " Speed " << currentSpeed_ << " km/h";
-                                    currentSegmentMoveStatus_ = APPROCHING;
-                                    currentSpeed_ = (*it).stopApproachSpeed_;
+                                    currentSegmentMoveStatustmp = APPROCHING;
+                                    currentSpeedtmp = (*it).stopApproachSpeed_;
                                 }
                             }
                         }
-                        else if (direction_ == 2)
+                        else if (directiontmp == 2)
                         {
-                            if(KpPosition_ <= (*it).startKp_ + (*it).brakeDistanceFromStop_)
+                            if(KpPositiontmp <= (*it).startKp_ + (*it).brakeDistanceFromStop_)
                             {
-                                if(currentSpeed_ > (*it).stopApproachSpeed_)
+                                if(currentSpeedtmp > (*it).stopApproachSpeed_)
                                 {
-                                    BOOST_LOG_SEV(logger_, notification) << loop << " move status :  " << currentSegmentMoveStatus_ << " Segment #" << (currentSegmentID_) \
-                                                                    << " Train braking2 " << KpPosition_ << " Direction " << direction_ \
-                                                                    << " Speed " << currentSpeed_ << " km/h";
-                                    currentSegmentMoveStatus_ = BRAKING;
+                                    currentSegmentMoveStatustmp = BRAKING;
                                 }
                                 else
                                 {
-                                    BOOST_LOG_SEV(logger_, notification) << loop << " move status :  " << currentSegmentMoveStatus_ << " Segment #" << (currentSegmentID_) \
-                                                                    << " Train approaching stop " << KpPosition_ << " Direction " << direction_ \
-                                                                    << " Speed " << currentSpeed_ << " km/h";
-                                    currentSegmentMoveStatus_ = APPROCHING;
-                                    currentSpeed_ = (*it).stopApproachSpeed_;
+                                    currentSegmentMoveStatustmp = APPROCHING;
+                                    currentSpeedtmp = (*it).stopApproachSpeed_;
                                 }
                             }
                         }
-                        else BOOST_LOG_SEV(logger_, critical)    << "unknown 3 movement direction :  " << direction_;
+                        else BOOST_LOG_SEV(logger_, critical)    << "unknown acceleration movement direction :  " << directiontmp;
                         break;
                     case CRUISE:
-                        //BOOST_LOG_SEV(logger_, notification) << loop << "*************************enter CRUISE STATUS !!!  ";
                         //integrate position from speed as per direction
-                        if(direction_ == 1) KpPosition_ += currentSpeed_/3.6 * (softwareConfig_->movementThreadBeatMilliseconds_)/1000;
-                        else if (direction_ == 2) KpPosition_ -= currentSpeed_/3.6 * (softwareConfig_->movementThreadBeatMilliseconds_)/1000;
-                        else BOOST_LOG_SEV(logger_, critical)    << "unknown 4 movement direction :  " << direction_;
+                        if(directiontmp == 1) KpPositiontmp += currentSpeedtmp/3.6 * (softwareConfig_->movementThreadBeatMilliseconds_)/1000;
+                        else if (directiontmp == 2) KpPositiontmp -= currentSpeedtmp/3.6 * (softwareConfig_->movementThreadBeatMilliseconds_)/1000;
+                        else BOOST_LOG_SEV(logger_, critical)    << "unknown cruise movement direction :  " << directiontmp;
                         //verify if brake area has been reached
-                        if(direction_ == 1)
+                        if(directiontmp == 1)
                         {
-                            if(KpPosition_ >= (*it).stopKp_ - (*it).brakeDistanceFromStop_)
+                            if(KpPositiontmp >= (*it).stopKp_ - (*it).brakeDistanceFromStop_)
                             {
-                                if(currentSpeed_ > (*it).stopApproachSpeed_)
+                                if(currentSpeedtmp > (*it).stopApproachSpeed_)
                                 {
-                                    BOOST_LOG_SEV(logger_, notification) << loop << " move status :  " << currentSegmentMoveStatus_ << " Segment #" << (currentSegmentID_) \
-                                                                    << " Train braking3 " << KpPosition_ << " Direction " << direction_ \
-                                                                    << " Speed " << currentSpeed_ << " km/h";
-                                    currentSegmentMoveStatus_ = BRAKING;
+                                    currentSegmentMoveStatustmp = BRAKING;
                                 }
                                 else
                                 {
-                                    BOOST_LOG_SEV(logger_, notification) << loop << " move status :  " << currentSegmentMoveStatus_ << " Segment #" << (currentSegmentID_) \
-                                                                    << " Train approaching stop " << KpPosition_ << " Direction " << direction_ \
-                                                                    << " Speed " << currentSpeed_ << " km/h";
-                                    currentSegmentMoveStatus_ = APPROCHING;
-                                    currentSpeed_ = (*it).stopApproachSpeed_/3.6;
+                                    currentSegmentMoveStatustmp = APPROCHING;
+                                    currentSpeedtmp = (*it).stopApproachSpeed_/3.6;
                                 }
                             }
                         }
-                        else if (direction_ == 2)
+                        else if (directiontmp == 2)
                         {
-                            if(KpPosition_ <= (*it).startKp_ + (*it).brakeDistanceFromStop_)
+                            if(KpPositiontmp <= (*it).startKp_ + (*it).brakeDistanceFromStop_)
                             {
-                                if(currentSpeed_ > (*it).stopApproachSpeed_)
+                                if(currentSpeedtmp > (*it).stopApproachSpeed_)
                                 {
-                                    BOOST_LOG_SEV(logger_, notification) << loop << " move status :  " << currentSegmentMoveStatus_ << " Segment #" << (currentSegmentID_) \
-                                                                    << " Train braking4 " << KpPosition_ << " Direction " << direction_ \
-                                                                    << " Speed " << currentSpeed_ << " km/h";
-                                    currentSegmentMoveStatus_ = BRAKING;
+                                    currentSegmentMoveStatustmp = BRAKING;
                                 }
                                 else
                                 {
-                                    BOOST_LOG_SEV(logger_, notification) << loop << " move status :  " << currentSegmentMoveStatus_ << " Segment #" << (currentSegmentID_) \
-                                                                    << " Train approaching stop " << KpPosition_ << " Direction " << direction_ \
-                                                                    << " Speed " << currentSpeed_ << " km/h";
-                                    currentSegmentMoveStatus_ = APPROCHING;
-                                    currentSpeed_ = (*it).stopApproachSpeed_;
+                                    currentSegmentMoveStatustmp = APPROCHING;
+                                    currentSpeedtmp = (*it).stopApproachSpeed_;
                                 }
                             }
                         }
-                        else BOOST_LOG_SEV(logger_, critical)    << "unknown 5 movement direction :  " << direction_;
+                        else BOOST_LOG_SEV(logger_, critical)    << "unknown cruise movement direction :  " << directiontmp;
                         break;
                     case BRAKING:
-                        //BOOST_LOG_SEV(logger_, notification) << loop << "*************************enter BRAKING STATUS !!!  ";
                         //integrate position from speed as per direction
-                        if(direction_ == 1)
+                        if(directiontmp == 1)
                         {
-                            KpPosition_ += (float)currentSpeed_/3.6 * (float)(softwareConfig_->movementThreadBeatMilliseconds_)/(float)1000;
+                            KpPositiontmp += (float)currentSpeedtmp/3.6 * (float)(softwareConfig_->movementThreadBeatMilliseconds_)/(float)1000;
                         }
                         else if (direction_ == 2)
                         {
-                            KpPosition_ -= (float)currentSpeed_/3.6 * (float)(softwareConfig_->movementThreadBeatMilliseconds_)/(float)1000;
+                            KpPositiontmp -= (float)currentSpeedtmp/3.6 * (float)(softwareConfig_->movementThreadBeatMilliseconds_)/(float)1000;
                         }
-                        else BOOST_LOG_SEV(logger_, critical)    << "unknown 6 movement direction :  " << direction_;
+                        else BOOST_LOG_SEV(logger_, critical)    << "unknown braking movement direction :  " << directiontmp;
                         //verify approaching speed reached
-                        if(currentSpeed_ <= (*it).stopApproachSpeed_)
+                        if(currentSpeedtmp <= (*it).stopApproachSpeed_)
                         {
 
-                            BOOST_LOG_SEV(logger_, notification) << loop << " move status :  " << currentSegmentMoveStatus_ << " Segment #" << (currentSegmentID_) \
-                                                                    << " Train approaching stop " << KpPosition_ << " Direction " << direction_ \
-                                                                    << " Speed " << currentSpeed_ << " km/h";
-                            currentSegmentMoveStatus_ = APPROCHING;
+                            currentSegmentMoveStatustmp = APPROCHING;
                         }
                         else
                         {
                             //integrate speed from brake deceleration
-                            currentSpeed_ += (float)(*it).brake_*3.6 * (float)(softwareConfig_->movementThreadBeatMilliseconds_)/(float)1000;
+                            currentSpeedtmp += (float)(*it).brake_*3.6 * (float)(softwareConfig_->movementThreadBeatMilliseconds_)/(float)1000;
                         }
-                        //BOOST_LOG_SEV(logger_, notification) << loop << " position " << KpPosition_;
-                        //BOOST_LOG_SEV(logger_, notification) << loop << " speed " << currentSpeed_ << " km/h  brake force " << (*it).brake_ << " m/s/s";
                         break;
                    case APPROCHING:
-                        //BOOST_LOG_SEV(logger_, notification) << loop << "*************************enter APPROCHING STATUS !!!  ";
-                        //cruise at approach speed until stop location is reached
-                        if(direction_ == 1)
+                        if(directiontmp == 1)
                         {
-                            if(KpPosition_ > ((*it).stopKp_ - 0.1) && KpPosition_ < ((*it).stopKp_ + 0.1))
+                            if(KpPositiontmp > ((*it).stopKp_ - 0.1) && KpPositiontmp < ((*it).stopKp_ + 0.1))
                             {
-                                BOOST_LOG_SEV(logger_, notification) << loop << " move status :  " << currentSegmentMoveStatus_ << " Segment #" << (currentSegmentID_) \
-                                                                    << " Train Arrived1 " << KpPosition_ << " Direction " << direction_ \
-                                                                    << " Speed " << currentSpeed_ << " km/h";
-                                currentSegmentMoveStatus_ = ARRIVED;
-                                currentSpeed_ = 0;
+                                currentSegmentMoveStatustmp = ARRIVED;
+                                currentSpeedtmp = 0;
                                 tTimePointForStationStop = std::chrono::high_resolution_clock::now();
                             }
                         }
-                        else if (direction_ == 2)
+                        else if (directiontmp == 2)
                         {
-                            if(KpPosition_ > ((*it).startKp_ - 0.1) && KpPosition_ < ((*it).startKp_ + 0.1))
+                            if(KpPositiontmp > ((*it).startKp_ - 0.1) && KpPositiontmp < ((*it).startKp_ + 0.1))
                             {
-                                BOOST_LOG_SEV(logger_, notification) << loop << " move status :  " << currentSegmentMoveStatus_ << " Segment #" << (currentSegmentID_) \
-                                                                    << " Train Arrived2 " << KpPosition_ << " Direction " << direction_ \
-                                                                    << " Speed " << currentSpeed_ << " km/h";
-                                currentSegmentMoveStatus_ = ARRIVED;
-                                currentSpeed_ = 0;
+                                currentSegmentMoveStatustmp = ARRIVED;
+                                currentSpeedtmp = 0;
                                 tTimePointForStationStop = std::chrono::high_resolution_clock::now();
                             }
                         }
-                        else BOOST_LOG_SEV(logger_, critical)    << "unknown 7 movement direction :  " << direction_;
+                        else BOOST_LOG_SEV(logger_, critical)    << "unknown approaching movement direction :  " << direction_;
                         //integrate position from speed as per direction
-                        if(direction_ == 1)
+                        if(directiontmp == 1)
                         {
-                            KpPosition_ += (float)currentSpeed_/3.6 * (float)(softwareConfig_->movementThreadBeatMilliseconds_)/(float)1000;
+                            KpPositiontmp += (float)currentSpeedtmp/3.6 * (float)(softwareConfig_->movementThreadBeatMilliseconds_)/(float)1000;
                         }
-                        else if (direction_ == 2)
+                        else if (directiontmp == 2)
                         {
-                            KpPosition_ -= (float)currentSpeed_/3.6 * (float)(softwareConfig_->movementThreadBeatMilliseconds_)/(float)1000;
+                            KpPositiontmp -= (float)currentSpeedtmp/3.6 * (float)(softwareConfig_->movementThreadBeatMilliseconds_)/(float)1000;
                         }
-                        else BOOST_LOG_SEV(logger_, critical)    << "unknown 8 movement direction :  " << direction_;
-                        //BOOST_LOG_SEV(logger_, notification) << loop << " position " << KpPosition_;
-                        //BOOST_LOG_SEV(logger_, notification) << loop << " speed " << currentSpeed_ << " approach speed " << (*it).stopApproachSpeed_;
+                        else BOOST_LOG_SEV(logger_, critical)    << "unknown approching movement direction :  " << directiontmp;
                         break;
                    case ARRIVED:
-                        //BOOST_LOG_SEV(logger_, notification) << loop << "*************************enter ARRIVED STATUS !!!  ";
-                        //stop for specified configured time
                         if(std::chrono::duration_cast<std::chrono::milliseconds>(tNow-tTimePointForStationStop).count() >= (*it).stopDuration_*1000)
                         {
-                            currentSegmentMoveStatus_ = STOPPED;
-                            if (direction_ == 1 && currentSegmentID_ < numberOfSegments_)
+                            currentSegmentMoveStatustmp = STOPPED;
+                            if (directiontmp == 1 && currentSegmentIDtmp < numberOfSegments_)
                             {
-                                BOOST_LOG_SEV(logger_, notification) << loop << " move status :  " << currentSegmentMoveStatus_ << " Segment #" << (currentSegmentID_) \
-                                                                    << " *************************NEXT SEGMENT !!!*********************** " << KpPosition_ << " Direction = " << direction_ \
-                                                                    << " Speed " << currentSpeed_ << " km/h";
-                                currentSegmentID_++;
+                                currentSegmentIDtmp++;
+                                BOOST_LOG_SEV(logger_, notification)    << " *************************NEXT SEGMENT : #" \
+                                                                        << currentSegmentIDtmp << " !!!*********************** " ;
                                 std::advance(it, 1);
                             }
-                            else if (direction_ == 2 && currentSegmentID_ > 1)
+                            else if (directiontmp == 2 && currentSegmentIDtmp > 1)
                             {
-                                BOOST_LOG_SEV(logger_, notification) << loop << " move status :  " << currentSegmentMoveStatus_ << " Segment #" << (currentSegmentID_) \
-                                                                    << " *************************NEXT SEGMENT !!!*********************** " << KpPosition_ << " Direction = " << direction_ \
-                                                                    << " Speed " << currentSpeed_ << " km/h";
-                                currentSegmentID_--;
-                                it = segmentsList.begin();
-                                std::advance(it, currentSegmentID_ - 1);
+                                currentSegmentIDtmp--;
+                                BOOST_LOG_SEV(logger_, notification)    << " *************************NEXT SEGMENT : #" \
+                                                                        << currentSegmentIDtmp << " !!!*********************** " ;
 
+                                it = segmentsList.begin();
+                                std::advance(it, currentSegmentIDtmp - 1);
                             }
-                            else if (direction_ == 1 && currentSegmentID_ == numberOfSegments_)
+                            else if (directiontmp == 1 && currentSegmentIDtmp == numberOfSegments_)
                             {
-                                direction_ = 2;
-                                BOOST_LOG_SEV(logger_, notification) << loop << " move status :  " << currentSegmentMoveStatus_ << " Segment #" << (currentSegmentID_) \
-                                                                    << " *************************REVERSE DIRECTION !!!*********************** " << KpPosition_ << " New Direction = " << direction_ \
-                                                                    << " Speed " << currentSpeed_ << " km/h";
+                                directiontmp = 2;
+                                BOOST_LOG_SEV(logger_, notification)    << " *************************REVERSE DIRECTION : " \
+                                                                        << directiontmp << " !!!*********************** " ;
                             }
-                            else if (direction_ == 2 && currentSegmentID_ == 1)
+                            else if (directiontmp == 2 && currentSegmentIDtmp == 1)
                             {
-                                direction_ = 1;
-                                BOOST_LOG_SEV(logger_, notification) << loop << " move status :  " << currentSegmentMoveStatus_ << " Segment #" << (currentSegmentID_) \
-                                                                    << " *************************REVERSE DIRECTION !!!*********************** " << KpPosition_ << " New Direction = " << direction_ \
-                                                                    << " Speed " << currentSpeed_ << " km/h";
+                                directiontmp = 1;
+                                BOOST_LOG_SEV(logger_, notification)    << " *************************REVERSE DIRECTION : " \
+                                                                        << directiontmp << " !!!*********************** " ;
                             }
-                            else BOOST_LOG_SEV(logger_, critical) << loop << " move status :  " << currentSegmentMoveStatus_ << " Segment #" << (currentSegmentID_) \
-                                                                    << " IMPOSSIBLE direction/segmentID combination !!!" << KpPosition_ << " Direction = " << direction_ \
-                                                                    << " Speed " << currentSpeed_ << " km/h";
+                            else BOOST_LOG_SEV(logger_, critical) << loop << " IMPOSSIBLE direction/segmentID combination !!!" ;
                         }
                         break;
                 }
@@ -450,11 +399,50 @@ void TrainOperationSession::TrainOperationSessionThreadCode(void)
 
                 break;
             default:
-                BOOST_LOG_SEV(logger_, critical)    << "unknown train mode :  " << mode_;
+                BOOST_LOG_SEV(logger_, critical)    << "unknown train mode :  " << modetmp;
         }
 
+        //make log user-friendly
+        std::string smode;
+        switch(modetmp)
+        {
+            case NONE: smode = "NONE";break;
+            case AUTOMATIC: smode = "AUTOMATIC";break;
+            case SEMIAUTOMATIC: smode = "SEMIAUTOMATIC";break;
+            case MANUAL: smode = "MANUAL";break;
+        }
+        std::string smove;
+        switch(currentSegmentMoveStatustmp)
+        {
+            case STOPPED: smove = "STOPPED";break;
+            case ACCELERATION: smove = "ACCELERATION";break;
+            case CRUISE: smove = "CRUISE";break;
+            case BRAKING: smove = "BRAKING";break;
+            case APPROCHING: smove = "APPROCHING";break;
+            case ARRIVED: smove = "ARRIVED";break;
+        }
+        BOOST_LOG_SEV(logger_, debug) << loop << " Segment #" << (currentSegmentIDtmp) << " "\
+                                                                    << smode << " " << smove \
+                                                                    << KpPositiontmp << " Direction " << directiontmp \
+                                                                    << " Speed " << currentSpeedtmp << " km/h";
 
-        //std::this_thread::sleep_for(std::chrono::milliseconds(5));
+        //store store oepration session value wity mitex lock
+        if(TryLockCommSessionMutexFor(softwareConfig_->commSessionMutexLockTimeoutMilliseconds_))
+        {
+            mode_ = modetmp;
+            currentSegmentMoveStatus_ = currentSegmentMoveStatustmp;
+            KpPosition_ = KpPositiontmp;
+            currentSegmentID_ = currentSegmentIDtmp;
+            currentSpeed_ = currentSpeedtmp;
+            direction_ = directiontmp;
+            UnlockCommSessionMutex();
+        }
+        else
+        {
+            BOOST_LOG_SEV(logger_, warning) << "Train Operation Session Lock failed !!!";
+        }
+
+        //in case of stress test : std::this_thread::sleep_for(std::chrono::milliseconds(5));
 
         tNow = std::chrono::high_resolution_clock::now();
 
@@ -663,7 +651,7 @@ int16_t TrainOperationSession::LoadPathSegmentsData(void)
         int k = std::distance(segmentsList.begin(), it);
         if(GetDirection() == 1) SetCurrentSegmentID(k+1);   //no segment 0 so +1
         if(GetDirection() == 2) SetCurrentSegmentID(k);
-        BOOST_LOG_SEV(logger_, notification) << "Current Segment : " << getCurrentSegmentID() << " Direction : " << GetDirection();
+        BOOST_LOG_SEV(logger_, notification) << "Current Segment : " << GetCurrentSegmentID() << " Direction : " << GetDirection();
     }
     else
     {

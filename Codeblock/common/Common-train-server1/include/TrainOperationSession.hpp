@@ -14,6 +14,7 @@
 #include "config.hpp"
 #include "errors.hpp"
 
+//if modifying this enum is necessary, also modify code to make log user-friendly
 enum mode
 {
         NONE = 0,
@@ -21,7 +22,7 @@ enum mode
         SEMIAUTOMATIC =2,
         MANUAL = 3
 };
-
+//if modifying this enum is necessary, also modify code to make log user-friendly
 enum segmentMoveStatuses
 {
     STOPPED = 10,
@@ -63,7 +64,7 @@ class TrainOperationSession
         void SetModeAutomatic(void);
         void SetModeSemiAutomatic(void);
         void SetModemanual(void);
-        int16_t getMode(void);
+        int16_t GetMode(void);
         void SetScenario(std::string const &);
         std::string getScenario(void);
         void SetPath(std::string const &);
@@ -79,7 +80,9 @@ class TrainOperationSession
         void SetCurrentSegmentStop(std::string const &);
         std::string GetCurrentSegmentStop(void);
         void SetCurrentSegmentID(uint16_t);
-        uint16_t getCurrentSegmentID(void);
+        uint16_t GetCurrentSegmentID(void);
+        void SetCurrentSegmentMoveStatus(uint16_t);
+        uint16_t GetCurrentSegmentMoveStatus(void);
         void TrainOperationSessionThreadCode(void);
         void TrainOperationSessionWatchdogThreadCode(void);
         void StartTrainOperationSessionThreadCode(void);

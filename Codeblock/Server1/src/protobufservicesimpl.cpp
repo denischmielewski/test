@@ -18,14 +18,35 @@ void PositionInformationImpl::PositionInformation(  RpcController *             
 {
     startup_severity_channel_logger_mt& lg = server_comm_logger::get();
 
-    BOOST_LOG_SEV(lg, notification) << "position received from train !";
+    //make log user-friendly
+    std::string smode;
+    switch(request->mode())
+    {
+        case NONE: smode = "NONE";break;
+        case AUTOMATIC: smode = "AUTOMATIC";break;
+        case SEMIAUTOMATIC: smode = "SEMIAUTOMATIC";break;
+        case MANUAL: smode = "MANUAL";break;
+    }
+    std::string smove;
+    switch(request->movement())
+    {
+        case STOPPED: smove = "STOPPED";break;
+        case ACCELERATION: smove = "ACCELERATION";break;
+        case CRUISE: smove = "CRUISE";break;
+        case BRAKING: smove = "BRAKING";break;
+        case APPROCHING: smove = "APPROCHING";break;
+        case ARRIVED: smove = "ARRIVED";break;
+    }
+    BOOST_LOG_SEV(lg, notification) << "position received from train : " << request->trainid() << " " << request->kpposition() << " " \
+                                    << smode << " " << smove << " direction " << request->direction() << " " \
+                                    << request->path();
 
     RCF::RcfProtoController * rcfController = static_cast<RCF::RcfProtoController *>(controller);
     RCF::RcfProtoSession * pprotoSession = rcfController->getSession();
     RCF::RcfSession & rcfSession = rcfController->getSession()->getRcfSession();
 
     // Fill in the response.
-    response->set_servername("Position received OK !");
+    response->set_servername("server1");
     // Send response back to the client.
     done->Run();
 
@@ -44,7 +65,6 @@ void PositionInformationImpl::PositionInformation(  RpcController *             
     {
         traincommsession.SetSessionActive();
         traincommsession.SetIpAddress(ipaddress);
-        BOOST_LOG_SEV(lg, notification) << "remote address: " << traincommsession.GetIpAddress();
         time_t timeraw = rcfSession.getConnectedAtTime();
         if(timeraw != traincommsession.GetSessionConnectionTime() && traincommsession.GetSessionRemoteCallCount() != 0)  traincommsession.IncConnectionLossCount();
         traincommsession.SetSessionConnectionTime(timeraw);

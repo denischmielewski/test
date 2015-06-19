@@ -6,9 +6,10 @@ ProtobufSynchronousClientForServer1::~ProtobufSynchronousClientForServer1()
     if(ProtobufSynchronousClientThread.joinable()) ProtobufSynchronousClientThread.join();
 }
 
-ProtobufSynchronousClientForServer1::ProtobufSynchronousClientForServer1(config * conf)
+ProtobufSynchronousClientForServer1::ProtobufSynchronousClientForServer1(config * const conf, std::unordered_map<std::string, TrainSession> * const sessions)
 {
     clientconf = conf;
+    trainsSessions_ = sessions;
 }
 
 void ProtobufSynchronousClientForServer1::Start()
@@ -59,8 +60,48 @@ void ProtobufSynchronousClientForServer1::ProtobufSynchronousClientThreadCode(vo
             if(sendingFrequency.count() >= clientconf->TrainToServer1MessagesFrequency_)
             {
                 t0 = std::chrono::high_resolution_clock::now();
-                BOOST_LOG_SEV(lg, notification) << "Sending message to Server1 : trainID = " << request.trainid() << " position = " << "TODO"/*request.position()*/ \
-                                                << " status = " << "TODO"/*request.status()*/;
+
+                //build request
+                auto it = trainsSessions_->find(clientconf->main_ipaddress_);
+                TrainOperationSession & trainoperationsession = (it->second).GetTrainOperationSessionRef();
+                if(trainoperationsession.TryLockCommSessionMutexFor(clientconf->operationSessionMutexLockTimeoutMilliseconds_))
+                {
+
+                    request.set_trainid(clientconf->main_ipaddress_);
+                    request.set_kpposition(trainoperationsession.GetKpPosition());
+                    request.set_mode(trainoperationsession.GetMode());
+                    request.set_direction(trainoperationsession.GetDirection());
+                    request.set_movement(trainoperationsession.GetCurrentSegmentMoveStatus());
+                    request.set_path(trainoperationsession.GetPath());
+                    trainoperationsession.UnlockCommSessionMutex();
+                }
+                else
+                {
+                    BOOST_LOG_SEV(lg, warning) << "Train Operation Session Lock failed !!!";
+                }
+
+                //make log user-friendly
+                std::string smode;
+                switch(trainoperationsession.GetMode())
+                {
+                    case NONE: smode = "NONE";break;
+                    case AUTOMATIC: smode = "AUTOMATIC";break;
+                    case SEMIAUTOMATIC: smode = "SEMIAUTOMATIC";break;
+                    case MANUAL: smode = "MANUAL";break;
+                }
+                std::string smove;
+                switch(trainoperationsession.GetCurrentSegmentMoveStatus())
+                {
+                    case STOPPED: smove = "STOPPED";break;
+                    case ACCELERATION: smove = "ACCELERATION";break;
+                    case CRUISE: smove = "CRUISE";break;
+                    case BRAKING: smove = "BRAKING";break;
+                    case APPROCHING: smove = "APPROCHING";break;
+                    case ARRIVED: smove = "ARRIVED";break;
+                }
+                BOOST_LOG_SEV(lg, notification) << "Sending message to Server1 : trainID = " << request.trainid() << " path = " << request.path() \
+                                                << " direction " << request.direction() << " position " << request.kpposition() << " "\
+                                                << smode << " " << smove;
                 stub.PositionInformation(NULL, &request, &response, NULL);
 
                 // Process response.

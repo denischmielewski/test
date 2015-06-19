@@ -20,7 +20,7 @@ void SetOperationModeImpl::SetOperationMode(  RpcController *                   
 
     startup_severity_channel_logger_mt& lg = server_comm_logger::get();
 
-    BOOST_LOG_SEV(lg, notification) << "Set operation Mode received !!! ";
+    BOOST_LOG_SEV(lg, notification) << "Set operation Mode received : " << request->mode();
 
     RCF::RcfProtoController * rcfController = static_cast<RCF::RcfProtoController *>(controller);
     RCF::RcfProtoSession * pprotoSession = rcfController->getSession();
@@ -48,7 +48,6 @@ void SetOperationModeImpl::SetOperationMode(  RpcController *                   
     {
         traincommsession.SetSessionActive();
         traincommsession.SetIpAddress(ipaddress);
-        BOOST_LOG_SEV(lg, notification) << "remote address: " << traincommsession.GetIpAddress();
         time_t timeraw = rcfSession.getConnectedAtTime();
         if(timeraw != traincommsession.GetSessionConnectionTime() && traincommsession.GetSessionRemoteCallCount() != 0)  traincommsession.IncConnectionLossCount();
         traincommsession.SetSessionConnectionTime(timeraw);

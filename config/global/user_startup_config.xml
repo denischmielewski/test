@@ -13,7 +13,7 @@
 		<MAX_LOG_FILE_SIZE_IN_KBYTES>1000</MAX_LOG_FILE_SIZE_IN_KBYTES>	<!-- precision is +/- 10% -->
 		<!-- this parameter defines the lower log level included in logs. Levels are : -->
 		<!-- debug, debug_temporary, internal_message, external_message, Threads, notification, warning, error and critical -->
-		<LOG_LEVEL>internal_message</LOG_LEVEL>		
+		<LOG_LEVEL>notification</LOG_LEVEL>		
 	</LOG>	
 
 	<TCPIP>
@@ -30,7 +30,7 @@
 		<!-- this parameter defines the time between 2 messages from train to server1. The value here is in milliseconds -->
 		<TRAIN_TO_SERVER1_MESSAGES_FREQUENCY>1000</TRAIN_TO_SERVER1_MESSAGES_FREQUENCY>
 		<!-- this parameter defines the time between 2 messages from Train to train GUI. The value here is in milliseconds -->
-		<TRAIN_TO_TRAINGUI_MESSAGES_FREQUENCY>500</TRAIN_TO_TRAINGUI_MESSAGES_FREQUENCY>
+		<TRAIN_TO_TRAINGUI_MESSAGES_FREQUENCY>1000</TRAIN_TO_TRAINGUI_MESSAGES_FREQUENCY>
 	</SYNCHRONOUS_MESSAGES>
 
 	<!-- location and name of file that stores operational data (like train position...) -->	
@@ -47,35 +47,35 @@
 			<IP_ADDRESSES_AND_SUBNET>
 				<ADAPTER>eth0</ADAPTER>
 				<MAIN_IP>192.168.1.11/24</MAIN_IP>
-				<GUI_IP>192.168.1.12/24</GUI_IP>
+				<GUI_IP>192.168.2.12/24</GUI_IP>
 			</IP_ADDRESSES_AND_SUBNET>
 		</dev-VM>
 		<Train191> <!-- Hostname of the linux OS, 1024 bytes MAX !!! -->
 			<IP_ADDRESSES_AND_SUBNET>
 				<ADAPTER>eth0</ADAPTER>
 				<MAIN_IP>192.168.1.191/24</MAIN_IP>
-				<GUI_IP>192.168.1.192/24</GUI_IP>
+				<GUI_IP>192.168.2.192/24</GUI_IP>
 			</IP_ADDRESSES_AND_SUBNET>
 		</Train191>		
 		<Train201> <!-- Hostname of the linux OS, 1024 bytes MAX !!! -->
 			<IP_ADDRESSES_AND_SUBNET>
 				<ADAPTER>eth0</ADAPTER>
 				<MAIN_IP>192.168.1.201/24</MAIN_IP>
-				<GUI_IP>192.168.1.202/24</GUI_IP>
+				<GUI_IP>192.168.2.202/24</GUI_IP>
 			</IP_ADDRESSES_AND_SUBNET>
 		</Train201>		
 		<Train211> <!-- Hostname of the linux OS, 1024 bytes MAX !!! -->
 			<IP_ADDRESSES_AND_SUBNET>
 				<ADAPTER>eth0</ADAPTER>
 				<MAIN_IP>192.168.1.211/24</MAIN_IP>
-				<GUI_IP>192.168.1.212/24</GUI_IP>
+				<GUI_IP>192.168.2.212/24</GUI_IP>
 			</IP_ADDRESSES_AND_SUBNET>
 		</Train211>
 		<Train221> <!-- Hostname of the linux OS, 1024 bytes MAX !!! -->
 			<IP_ADDRESSES_AND_SUBNET>
 				<ADAPTER>eth0</ADAPTER>
 				<MAIN_IP>192.168.1.221/24</MAIN_IP>
-				<GUI_IP>192.168.1.222/24</GUI_IP>
+				<GUI_IP>192.168.2.222/24</GUI_IP>
 			</IP_ADDRESSES_AND_SUBNET>
 		</Train221>
 		<SERVER1> <!-- Hostname of the linux OS, 1024 bytes MAX !!! -->
@@ -89,14 +89,14 @@
 			<IP_ADDRESSES_AND_SUBNET>
 				<ADAPTER>eth0</ADAPTER>
 				<MAIN_IP>192.168.1.15/24</MAIN_IP>
-				<GUI_IP>192.168.1.16/24</GUI_IP>
+				<GUI_IP>192.168.2.16/24</GUI_IP>
 			</IP_ADDRESSES_AND_SUBNET>
 		</SERVER2>
 		<SERVER3> <!-- Hostname of the linux OS, 1024 bytes MAX !!! -->
 			<IP_ADDRESSES_AND_SUBNET>
 				<ADAPTER>eth0</ADAPTER>
 				<MAIN_IP>192.168.1.20/24</MAIN_IP>
-				<GUI_IP>192.168.1.21/24</GUI_IP>
+				<GUI_IP>192.168.2.21/24</GUI_IP>
 			</IP_ADDRESSES_AND_SUBNET>
 		</SERVER3>
 	</TRAINS_IP_CONFIG>

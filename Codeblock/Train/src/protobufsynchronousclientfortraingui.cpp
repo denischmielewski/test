@@ -7,9 +7,10 @@ ProtobufSynchronousClientForTrainGUI::~ProtobufSynchronousClientForTrainGUI()
     if(ProtobufSynchronousClientThread.joinable()) ProtobufSynchronousClientThread.join();
 }
 
-ProtobufSynchronousClientForTrainGUI::ProtobufSynchronousClientForTrainGUI(config * conf)
+ProtobufSynchronousClientForTrainGUI::ProtobufSynchronousClientForTrainGUI(config * conf, std::unordered_map<std::string, TrainSession> * const trainsessions)
 {
     clientconf = conf;
+    trainsSessions_ = trainsessions;
 }
 
 void ProtobufSynchronousClientForTrainGUI::Start()
@@ -32,7 +33,6 @@ void ProtobufSynchronousClientForTrainGUI::ProtobufSynchronousClientThreadCode(v
 
     // Create request object.
     PositionInformationTransmit request;
-    request.set_trainid(clientconf->hostname_);
 
     // Create response object.
     PositionInformationReceive response;
@@ -52,6 +52,9 @@ void ProtobufSynchronousClientForTrainGUI::ProtobufSynchronousClientThreadCode(v
     std::chrono::high_resolution_clock::time_point t1 = std::chrono::high_resolution_clock::now();
     std::chrono::milliseconds sendingFrequency(clientconf->TrainToTrainGUIMessagesFrequency_);
 
+    auto it = trainsSessions_->find(clientconf->main_ipaddress_);
+    TrainOperationSession & trainoperationsession = (it->second).GetTrainOperationSessionRef();
+
     while(!g_signal_received)
     {
 
@@ -60,8 +63,45 @@ void ProtobufSynchronousClientForTrainGUI::ProtobufSynchronousClientThreadCode(v
             // Make a synchronous remote call to server according to configured frequency
             if(sendingFrequency.count() >= clientconf->TrainToTrainGUIMessagesFrequency_)
             {
+                if(trainoperationsession.TryLockCommSessionMutexFor(clientconf->operationSessionMutexLockTimeoutMilliseconds_))
+                {
+
+                    request.set_trainid(clientconf->hostname_);
+                    request.set_kpposition(trainoperationsession.GetKpPosition());
+                    request.set_mode(trainoperationsession.GetMode());
+                    request.set_direction(trainoperationsession.GetDirection());
+                    request.set_movement(trainoperationsession.GetCurrentSegmentMoveStatus());
+                    request.set_path(trainoperationsession.GetPath());
+                    trainoperationsession.UnlockCommSessionMutex();
+                }
+                else
+                {
+                    BOOST_LOG_SEV(lg, warning) << "Train Operation Session Lock failed !!!";
+                }
+
                 t0 = std::chrono::high_resolution_clock::now();
-                BOOST_LOG_SEV(lg, notification) << "Sending message to GUI : trainID = " << request.trainid() << " position = " << "TODO"/*request.position()*/ << " status = " << "TODO"/*request.status()*/;
+                //make log user-friendly
+                std::string smode;
+                switch(trainoperationsession.GetMode())
+                {
+                    case NONE: smode = "NONE";break;
+                    case AUTOMATIC: smode = "AUTOMATIC";break;
+                    case SEMIAUTOMATIC: smode = "SEMIAUTOMATIC";break;
+                    case MANUAL: smode = "MANUAL";break;
+                }
+                std::string smove;
+                switch(trainoperationsession.GetCurrentSegmentMoveStatus())
+                {
+                    case STOPPED: smove = "STOPPED";break;
+                    case ACCELERATION: smove = "ACCELERATION";break;
+                    case CRUISE: smove = "CRUISE";break;
+                    case BRAKING: smove = "BRAKING";break;
+                    case APPROCHING: smove = "APPROCHING";break;
+                    case ARRIVED: smove = "ARRIVED";break;
+                }
+                BOOST_LOG_SEV(lg, notification) << "Sending message to GUI : trainID = " << request.trainid() << " path = " << request.path() \
+                                                << " direction " << request.direction() << " position " << request.kpposition() << " " \
+                                                << smode << " "<< smove;
                 stub.PositionInformation(NULL, &request, &response, NULL);
                 // Process response.
                 BOOST_LOG_SEV(lg, notification) << "Received response from GUI : server name = " << response.servername();

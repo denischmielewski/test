@@ -7,6 +7,8 @@
 #include <chrono>
 #include <RCFProto.hpp>
 #include <ctime>
+#include <unordered_map>
+#include "TrainSession.hpp"
 
 // Include protoc-generated header.
 #include "RCFProtoServices.pb.h"
@@ -15,12 +17,13 @@
 class ProtobufSynchronousClientForTrainGUI
 {
     public:
-        ProtobufSynchronousClientForTrainGUI(config * config);
+        ProtobufSynchronousClientForTrainGUI(config * config, std::unordered_map<std::string, TrainSession> * const);
         ~ProtobufSynchronousClientForTrainGUI();
         void ProtobufSynchronousClientThreadCode(void);
         void Start();
         void Join();
         const config * clientconf=nullptr;
+        std::unordered_map<std::string, TrainSession> * trainsSessions_;
         std::thread ProtobufSynchronousClientThread; //the default constructor is called so the thread is created.
     protected:
     private:

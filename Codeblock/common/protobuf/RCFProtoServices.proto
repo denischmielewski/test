@@ -1,0 +1,49 @@
+// Enable generation of Protocol Buffers RPC services.
+option cc_generic_services = true;
+option java_generic_services = true;
+option py_generic_services = true;
+
+
+//============Position transmit service=========================================================
+// Define a request.
+message PositionInformationTransmit {
+  optional string trainid = 1;
+  //required string position = 2;
+  optional float kpPosition = 2;
+  optional int32 mode = 3; 
+  //optional int32 status = 3;
+  optional int32 movement = 4;
+  optional int32 direction = 5;
+  optional string path = 6;
+}
+// Define a response
+
+message PositionInformationReceive {
+  optional string servername = 1;
+  optional int32 movement = 2;
+}
+// Define the service.
+
+service PositionInformationService
+{
+  rpc PositionInformation (PositionInformationTransmit) returns (PositionInformationReceive);
+}
+//============Position transmit service=========================================================
+
+//============Set Operation Mode Service : automatic or manual=========================================================
+// Define a request.
+message SetOperationModeCommand{
+  required string mode = 1;
+}
+// Define a response
+message SetOperationModeResponse{
+  required string previousmode = 1;
+  required string newmode = 2;
+}
+// Define the service.
+
+service SetOperationModeService
+{
+  rpc SetOperationMode (SetOperationModeCommand) returns (SetOperationModeResponse);
+}
+//============Set Operation Mode Service : automatic or manual=========================================================

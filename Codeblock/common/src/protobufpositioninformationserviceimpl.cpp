@@ -56,7 +56,6 @@ void PositionInformationImpl::UpdateSession(RCF::RcfProtoSession * pprotoSession
     {
         traincommsession.SetSessionActive();
         traincommsession.SetIpAddress(ipaddress);
-        BOOST_LOG_SEV(*logger, notification) << "remote address: " << traincommsession.GetIpAddress();
         time_t timeraw = rcfSession.getConnectedAtTime();
         if(timeraw != traincommsession.GetSessionConnectionTime() && traincommsession.GetSessionRemoteCallCount() != 0)  traincommsession.IncConnectionLossCount();
         traincommsession.SetSessionConnectionTime(timeraw);
