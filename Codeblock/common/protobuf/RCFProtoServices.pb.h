@@ -36,6 +36,10 @@ class PositionInformationTransmit;
 class PositionInformationReceive;
 class SetOperationModeCommand;
 class SetOperationModeResponse;
+class traindata;
+class MapTrainData;
+class GetFleetCommand;
+class GetFleetResponse;
 
 // ===================================================================
 
@@ -243,26 +247,16 @@ class PositionInformationReceive : public ::google::protobuf::Message {
   inline ::std::string* release_servername();
   inline void set_allocated_servername(::std::string* servername);
 
-  // optional int32 movement = 2;
-  inline bool has_movement() const;
-  inline void clear_movement();
-  static const int kMovementFieldNumber = 2;
-  inline ::google::protobuf::int32 movement() const;
-  inline void set_movement(::google::protobuf::int32 value);
-
   // @@protoc_insertion_point(class_scope:PositionInformationReceive)
  private:
   inline void set_has_servername();
   inline void clear_has_servername();
-  inline void set_has_movement();
-  inline void clear_has_movement();
 
   ::google::protobuf::UnknownFieldSet _unknown_fields_;
 
   ::google::protobuf::uint32 _has_bits_[1];
   mutable int _cached_size_;
   ::std::string* servername_;
-  ::google::protobuf::int32 movement_;
   friend void  protobuf_AddDesc_RCFProtoServices_2eproto();
   friend void protobuf_AssignDesc_RCFProtoServices_2eproto();
   friend void protobuf_ShutdownFile_RCFProtoServices_2eproto();
@@ -453,6 +447,392 @@ class SetOperationModeResponse : public ::google::protobuf::Message {
   void InitAsDefaultInstance();
   static SetOperationModeResponse* default_instance_;
 };
+// -------------------------------------------------------------------
+
+class traindata : public ::google::protobuf::Message {
+ public:
+  traindata();
+  virtual ~traindata();
+
+  traindata(const traindata& from);
+
+  inline traindata& operator=(const traindata& from) {
+    CopyFrom(from);
+    return *this;
+  }
+
+  inline const ::google::protobuf::UnknownFieldSet& unknown_fields() const {
+    return _unknown_fields_;
+  }
+
+  inline ::google::protobuf::UnknownFieldSet* mutable_unknown_fields() {
+    return &_unknown_fields_;
+  }
+
+  static const ::google::protobuf::Descriptor* descriptor();
+  static const traindata& default_instance();
+
+  void Swap(traindata* other);
+
+  // implements Message ----------------------------------------------
+
+  traindata* New() const;
+  void CopyFrom(const ::google::protobuf::Message& from);
+  void MergeFrom(const ::google::protobuf::Message& from);
+  void CopyFrom(const traindata& from);
+  void MergeFrom(const traindata& from);
+  void Clear();
+  bool IsInitialized() const;
+
+  int ByteSize() const;
+  bool MergePartialFromCodedStream(
+      ::google::protobuf::io::CodedInputStream* input);
+  void SerializeWithCachedSizes(
+      ::google::protobuf::io::CodedOutputStream* output) const;
+  ::google::protobuf::uint8* SerializeWithCachedSizesToArray(::google::protobuf::uint8* output) const;
+  int GetCachedSize() const { return _cached_size_; }
+  private:
+  void SharedCtor();
+  void SharedDtor();
+  void SetCachedSize(int size) const;
+  public:
+  ::google::protobuf::Metadata GetMetadata() const;
+
+  // nested types ----------------------------------------------------
+
+  // accessors -------------------------------------------------------
+
+  // optional float kpPosition = 1;
+  inline bool has_kpposition() const;
+  inline void clear_kpposition();
+  static const int kKpPositionFieldNumber = 1;
+  inline float kpposition() const;
+  inline void set_kpposition(float value);
+
+  // optional int32 mode = 2;
+  inline bool has_mode() const;
+  inline void clear_mode();
+  static const int kModeFieldNumber = 2;
+  inline ::google::protobuf::int32 mode() const;
+  inline void set_mode(::google::protobuf::int32 value);
+
+  // optional int32 movement = 3;
+  inline bool has_movement() const;
+  inline void clear_movement();
+  static const int kMovementFieldNumber = 3;
+  inline ::google::protobuf::int32 movement() const;
+  inline void set_movement(::google::protobuf::int32 value);
+
+  // optional int32 direction = 4;
+  inline bool has_direction() const;
+  inline void clear_direction();
+  static const int kDirectionFieldNumber = 4;
+  inline ::google::protobuf::int32 direction() const;
+  inline void set_direction(::google::protobuf::int32 value);
+
+  // optional string path = 5;
+  inline bool has_path() const;
+  inline void clear_path();
+  static const int kPathFieldNumber = 5;
+  inline const ::std::string& path() const;
+  inline void set_path(const ::std::string& value);
+  inline void set_path(const char* value);
+  inline void set_path(const char* value, size_t size);
+  inline ::std::string* mutable_path();
+  inline ::std::string* release_path();
+  inline void set_allocated_path(::std::string* path);
+
+  // @@protoc_insertion_point(class_scope:traindata)
+ private:
+  inline void set_has_kpposition();
+  inline void clear_has_kpposition();
+  inline void set_has_mode();
+  inline void clear_has_mode();
+  inline void set_has_movement();
+  inline void clear_has_movement();
+  inline void set_has_direction();
+  inline void clear_has_direction();
+  inline void set_has_path();
+  inline void clear_has_path();
+
+  ::google::protobuf::UnknownFieldSet _unknown_fields_;
+
+  ::google::protobuf::uint32 _has_bits_[1];
+  mutable int _cached_size_;
+  float kpposition_;
+  ::google::protobuf::int32 mode_;
+  ::google::protobuf::int32 movement_;
+  ::google::protobuf::int32 direction_;
+  ::std::string* path_;
+  friend void  protobuf_AddDesc_RCFProtoServices_2eproto();
+  friend void protobuf_AssignDesc_RCFProtoServices_2eproto();
+  friend void protobuf_ShutdownFile_RCFProtoServices_2eproto();
+
+  void InitAsDefaultInstance();
+  static traindata* default_instance_;
+};
+// -------------------------------------------------------------------
+
+class MapTrainData : public ::google::protobuf::Message {
+ public:
+  MapTrainData();
+  virtual ~MapTrainData();
+
+  MapTrainData(const MapTrainData& from);
+
+  inline MapTrainData& operator=(const MapTrainData& from) {
+    CopyFrom(from);
+    return *this;
+  }
+
+  inline const ::google::protobuf::UnknownFieldSet& unknown_fields() const {
+    return _unknown_fields_;
+  }
+
+  inline ::google::protobuf::UnknownFieldSet* mutable_unknown_fields() {
+    return &_unknown_fields_;
+  }
+
+  static const ::google::protobuf::Descriptor* descriptor();
+  static const MapTrainData& default_instance();
+
+  void Swap(MapTrainData* other);
+
+  // implements Message ----------------------------------------------
+
+  MapTrainData* New() const;
+  void CopyFrom(const ::google::protobuf::Message& from);
+  void MergeFrom(const ::google::protobuf::Message& from);
+  void CopyFrom(const MapTrainData& from);
+  void MergeFrom(const MapTrainData& from);
+  void Clear();
+  bool IsInitialized() const;
+
+  int ByteSize() const;
+  bool MergePartialFromCodedStream(
+      ::google::protobuf::io::CodedInputStream* input);
+  void SerializeWithCachedSizes(
+      ::google::protobuf::io::CodedOutputStream* output) const;
+  ::google::protobuf::uint8* SerializeWithCachedSizesToArray(::google::protobuf::uint8* output) const;
+  int GetCachedSize() const { return _cached_size_; }
+  private:
+  void SharedCtor();
+  void SharedDtor();
+  void SetCachedSize(int size) const;
+  public:
+  ::google::protobuf::Metadata GetMetadata() const;
+
+  // nested types ----------------------------------------------------
+
+  // accessors -------------------------------------------------------
+
+  // required string ipaddress = 1;
+  inline bool has_ipaddress() const;
+  inline void clear_ipaddress();
+  static const int kIpaddressFieldNumber = 1;
+  inline const ::std::string& ipaddress() const;
+  inline void set_ipaddress(const ::std::string& value);
+  inline void set_ipaddress(const char* value);
+  inline void set_ipaddress(const char* value, size_t size);
+  inline ::std::string* mutable_ipaddress();
+  inline ::std::string* release_ipaddress();
+  inline void set_allocated_ipaddress(::std::string* ipaddress);
+
+  // optional .traindata traindata = 2;
+  inline bool has_traindata() const;
+  inline void clear_traindata();
+  static const int kTraindataFieldNumber = 2;
+  inline const ::traindata& traindata() const;
+  inline ::traindata* mutable_traindata();
+  inline ::traindata* release_traindata();
+  inline void set_allocated_traindata(::traindata* traindata);
+
+  // @@protoc_insertion_point(class_scope:MapTrainData)
+ private:
+  inline void set_has_ipaddress();
+  inline void clear_has_ipaddress();
+  inline void set_has_traindata();
+  inline void clear_has_traindata();
+
+  ::google::protobuf::UnknownFieldSet _unknown_fields_;
+
+  ::google::protobuf::uint32 _has_bits_[1];
+  mutable int _cached_size_;
+  ::std::string* ipaddress_;
+  ::traindata* traindata_;
+  friend void  protobuf_AddDesc_RCFProtoServices_2eproto();
+  friend void protobuf_AssignDesc_RCFProtoServices_2eproto();
+  friend void protobuf_ShutdownFile_RCFProtoServices_2eproto();
+
+  void InitAsDefaultInstance();
+  static MapTrainData* default_instance_;
+};
+// -------------------------------------------------------------------
+
+class GetFleetCommand : public ::google::protobuf::Message {
+ public:
+  GetFleetCommand();
+  virtual ~GetFleetCommand();
+
+  GetFleetCommand(const GetFleetCommand& from);
+
+  inline GetFleetCommand& operator=(const GetFleetCommand& from) {
+    CopyFrom(from);
+    return *this;
+  }
+
+  inline const ::google::protobuf::UnknownFieldSet& unknown_fields() const {
+    return _unknown_fields_;
+  }
+
+  inline ::google::protobuf::UnknownFieldSet* mutable_unknown_fields() {
+    return &_unknown_fields_;
+  }
+
+  static const ::google::protobuf::Descriptor* descriptor();
+  static const GetFleetCommand& default_instance();
+
+  void Swap(GetFleetCommand* other);
+
+  // implements Message ----------------------------------------------
+
+  GetFleetCommand* New() const;
+  void CopyFrom(const ::google::protobuf::Message& from);
+  void MergeFrom(const ::google::protobuf::Message& from);
+  void CopyFrom(const GetFleetCommand& from);
+  void MergeFrom(const GetFleetCommand& from);
+  void Clear();
+  bool IsInitialized() const;
+
+  int ByteSize() const;
+  bool MergePartialFromCodedStream(
+      ::google::protobuf::io::CodedInputStream* input);
+  void SerializeWithCachedSizes(
+      ::google::protobuf::io::CodedOutputStream* output) const;
+  ::google::protobuf::uint8* SerializeWithCachedSizesToArray(::google::protobuf::uint8* output) const;
+  int GetCachedSize() const { return _cached_size_; }
+  private:
+  void SharedCtor();
+  void SharedDtor();
+  void SetCachedSize(int size) const;
+  public:
+  ::google::protobuf::Metadata GetMetadata() const;
+
+  // nested types ----------------------------------------------------
+
+  // accessors -------------------------------------------------------
+
+  // required string ipaddress = 1;
+  inline bool has_ipaddress() const;
+  inline void clear_ipaddress();
+  static const int kIpaddressFieldNumber = 1;
+  inline const ::std::string& ipaddress() const;
+  inline void set_ipaddress(const ::std::string& value);
+  inline void set_ipaddress(const char* value);
+  inline void set_ipaddress(const char* value, size_t size);
+  inline ::std::string* mutable_ipaddress();
+  inline ::std::string* release_ipaddress();
+  inline void set_allocated_ipaddress(::std::string* ipaddress);
+
+  // @@protoc_insertion_point(class_scope:GetFleetCommand)
+ private:
+  inline void set_has_ipaddress();
+  inline void clear_has_ipaddress();
+
+  ::google::protobuf::UnknownFieldSet _unknown_fields_;
+
+  ::google::protobuf::uint32 _has_bits_[1];
+  mutable int _cached_size_;
+  ::std::string* ipaddress_;
+  friend void  protobuf_AddDesc_RCFProtoServices_2eproto();
+  friend void protobuf_AssignDesc_RCFProtoServices_2eproto();
+  friend void protobuf_ShutdownFile_RCFProtoServices_2eproto();
+
+  void InitAsDefaultInstance();
+  static GetFleetCommand* default_instance_;
+};
+// -------------------------------------------------------------------
+
+class GetFleetResponse : public ::google::protobuf::Message {
+ public:
+  GetFleetResponse();
+  virtual ~GetFleetResponse();
+
+  GetFleetResponse(const GetFleetResponse& from);
+
+  inline GetFleetResponse& operator=(const GetFleetResponse& from) {
+    CopyFrom(from);
+    return *this;
+  }
+
+  inline const ::google::protobuf::UnknownFieldSet& unknown_fields() const {
+    return _unknown_fields_;
+  }
+
+  inline ::google::protobuf::UnknownFieldSet* mutable_unknown_fields() {
+    return &_unknown_fields_;
+  }
+
+  static const ::google::protobuf::Descriptor* descriptor();
+  static const GetFleetResponse& default_instance();
+
+  void Swap(GetFleetResponse* other);
+
+  // implements Message ----------------------------------------------
+
+  GetFleetResponse* New() const;
+  void CopyFrom(const ::google::protobuf::Message& from);
+  void MergeFrom(const ::google::protobuf::Message& from);
+  void CopyFrom(const GetFleetResponse& from);
+  void MergeFrom(const GetFleetResponse& from);
+  void Clear();
+  bool IsInitialized() const;
+
+  int ByteSize() const;
+  bool MergePartialFromCodedStream(
+      ::google::protobuf::io::CodedInputStream* input);
+  void SerializeWithCachedSizes(
+      ::google::protobuf::io::CodedOutputStream* output) const;
+  ::google::protobuf::uint8* SerializeWithCachedSizesToArray(::google::protobuf::uint8* output) const;
+  int GetCachedSize() const { return _cached_size_; }
+  private:
+  void SharedCtor();
+  void SharedDtor();
+  void SetCachedSize(int size) const;
+  public:
+  ::google::protobuf::Metadata GetMetadata() const;
+
+  // nested types ----------------------------------------------------
+
+  // accessors -------------------------------------------------------
+
+  // repeated .MapTrainData traindata = 1;
+  inline int traindata_size() const;
+  inline void clear_traindata();
+  static const int kTraindataFieldNumber = 1;
+  inline const ::MapTrainData& traindata(int index) const;
+  inline ::MapTrainData* mutable_traindata(int index);
+  inline ::MapTrainData* add_traindata();
+  inline const ::google::protobuf::RepeatedPtrField< ::MapTrainData >&
+      traindata() const;
+  inline ::google::protobuf::RepeatedPtrField< ::MapTrainData >*
+      mutable_traindata();
+
+  // @@protoc_insertion_point(class_scope:GetFleetResponse)
+ private:
+
+  ::google::protobuf::UnknownFieldSet _unknown_fields_;
+
+  ::google::protobuf::uint32 _has_bits_[1];
+  mutable int _cached_size_;
+  ::google::protobuf::RepeatedPtrField< ::MapTrainData > traindata_;
+  friend void  protobuf_AddDesc_RCFProtoServices_2eproto();
+  friend void protobuf_AssignDesc_RCFProtoServices_2eproto();
+  friend void protobuf_ShutdownFile_RCFProtoServices_2eproto();
+
+  void InitAsDefaultInstance();
+  static GetFleetResponse* default_instance_;
+};
 // ===================================================================
 
 class PositionInformationService_Stub;
@@ -568,6 +948,65 @@ class SetOperationModeService_Stub : public SetOperationModeService {
   ::google::protobuf::RpcChannel* channel_;
   bool owns_channel_;
   GOOGLE_DISALLOW_EVIL_CONSTRUCTORS(SetOperationModeService_Stub);
+};
+
+
+// -------------------------------------------------------------------
+
+class GetFleetService_Stub;
+
+class GetFleetService : public ::google::protobuf::Service {
+ protected:
+  // This class should be treated as an abstract interface.
+  inline GetFleetService() {};
+ public:
+  virtual ~GetFleetService();
+
+  typedef GetFleetService_Stub Stub;
+
+  static const ::google::protobuf::ServiceDescriptor* descriptor();
+
+  virtual void GetFleet(::google::protobuf::RpcController* controller,
+                       const ::GetFleetCommand* request,
+                       ::GetFleetResponse* response,
+                       ::google::protobuf::Closure* done);
+
+  // implements Service ----------------------------------------------
+
+  const ::google::protobuf::ServiceDescriptor* GetDescriptor();
+  void CallMethod(const ::google::protobuf::MethodDescriptor* method,
+                  ::google::protobuf::RpcController* controller,
+                  const ::google::protobuf::Message* request,
+                  ::google::protobuf::Message* response,
+                  ::google::protobuf::Closure* done);
+  const ::google::protobuf::Message& GetRequestPrototype(
+    const ::google::protobuf::MethodDescriptor* method) const;
+  const ::google::protobuf::Message& GetResponsePrototype(
+    const ::google::protobuf::MethodDescriptor* method) const;
+
+ private:
+  GOOGLE_DISALLOW_EVIL_CONSTRUCTORS(GetFleetService);
+};
+
+class GetFleetService_Stub : public GetFleetService {
+ public:
+  GetFleetService_Stub(::google::protobuf::RpcChannel* channel);
+  GetFleetService_Stub(::google::protobuf::RpcChannel* channel,
+                   ::google::protobuf::Service::ChannelOwnership ownership);
+  ~GetFleetService_Stub();
+
+  inline ::google::protobuf::RpcChannel* channel() { return channel_; }
+
+  // implements GetFleetService ------------------------------------------
+
+  void GetFleet(::google::protobuf::RpcController* controller,
+                       const ::GetFleetCommand* request,
+                       ::GetFleetResponse* response,
+                       ::google::protobuf::Closure* done);
+ private:
+  ::google::protobuf::RpcChannel* channel_;
+  bool owns_channel_;
+  GOOGLE_DISALLOW_EVIL_CONSTRUCTORS(GetFleetService_Stub);
 };
 
 
@@ -906,30 +1345,6 @@ inline void PositionInformationReceive::set_allocated_servername(::std::string* 
   // @@protoc_insertion_point(field_set_allocated:PositionInformationReceive.servername)
 }
 
-// optional int32 movement = 2;
-inline bool PositionInformationReceive::has_movement() const {
-  return (_has_bits_[0] & 0x00000002u) != 0;
-}
-inline void PositionInformationReceive::set_has_movement() {
-  _has_bits_[0] |= 0x00000002u;
-}
-inline void PositionInformationReceive::clear_has_movement() {
-  _has_bits_[0] &= ~0x00000002u;
-}
-inline void PositionInformationReceive::clear_movement() {
-  movement_ = 0;
-  clear_has_movement();
-}
-inline ::google::protobuf::int32 PositionInformationReceive::movement() const {
-  // @@protoc_insertion_point(field_get:PositionInformationReceive.movement)
-  return movement_;
-}
-inline void PositionInformationReceive::set_movement(::google::protobuf::int32 value) {
-  set_has_movement();
-  movement_ = value;
-  // @@protoc_insertion_point(field_set:PositionInformationReceive.movement)
-}
-
 // -------------------------------------------------------------------
 
 // SetOperationModeCommand
@@ -1164,6 +1579,417 @@ inline void SetOperationModeResponse::set_allocated_newmode(::std::string* newmo
     newmode_ = const_cast< ::std::string*>(&::google::protobuf::internal::GetEmptyStringAlreadyInited());
   }
   // @@protoc_insertion_point(field_set_allocated:SetOperationModeResponse.newmode)
+}
+
+// -------------------------------------------------------------------
+
+// traindata
+
+// optional float kpPosition = 1;
+inline bool traindata::has_kpposition() const {
+  return (_has_bits_[0] & 0x00000001u) != 0;
+}
+inline void traindata::set_has_kpposition() {
+  _has_bits_[0] |= 0x00000001u;
+}
+inline void traindata::clear_has_kpposition() {
+  _has_bits_[0] &= ~0x00000001u;
+}
+inline void traindata::clear_kpposition() {
+  kpposition_ = 0;
+  clear_has_kpposition();
+}
+inline float traindata::kpposition() const {
+  // @@protoc_insertion_point(field_get:traindata.kpPosition)
+  return kpposition_;
+}
+inline void traindata::set_kpposition(float value) {
+  set_has_kpposition();
+  kpposition_ = value;
+  // @@protoc_insertion_point(field_set:traindata.kpPosition)
+}
+
+// optional int32 mode = 2;
+inline bool traindata::has_mode() const {
+  return (_has_bits_[0] & 0x00000002u) != 0;
+}
+inline void traindata::set_has_mode() {
+  _has_bits_[0] |= 0x00000002u;
+}
+inline void traindata::clear_has_mode() {
+  _has_bits_[0] &= ~0x00000002u;
+}
+inline void traindata::clear_mode() {
+  mode_ = 0;
+  clear_has_mode();
+}
+inline ::google::protobuf::int32 traindata::mode() const {
+  // @@protoc_insertion_point(field_get:traindata.mode)
+  return mode_;
+}
+inline void traindata::set_mode(::google::protobuf::int32 value) {
+  set_has_mode();
+  mode_ = value;
+  // @@protoc_insertion_point(field_set:traindata.mode)
+}
+
+// optional int32 movement = 3;
+inline bool traindata::has_movement() const {
+  return (_has_bits_[0] & 0x00000004u) != 0;
+}
+inline void traindata::set_has_movement() {
+  _has_bits_[0] |= 0x00000004u;
+}
+inline void traindata::clear_has_movement() {
+  _has_bits_[0] &= ~0x00000004u;
+}
+inline void traindata::clear_movement() {
+  movement_ = 0;
+  clear_has_movement();
+}
+inline ::google::protobuf::int32 traindata::movement() const {
+  // @@protoc_insertion_point(field_get:traindata.movement)
+  return movement_;
+}
+inline void traindata::set_movement(::google::protobuf::int32 value) {
+  set_has_movement();
+  movement_ = value;
+  // @@protoc_insertion_point(field_set:traindata.movement)
+}
+
+// optional int32 direction = 4;
+inline bool traindata::has_direction() const {
+  return (_has_bits_[0] & 0x00000008u) != 0;
+}
+inline void traindata::set_has_direction() {
+  _has_bits_[0] |= 0x00000008u;
+}
+inline void traindata::clear_has_direction() {
+  _has_bits_[0] &= ~0x00000008u;
+}
+inline void traindata::clear_direction() {
+  direction_ = 0;
+  clear_has_direction();
+}
+inline ::google::protobuf::int32 traindata::direction() const {
+  // @@protoc_insertion_point(field_get:traindata.direction)
+  return direction_;
+}
+inline void traindata::set_direction(::google::protobuf::int32 value) {
+  set_has_direction();
+  direction_ = value;
+  // @@protoc_insertion_point(field_set:traindata.direction)
+}
+
+// optional string path = 5;
+inline bool traindata::has_path() const {
+  return (_has_bits_[0] & 0x00000010u) != 0;
+}
+inline void traindata::set_has_path() {
+  _has_bits_[0] |= 0x00000010u;
+}
+inline void traindata::clear_has_path() {
+  _has_bits_[0] &= ~0x00000010u;
+}
+inline void traindata::clear_path() {
+  if (path_ != &::google::protobuf::internal::GetEmptyStringAlreadyInited()) {
+    path_->clear();
+  }
+  clear_has_path();
+}
+inline const ::std::string& traindata::path() const {
+  // @@protoc_insertion_point(field_get:traindata.path)
+  return *path_;
+}
+inline void traindata::set_path(const ::std::string& value) {
+  set_has_path();
+  if (path_ == &::google::protobuf::internal::GetEmptyStringAlreadyInited()) {
+    path_ = new ::std::string;
+  }
+  path_->assign(value);
+  // @@protoc_insertion_point(field_set:traindata.path)
+}
+inline void traindata::set_path(const char* value) {
+  set_has_path();
+  if (path_ == &::google::protobuf::internal::GetEmptyStringAlreadyInited()) {
+    path_ = new ::std::string;
+  }
+  path_->assign(value);
+  // @@protoc_insertion_point(field_set_char:traindata.path)
+}
+inline void traindata::set_path(const char* value, size_t size) {
+  set_has_path();
+  if (path_ == &::google::protobuf::internal::GetEmptyStringAlreadyInited()) {
+    path_ = new ::std::string;
+  }
+  path_->assign(reinterpret_cast<const char*>(value), size);
+  // @@protoc_insertion_point(field_set_pointer:traindata.path)
+}
+inline ::std::string* traindata::mutable_path() {
+  set_has_path();
+  if (path_ == &::google::protobuf::internal::GetEmptyStringAlreadyInited()) {
+    path_ = new ::std::string;
+  }
+  // @@protoc_insertion_point(field_mutable:traindata.path)
+  return path_;
+}
+inline ::std::string* traindata::release_path() {
+  clear_has_path();
+  if (path_ == &::google::protobuf::internal::GetEmptyStringAlreadyInited()) {
+    return NULL;
+  } else {
+    ::std::string* temp = path_;
+    path_ = const_cast< ::std::string*>(&::google::protobuf::internal::GetEmptyStringAlreadyInited());
+    return temp;
+  }
+}
+inline void traindata::set_allocated_path(::std::string* path) {
+  if (path_ != &::google::protobuf::internal::GetEmptyStringAlreadyInited()) {
+    delete path_;
+  }
+  if (path) {
+    set_has_path();
+    path_ = path;
+  } else {
+    clear_has_path();
+    path_ = const_cast< ::std::string*>(&::google::protobuf::internal::GetEmptyStringAlreadyInited());
+  }
+  // @@protoc_insertion_point(field_set_allocated:traindata.path)
+}
+
+// -------------------------------------------------------------------
+
+// MapTrainData
+
+// required string ipaddress = 1;
+inline bool MapTrainData::has_ipaddress() const {
+  return (_has_bits_[0] & 0x00000001u) != 0;
+}
+inline void MapTrainData::set_has_ipaddress() {
+  _has_bits_[0] |= 0x00000001u;
+}
+inline void MapTrainData::clear_has_ipaddress() {
+  _has_bits_[0] &= ~0x00000001u;
+}
+inline void MapTrainData::clear_ipaddress() {
+  if (ipaddress_ != &::google::protobuf::internal::GetEmptyStringAlreadyInited()) {
+    ipaddress_->clear();
+  }
+  clear_has_ipaddress();
+}
+inline const ::std::string& MapTrainData::ipaddress() const {
+  // @@protoc_insertion_point(field_get:MapTrainData.ipaddress)
+  return *ipaddress_;
+}
+inline void MapTrainData::set_ipaddress(const ::std::string& value) {
+  set_has_ipaddress();
+  if (ipaddress_ == &::google::protobuf::internal::GetEmptyStringAlreadyInited()) {
+    ipaddress_ = new ::std::string;
+  }
+  ipaddress_->assign(value);
+  // @@protoc_insertion_point(field_set:MapTrainData.ipaddress)
+}
+inline void MapTrainData::set_ipaddress(const char* value) {
+  set_has_ipaddress();
+  if (ipaddress_ == &::google::protobuf::internal::GetEmptyStringAlreadyInited()) {
+    ipaddress_ = new ::std::string;
+  }
+  ipaddress_->assign(value);
+  // @@protoc_insertion_point(field_set_char:MapTrainData.ipaddress)
+}
+inline void MapTrainData::set_ipaddress(const char* value, size_t size) {
+  set_has_ipaddress();
+  if (ipaddress_ == &::google::protobuf::internal::GetEmptyStringAlreadyInited()) {
+    ipaddress_ = new ::std::string;
+  }
+  ipaddress_->assign(reinterpret_cast<const char*>(value), size);
+  // @@protoc_insertion_point(field_set_pointer:MapTrainData.ipaddress)
+}
+inline ::std::string* MapTrainData::mutable_ipaddress() {
+  set_has_ipaddress();
+  if (ipaddress_ == &::google::protobuf::internal::GetEmptyStringAlreadyInited()) {
+    ipaddress_ = new ::std::string;
+  }
+  // @@protoc_insertion_point(field_mutable:MapTrainData.ipaddress)
+  return ipaddress_;
+}
+inline ::std::string* MapTrainData::release_ipaddress() {
+  clear_has_ipaddress();
+  if (ipaddress_ == &::google::protobuf::internal::GetEmptyStringAlreadyInited()) {
+    return NULL;
+  } else {
+    ::std::string* temp = ipaddress_;
+    ipaddress_ = const_cast< ::std::string*>(&::google::protobuf::internal::GetEmptyStringAlreadyInited());
+    return temp;
+  }
+}
+inline void MapTrainData::set_allocated_ipaddress(::std::string* ipaddress) {
+  if (ipaddress_ != &::google::protobuf::internal::GetEmptyStringAlreadyInited()) {
+    delete ipaddress_;
+  }
+  if (ipaddress) {
+    set_has_ipaddress();
+    ipaddress_ = ipaddress;
+  } else {
+    clear_has_ipaddress();
+    ipaddress_ = const_cast< ::std::string*>(&::google::protobuf::internal::GetEmptyStringAlreadyInited());
+  }
+  // @@protoc_insertion_point(field_set_allocated:MapTrainData.ipaddress)
+}
+
+// optional .traindata traindata = 2;
+inline bool MapTrainData::has_traindata() const {
+  return (_has_bits_[0] & 0x00000002u) != 0;
+}
+inline void MapTrainData::set_has_traindata() {
+  _has_bits_[0] |= 0x00000002u;
+}
+inline void MapTrainData::clear_has_traindata() {
+  _has_bits_[0] &= ~0x00000002u;
+}
+inline void MapTrainData::clear_traindata() {
+  if (traindata_ != NULL) traindata_->::traindata::Clear();
+  clear_has_traindata();
+}
+inline const ::traindata& MapTrainData::traindata() const {
+  // @@protoc_insertion_point(field_get:MapTrainData.traindata)
+  return traindata_ != NULL ? *traindata_ : *default_instance_->traindata_;
+}
+inline ::traindata* MapTrainData::mutable_traindata() {
+  set_has_traindata();
+  if (traindata_ == NULL) traindata_ = new ::traindata;
+  // @@protoc_insertion_point(field_mutable:MapTrainData.traindata)
+  return traindata_;
+}
+inline ::traindata* MapTrainData::release_traindata() {
+  clear_has_traindata();
+  ::traindata* temp = traindata_;
+  traindata_ = NULL;
+  return temp;
+}
+inline void MapTrainData::set_allocated_traindata(::traindata* traindata) {
+  delete traindata_;
+  traindata_ = traindata;
+  if (traindata) {
+    set_has_traindata();
+  } else {
+    clear_has_traindata();
+  }
+  // @@protoc_insertion_point(field_set_allocated:MapTrainData.traindata)
+}
+
+// -------------------------------------------------------------------
+
+// GetFleetCommand
+
+// required string ipaddress = 1;
+inline bool GetFleetCommand::has_ipaddress() const {
+  return (_has_bits_[0] & 0x00000001u) != 0;
+}
+inline void GetFleetCommand::set_has_ipaddress() {
+  _has_bits_[0] |= 0x00000001u;
+}
+inline void GetFleetCommand::clear_has_ipaddress() {
+  _has_bits_[0] &= ~0x00000001u;
+}
+inline void GetFleetCommand::clear_ipaddress() {
+  if (ipaddress_ != &::google::protobuf::internal::GetEmptyStringAlreadyInited()) {
+    ipaddress_->clear();
+  }
+  clear_has_ipaddress();
+}
+inline const ::std::string& GetFleetCommand::ipaddress() const {
+  // @@protoc_insertion_point(field_get:GetFleetCommand.ipaddress)
+  return *ipaddress_;
+}
+inline void GetFleetCommand::set_ipaddress(const ::std::string& value) {
+  set_has_ipaddress();
+  if (ipaddress_ == &::google::protobuf::internal::GetEmptyStringAlreadyInited()) {
+    ipaddress_ = new ::std::string;
+  }
+  ipaddress_->assign(value);
+  // @@protoc_insertion_point(field_set:GetFleetCommand.ipaddress)
+}
+inline void GetFleetCommand::set_ipaddress(const char* value) {
+  set_has_ipaddress();
+  if (ipaddress_ == &::google::protobuf::internal::GetEmptyStringAlreadyInited()) {
+    ipaddress_ = new ::std::string;
+  }
+  ipaddress_->assign(value);
+  // @@protoc_insertion_point(field_set_char:GetFleetCommand.ipaddress)
+}
+inline void GetFleetCommand::set_ipaddress(const char* value, size_t size) {
+  set_has_ipaddress();
+  if (ipaddress_ == &::google::protobuf::internal::GetEmptyStringAlreadyInited()) {
+    ipaddress_ = new ::std::string;
+  }
+  ipaddress_->assign(reinterpret_cast<const char*>(value), size);
+  // @@protoc_insertion_point(field_set_pointer:GetFleetCommand.ipaddress)
+}
+inline ::std::string* GetFleetCommand::mutable_ipaddress() {
+  set_has_ipaddress();
+  if (ipaddress_ == &::google::protobuf::internal::GetEmptyStringAlreadyInited()) {
+    ipaddress_ = new ::std::string;
+  }
+  // @@protoc_insertion_point(field_mutable:GetFleetCommand.ipaddress)
+  return ipaddress_;
+}
+inline ::std::string* GetFleetCommand::release_ipaddress() {
+  clear_has_ipaddress();
+  if (ipaddress_ == &::google::protobuf::internal::GetEmptyStringAlreadyInited()) {
+    return NULL;
+  } else {
+    ::std::string* temp = ipaddress_;
+    ipaddress_ = const_cast< ::std::string*>(&::google::protobuf::internal::GetEmptyStringAlreadyInited());
+    return temp;
+  }
+}
+inline void GetFleetCommand::set_allocated_ipaddress(::std::string* ipaddress) {
+  if (ipaddress_ != &::google::protobuf::internal::GetEmptyStringAlreadyInited()) {
+    delete ipaddress_;
+  }
+  if (ipaddress) {
+    set_has_ipaddress();
+    ipaddress_ = ipaddress;
+  } else {
+    clear_has_ipaddress();
+    ipaddress_ = const_cast< ::std::string*>(&::google::protobuf::internal::GetEmptyStringAlreadyInited());
+  }
+  // @@protoc_insertion_point(field_set_allocated:GetFleetCommand.ipaddress)
+}
+
+// -------------------------------------------------------------------
+
+// GetFleetResponse
+
+// repeated .MapTrainData traindata = 1;
+inline int GetFleetResponse::traindata_size() const {
+  return traindata_.size();
+}
+inline void GetFleetResponse::clear_traindata() {
+  traindata_.Clear();
+}
+inline const ::MapTrainData& GetFleetResponse::traindata(int index) const {
+  // @@protoc_insertion_point(field_get:GetFleetResponse.traindata)
+  return traindata_.Get(index);
+}
+inline ::MapTrainData* GetFleetResponse::mutable_traindata(int index) {
+  // @@protoc_insertion_point(field_mutable:GetFleetResponse.traindata)
+  return traindata_.Mutable(index);
+}
+inline ::MapTrainData* GetFleetResponse::add_traindata() {
+  // @@protoc_insertion_point(field_add:GetFleetResponse.traindata)
+  return traindata_.Add();
+}
+inline const ::google::protobuf::RepeatedPtrField< ::MapTrainData >&
+GetFleetResponse::traindata() const {
+  // @@protoc_insertion_point(field_list:GetFleetResponse.traindata)
+  return traindata_;
+}
+inline ::google::protobuf::RepeatedPtrField< ::MapTrainData >*
+GetFleetResponse::mutable_traindata() {
+  // @@protoc_insertion_point(field_mutable_list:GetFleetResponse.traindata)
+  return &traindata_;
 }
 
 
