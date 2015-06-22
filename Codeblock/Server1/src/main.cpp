@@ -97,7 +97,7 @@ int main()
     BOOST_LOG_SEV(lg, notification) << "try to create ProtobufSyncServer !!!";
     try
     {
-            server = new ProtobufSyncServer(server_configuration);
+            server = new ProtobufSyncServer(server_configuration, &g_trains);
             server->Start();
     }
     catch(int e)

@@ -3,6 +3,9 @@
 
 #include "config.hpp"
 #include "log.hpp"
+#include <unordered_map>
+#include "TrainSession.hpp"
+
 #include <thread>
 #include <chrono>
 #include <RCFProto.hpp>
@@ -11,22 +14,11 @@
 // Include protoc-generated header.
 #include "RCFProtoServices.pb.h"
 
-class Session
-{
-    public:
-        Session();
-        ~Session();
-        bool sessionactive_ = false;
-    protected:
-    private:
-
-};
-
 class ProtobufSyncServer
 {
     public:
         ProtobufSyncServer();
-        ProtobufSyncServer(config const *);
+        ProtobufSyncServer(config const *, std::unordered_map<std::string, TrainSession> *);
         ~ProtobufSyncServer();
         void ProtobufSyncServerThreadsCode(void);
         void Start(void);
@@ -34,8 +26,8 @@ class ProtobufSyncServer
     protected:
     private:
         std::thread ProtobufSyncServerThread; //the default constructor is called so the thread is created.
-        const config * serverconf=nullptr;
-        class Session session_;
+        const config * serverconf_ =nullptr;
+        std::unordered_map<std::string, TrainSession> * trainsSessions_ = nullptr;
 };
 
 

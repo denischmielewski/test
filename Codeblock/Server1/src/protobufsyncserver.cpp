@@ -1,21 +1,11 @@
 #include "protobufsyncserver.hpp"
 #include "protobufservicesimpl.hpp"
+#include "protobufgetfleetservicesimpl.hpp"
 
 using namespace std;
 using namespace google::protobuf;
 
 extern volatile int g_signal_received;
-
-
-
-Session::Session()
-{
-}
-
-Session::~Session()
-{
-    //dtor
-}
 
 void ProtobufSyncServerThreads(void);
 
@@ -24,9 +14,10 @@ ProtobufSyncServer::ProtobufSyncServer() : ProtobufSyncServerThread()
     //ctor
 }
 
-ProtobufSyncServer::ProtobufSyncServer(config const * conf)
+ProtobufSyncServer::ProtobufSyncServer(config const * conf, std::unordered_map<std::string, TrainSession> * trainsSessions)
 {
-    serverconf = conf;
+    serverconf_ = conf;
+    trainsSessions_ = trainsSessions;
 }
 
 ProtobufSyncServer::~ProtobufSyncServer()
@@ -38,9 +29,7 @@ ProtobufSyncServer::~ProtobufSyncServer()
 void ProtobufSyncServer::ProtobufSyncServerThreadsCode(void)   //RCF and protobuf will start other threads hence the thread(s)
 {
     startup_severity_channel_logger_mt& lg = server_comm_logger::get();
-    std::chrono::milliseconds duration(serverconf->communicationThreadsSleepDurationMilliseconds_);
-
-    this->session_.sessionactive_=true;
+    std::chrono::milliseconds duration(serverconf_->communicationThreadsSleepDurationMilliseconds_);
 
     try
     {
@@ -49,12 +38,14 @@ void ProtobufSyncServer::ProtobufSyncServerThreadsCode(void)   //RCF and protobu
         RCF::enableLogging( RCF::LogToFile("/home/train/programs/real/rcfproto.log"), 4, "");
         BOOST_LOG_SEV(lg, notification) << "RCF init !";
         // Create server.
-        RCF::RcfProtoServer server( RCF::TcpEndpoint("0.0.0.0", std::stoi(serverconf->server1_listener_port_)));
-        BOOST_LOG_SEV(lg, notification) << "Protobuf server created ! listen on 0.0.0.0, port " << std::stoi(serverconf->server1_listener_port_);
+        RCF::RcfProtoServer server( RCF::TcpEndpoint("0.0.0.0", std::stoi(serverconf_->server1_listener_port_)));
+        BOOST_LOG_SEV(lg, notification) << "Protobuf server created ! listen on 0.0.0.0, port " << std::stoi(serverconf_->server1_listener_port_);
         // Bind Protobuf service.
         PositionInformationImpl positionInformationImpl;
         server.bindService(positionInformationImpl);
-        BOOST_LOG_SEV(lg, notification) << "RCF proto server declared and service bind !";
+        GetFleetImpl getFleetImpl(serverconf_, trainsSessions_);
+        server.bindService(getFleetImpl);
+        BOOST_LOG_SEV(lg, notification) << "RCF proto server declared and all services bound !";
 
         // Start the server.
         server.start();
@@ -62,12 +53,12 @@ void ProtobufSyncServer::ProtobufSyncServerThreadsCode(void)   //RCF and protobu
 
         std::chrono::high_resolution_clock::time_point t0 = std::chrono::high_resolution_clock::now();
         std::chrono::high_resolution_clock::time_point t1 = std::chrono::high_resolution_clock::now();
-        std::chrono::milliseconds logFrequency(serverconf->ThreadsLogNotificationFrequencyMilliseconds_);
+        std::chrono::milliseconds logFrequency(serverconf_->ThreadsLogNotificationFrequencyMilliseconds_);
 
         while(!g_signal_received)
         {
             //log frequency as per configuration so no pollution
-            if(logFrequency.count() >= serverconf->ThreadsLogNotificationFrequencyMilliseconds_)
+            if(logFrequency.count() >= serverconf_->ThreadsLogNotificationFrequencyMilliseconds_)
             {
                 t0 = std::chrono::high_resolution_clock::now();
                 BOOST_LOG_SEV(lg, notification) << "hello from protobufsyncserver thread";

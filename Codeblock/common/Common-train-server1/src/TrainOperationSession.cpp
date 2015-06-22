@@ -426,7 +426,7 @@ void TrainOperationSession::TrainOperationSessionThreadCode(void)
                                                                     << KpPositiontmp << " Direction " << directiontmp \
                                                                     << " Speed " << currentSpeedtmp << " km/h";
 
-        //store store oepration session value wity mitex lock
+        //store store oepration session value with mutex lock
         if(TryLockCommSessionMutexFor(softwareConfig_->commSessionMutexLockTimeoutMilliseconds_))
         {
             mode_ = modetmp;

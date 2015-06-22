@@ -46,17 +46,13 @@ service SetOperationModeService
 //============Set Operation Mode Service : automatic or manual=========================================================
 
 //============Get Fleet Service : retrieve real-time information of all trains=========================================================
-message traindata {
-  optional float kpPosition = 1;
-  optional int32 mode = 2; 
-  optional int32 movement = 3;
-  optional int32 direction = 4;
-  optional string path = 5;
-}
-
-message MapTrainData {
+message TrainData {
   required string ipaddress = 1;
-  optional traindata traindata= 2;
+  optional float kpPosition = 2;
+  optional int32 mode = 3; 
+  optional int32 movement = 4;
+  optional int32 direction = 5;
+  optional string path = 6;
 }
 
 // Define a request.
@@ -66,7 +62,7 @@ message GetFleetCommand{
 
 // Define a response
 message GetFleetResponse{
-  repeated MapTrainData traindata = 1;
+  repeated TrainData trainDataList = 1;
 }
 // Define the service.
 
@@ -74,4 +70,4 @@ service GetFleetService
 {
   rpc GetFleet (GetFleetCommand) returns (GetFleetResponse);
 }
-//============Set Operation Mode Service : automatic or manual=========================================================
+//============Get Fleet Service : retrieve real-time information of all trains=========================================================

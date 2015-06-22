@@ -103,11 +103,13 @@
 		<Unit filename="include/TrainCommSession.hpp" />
 		<Unit filename="include/TrainSession.hpp" />
 		<Unit filename="include/log.hpp" />
+		<Unit filename="include/protobufgetfleetservicesimpl.hpp" />
 		<Unit filename="include/protobufservicesimpl.hpp" />
 		<Unit filename="include/protobufsyncserver.hpp" />
 		<Unit filename="include/protobuftraininternalservicesimpl.hpp" />
 		<Unit filename="src/log.cpp" />
 		<Unit filename="src/main.cpp" />
+		<Unit filename="src/protobufgetfleetservicesimpl.cpp" />
 		<Unit filename="src/protobufservicesimpl.cpp" />
 		<Unit filename="src/protobufsyncserver.cpp" />
 		<Unit filename="src/protobuftraininternalservicesimpl.cpp" />

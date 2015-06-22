@@ -23,21 +23,21 @@ FleetGUICommunicationClient::~FleetGUICommunicationClient()
 void FleetGUICommunicationClient::FleetGUICommunicationClient::run(void)
 {
     RCF::RcfProtoChannel * chan = nullptr;
-    SetOperationModeService::Stub * stub = nullptr;
+    GetFleetService::Stub * stub = nullptr;
 
     try
     {
         //RCF::RcfProtoChannel channel( RCF::TcpEndpoint(clientconf->main_ipaddress_, std::stoi(clientconf->main_listener_port_)));
-        chan = new RCF::RcfProtoChannel( RCF::TcpEndpoint(clientconf->main_ipaddress_, std::stoi(clientconf->main_listener_port_)));
-        BOOST_LOG_SEV(*logger, notification) << "Message to main software will be sent to : " << clientconf->main_ipaddress_ << " on port : " << clientconf->main_listener_port_;
+        chan = new RCF::RcfProtoChannel( RCF::TcpEndpoint(clientconf->server1_ipaddress_, std::stoi(clientconf->server1_listener_port_)));
+        BOOST_LOG_SEV(*logger, notification) << "Message to Server1 will be sent to : " << clientconf->server1_ipaddress_ << " on port : " << clientconf->server1_listener_port_;
         // connect timeout in ms.
        chan->setConnectTimeoutMs(clientconf->TCPIP_Connection_Timeout_);
        // remote call timeout in ms.
        chan->setRemoteCallTimeoutMs(clientconf->TCPIP_Reply_Timeout_);
 
        //SetOperationModeService::Stub stub(&channel);
-       stub = new SetOperationModeService::Stub(chan);
-       setOperationModeServiceStub_ = stub;
+       stub = new GetFleetService::Stub(chan);
+       getFleetServiceStub_ = stub;
     }
     catch(const RCF::Exception & e)
     {
@@ -45,9 +45,14 @@ void FleetGUICommunicationClient::FleetGUICommunicationClient::run(void)
         return;
     }
 
-    QTimer * timer = new QTimer;
-    connect(timer, &QTimer::timeout, this, &FleetGUICommunicationClient::onThreadTimerShot);
-    timer->start(clientconf->ThreadsLogNotificationFrequencyMilliseconds_);
+    QTimer * timerForClientThreadNotification = new QTimer;
+    connect(timerForClientThreadNotification, &QTimer::timeout, this, &FleetGUICommunicationClient::onTimerForClientThreadNotificationShot);
+    timerForClientThreadNotification->start(clientconf->ThreadsLogNotificationFrequencyMilliseconds_);
+
+    QTimer * timerForClientToServer1GetFleet = new QTimer;
+    connect(timerForClientThreadNotification, &QTimer::timeout, this, &FleetGUICommunicationClient::onTimerForClientToServer1GetFleetShot);
+    timerForClientThreadNotification->start(1000);
+
     BOOST_LOG_SEV(*logger, notification) << "FleetGUICommunicationsClientThread event loop will start";
     exec();
     BOOST_LOG_SEV(*logger, notification) << "FleetGUICommunicationsClientThread event loop terminated";
@@ -56,9 +61,52 @@ void FleetGUICommunicationClient::FleetGUICommunicationClient::run(void)
     delete stub;
 }
 
-void FleetGUICommunicationClient::onThreadTimerShot(void)
+void FleetGUICommunicationClient::onTimerForClientThreadNotificationShot(void)
 {
     BOOST_LOG_SEV(*logger, notification) << "hello from FleetGUI comm client thread";
+}
+
+void FleetGUICommunicationClient::onTimerForClientToServer1GetFleetShot(void)
+{
+    try
+    {
+        getFleetCommand_.set_ipaddress(clientconf->main_ipaddress_);
+        BOOST_LOG_SEV(*logger, notification) << "Send GetFleet message to Server1";
+        getFleetServiceStub_->GetFleet(NULL, &getFleetCommand_, &getFleetResponse_, NULL);
+        BOOST_LOG_SEV(*logger, notification)    << " Received getFleetResponse from Server1 : number of traindata = "<< getFleetResponse_.traindatalist_size();
+        for (int i = 0; i < getFleetResponse_.traindatalist_size();i++)
+        {
+            TrainData td = getFleetResponse_.traindatalist(i);
+            std::string smode;
+            switch(td.mode())
+            {
+                case NONE: smode = "NONE";break;
+                case AUTOMATIC: smode = "AUTOMATIC";break;
+                case SEMIAUTOMATIC: smode = "SEMIAUTOMATIC";break;
+                case MANUAL: smode = "MANUAL";break;
+                default: smode = "NO_MODE_DATA";break;
+            }
+            BOOST_LOG_SEV(*logger, notification) << smode;
+            std::string smove;
+            switch(td.movement())
+            {
+                case STOPPED: smove = "STOPPED";break;
+                case ACCELERATION: smove = "ACCELERATION";break;
+                case CRUISE: smove = "CRUISE";break;
+                case BRAKING: smove = "BRAKING";break;
+                case APPROCHING: smove = "APPROCHING";break;
+                case ARRIVED: smove = "ARRIVED";break;
+                default: smove = "NO_MOVE_DATA";break;
+            }
+            BOOST_LOG_SEV(*logger, notification)    << " Train #" << i << " : " << td.ipaddress() << " " << td.kpposition() << " " << smode \
+                                                    << " " << smove << " direction " << td.direction() << " " << td.path();
+        }
+
+    }
+    catch(const RCF::Exception & e)
+    {
+        BOOST_LOG_SEV(*logger, warning) << "problem during synchronous call to main software. RCF exception " << e.getErrorString() << std::endl;
+    }
 }
 
 void FleetGUICommunicationClient::onCloseFleetGUI()
