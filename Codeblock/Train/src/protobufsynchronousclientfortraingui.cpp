@@ -3,7 +3,6 @@
 
 ProtobufSynchronousClientForTrainGUI::~ProtobufSynchronousClientForTrainGUI()
 {
-    //dtor
     if(ProtobufSynchronousClientThread.joinable()) ProtobufSynchronousClientThread.join();
 }
 
@@ -15,13 +14,11 @@ ProtobufSynchronousClientForTrainGUI::ProtobufSynchronousClientForTrainGUI(confi
 
 void ProtobufSynchronousClientForTrainGUI::Start()
 {
-    // This will start the thread. Notice move semantics!
     ProtobufSynchronousClientThread = std::thread(&ProtobufSynchronousClientForTrainGUI::ProtobufSynchronousClientThreadCode,this);
 }
 
 void ProtobufSynchronousClientForTrainGUI::Join()
 {
-    // This will start the thread. Notice move semantics!
     ProtobufSynchronousClientThread.join();
 }
 
@@ -31,21 +28,15 @@ void ProtobufSynchronousClientForTrainGUI::ProtobufSynchronousClientThreadCode(v
     extern volatile int g_signal_received;
     std::chrono::milliseconds sleepMilliseconds(clientconf->communicationThreadsSleepDurationMilliseconds_);
 
-    // Create request object.
     PositionInformationTransmit request;
-
-    // Create response object.
     PositionInformationReceive response;
 
     RCF::RcfProtoChannel channel( RCF::TcpEndpoint(clientconf->gui_ipaddress_, std::stoi(clientconf->gui_listener_port_)));
-    BOOST_LOG_SEV(lg, notification) << "Message to GUI will be sent to : " << clientconf->gui_ipaddress_ << " on port : " << clientconf->gui_listener_port_;
+    BOOST_LOG_SEV(lg, threads) << "Message to GUI will be sent to : " << clientconf->gui_ipaddress_ << " on port : " << clientconf->gui_listener_port_;
 
-    // connect timeout in ms.
     channel.setConnectTimeoutMs(clientconf->TCPIP_Connection_Timeout_);
-    // remote call timeout in ms.
     channel.setRemoteCallTimeoutMs(clientconf->TCPIP_Reply_Timeout_);
 
-    // Create service stub.
     PositionInformationService::Stub stub(&channel);
 
     std::chrono::high_resolution_clock::time_point t0 = std::chrono::high_resolution_clock::now();
@@ -60,10 +51,10 @@ void ProtobufSynchronousClientForTrainGUI::ProtobufSynchronousClientThreadCode(v
 
         try
         {
-            // Make a synchronous remote call to server according to configured frequency
+            // Make a synchronous remote call to TrainGUI according to configured frequency
             if(sendingFrequency.count() >= clientconf->TrainToTrainGUIMessagesFrequency_)
             {
-                if(trainoperationsession.TryLockCommSessionMutexFor(clientconf->operationSessionMutexLockTimeoutMilliseconds_))
+                if(trainoperationsession.TryLockOperationSessionMutexFor(clientconf->operationSessionMutexLockTimeoutMilliseconds_))
                 {
 
                     request.set_trainid(clientconf->hostname_);
@@ -72,7 +63,7 @@ void ProtobufSynchronousClientForTrainGUI::ProtobufSynchronousClientThreadCode(v
                     request.set_direction(trainoperationsession.GetDirection());
                     request.set_movement(trainoperationsession.GetCurrentSegmentMoveStatus());
                     request.set_path(trainoperationsession.GetPath());
-                    trainoperationsession.UnlockCommSessionMutex();
+                    trainoperationsession.UnlockOperationSessionMutex();
                 }
                 else
                 {
@@ -99,12 +90,12 @@ void ProtobufSynchronousClientForTrainGUI::ProtobufSynchronousClientThreadCode(v
                     case APPROCHING: smove = "APPROCHING";break;
                     case ARRIVED: smove = "ARRIVED";break;
                 }
-                BOOST_LOG_SEV(lg, notification) << "Sending message to GUI : trainID = " << request.trainid() << " path = " << request.path() \
+                BOOST_LOG_SEV(lg, message) << "Sending message to GUI : trainID = " << request.trainid() << " path = " << request.path() \
                                                 << " direction " << request.direction() << " position " << request.kpposition() << " " \
                                                 << smode << " "<< smove;
                 stub.PositionInformation(NULL, &request, &response, NULL);
                 // Process response.
-                BOOST_LOG_SEV(lg, notification) << "Received response from GUI : server name = " << response.servername();
+                BOOST_LOG_SEV(lg, message) << "Received response from GUI : server name = " << response.servername();
             }
         }
         catch(const RCF::Exception & e)
@@ -117,5 +108,5 @@ void ProtobufSynchronousClientForTrainGUI::ProtobufSynchronousClientThreadCode(v
         sendingFrequency = std::chrono::duration_cast<std::chrono::milliseconds>(t1 - t0);
     }
 
-    if(g_signal_received) BOOST_LOG_SEV(lg, notification) << "Signal received, terminating Protobuf Synchronous Client for Train GUI Thread";
+    if(g_signal_received) BOOST_LOG_SEV(lg, threads) << "Signal received, terminating Protobuf Synchronous Client for Train GUI Thread";
 }

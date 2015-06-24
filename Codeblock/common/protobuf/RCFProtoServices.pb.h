@@ -553,6 +553,13 @@ class TrainData : public ::google::protobuf::Message {
   inline ::std::string* release_path();
   inline void set_allocated_path(::std::string* path);
 
+  // optional bool commstatusOK = 7;
+  inline bool has_commstatusok() const;
+  inline void clear_commstatusok();
+  static const int kCommstatusOKFieldNumber = 7;
+  inline bool commstatusok() const;
+  inline void set_commstatusok(bool value);
+
   // @@protoc_insertion_point(class_scope:TrainData)
  private:
   inline void set_has_ipaddress();
@@ -567,6 +574,8 @@ class TrainData : public ::google::protobuf::Message {
   inline void clear_has_direction();
   inline void set_has_path();
   inline void clear_has_path();
+  inline void set_has_commstatusok();
+  inline void clear_has_commstatusok();
 
   ::google::protobuf::UnknownFieldSet _unknown_fields_;
 
@@ -578,6 +587,7 @@ class TrainData : public ::google::protobuf::Message {
   ::google::protobuf::int32 movement_;
   ::google::protobuf::int32 direction_;
   ::std::string* path_;
+  bool commstatusok_;
   friend void  protobuf_AddDesc_RCFProtoServices_2eproto();
   friend void protobuf_AssignDesc_RCFProtoServices_2eproto();
   friend void protobuf_ShutdownFile_RCFProtoServices_2eproto();
@@ -1749,6 +1759,30 @@ inline void TrainData::set_allocated_path(::std::string* path) {
     path_ = const_cast< ::std::string*>(&::google::protobuf::internal::GetEmptyStringAlreadyInited());
   }
   // @@protoc_insertion_point(field_set_allocated:TrainData.path)
+}
+
+// optional bool commstatusOK = 7;
+inline bool TrainData::has_commstatusok() const {
+  return (_has_bits_[0] & 0x00000040u) != 0;
+}
+inline void TrainData::set_has_commstatusok() {
+  _has_bits_[0] |= 0x00000040u;
+}
+inline void TrainData::clear_has_commstatusok() {
+  _has_bits_[0] &= ~0x00000040u;
+}
+inline void TrainData::clear_commstatusok() {
+  commstatusok_ = false;
+  clear_has_commstatusok();
+}
+inline bool TrainData::commstatusok() const {
+  // @@protoc_insertion_point(field_get:TrainData.commstatusOK)
+  return commstatusok_;
+}
+inline void TrainData::set_commstatusok(bool value) {
+  set_has_commstatusok();
+  commstatusok_ = value;
+  // @@protoc_insertion_point(field_set:TrainData.commstatusOK)
 }
 
 // -------------------------------------------------------------------

@@ -13,7 +13,7 @@
 		<MAX_LOG_FILE_SIZE_IN_KBYTES>1000</MAX_LOG_FILE_SIZE_IN_KBYTES>	<!-- precision is +/- 10% -->
 		<!-- this parameter defines the lower log level included in logs. Levels are : -->
 		<!-- debug, debug_temporary, internal_message, external_message, Threads, notification, warning, error and critical -->
-		<LOG_LEVEL>notification</LOG_LEVEL>		
+		<LOG_LEVEL>message</LOG_LEVEL>		
 	</LOG>	
 
 	<TCPIP>
@@ -31,6 +31,11 @@
 		<TRAIN_TO_SERVER1_MESSAGES_FREQUENCY>1000</TRAIN_TO_SERVER1_MESSAGES_FREQUENCY>
 		<!-- this parameter defines the time between 2 messages from Train to train GUI. The value here is in milliseconds -->
 		<TRAIN_TO_TRAINGUI_MESSAGES_FREQUENCY>1000</TRAIN_TO_TRAINGUI_MESSAGES_FREQUENCY>
+		<!-- this parameter defines the time between 2 messages from FleetGUI to server1. The value here is in milliseconds -->
+		<FLEETGUI_TO_SERVER1_MESSAGES_FREQUENCY>1000</FLEETGUI_TO_SERVER1_MESSAGES_FREQUENCY>
+		<!-- this parameter defines the period for which position Data received are valid. The value here is in milliseconds -->
+		<!-- must be higher than TRAIN_TO_SERVER1_MESSAGES_FREQUENCY !!! -->
+		<SERVER1_TRAIN_POSITION_DATA_VALIDATION_PERIOD>2000</SERVER1_TRAIN_POSITION_DATA_VALIDATION_PERIOD>
 	</SYNCHRONOUS_MESSAGES>
 
 	<!-- location and name of file that stores operational data (like train position...) -->	

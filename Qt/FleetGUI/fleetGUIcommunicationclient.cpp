@@ -27,15 +27,11 @@ void FleetGUICommunicationClient::FleetGUICommunicationClient::run(void)
 
     try
     {
-        //RCF::RcfProtoChannel channel( RCF::TcpEndpoint(clientconf->main_ipaddress_, std::stoi(clientconf->main_listener_port_)));
         chan = new RCF::RcfProtoChannel( RCF::TcpEndpoint(clientconf->server1_ipaddress_, std::stoi(clientconf->server1_listener_port_)));
-        BOOST_LOG_SEV(*logger, notification) << "Message to Server1 will be sent to : " << clientconf->server1_ipaddress_ << " on port : " << clientconf->server1_listener_port_;
-        // connect timeout in ms.
+        BOOST_LOG_SEV(*logger, threads) << "Message to Server1 will be sent to : " << clientconf->server1_ipaddress_ << " on port : " << clientconf->server1_listener_port_;
        chan->setConnectTimeoutMs(clientconf->TCPIP_Connection_Timeout_);
-       // remote call timeout in ms.
        chan->setRemoteCallTimeoutMs(clientconf->TCPIP_Reply_Timeout_);
 
-       //SetOperationModeService::Stub stub(&channel);
        stub = new GetFleetService::Stub(chan);
        getFleetServiceStub_ = stub;
     }
@@ -51,11 +47,11 @@ void FleetGUICommunicationClient::FleetGUICommunicationClient::run(void)
 
     QTimer * timerForClientToServer1GetFleet = new QTimer;
     connect(timerForClientThreadNotification, &QTimer::timeout, this, &FleetGUICommunicationClient::onTimerForClientToServer1GetFleetShot);
-    timerForClientThreadNotification->start(1000);
+    timerForClientThreadNotification->start(clientconf->FleetGUIToServer1MessagesFrequencyMilliseconds_);
 
-    BOOST_LOG_SEV(*logger, notification) << "FleetGUICommunicationsClientThread event loop will start";
+    BOOST_LOG_SEV(*logger, threads) << "FleetGUICommunicationsClientThread event loop will start";
     exec();
-    BOOST_LOG_SEV(*logger, notification) << "FleetGUICommunicationsClientThread event loop terminated";
+    BOOST_LOG_SEV(*logger, threads) << "FleetGUICommunicationsClientThread event loop terminated";
 
     delete chan;
     delete stub;
@@ -63,7 +59,7 @@ void FleetGUICommunicationClient::FleetGUICommunicationClient::run(void)
 
 void FleetGUICommunicationClient::onTimerForClientThreadNotificationShot(void)
 {
-    BOOST_LOG_SEV(*logger, notification) << "hello from FleetGUI comm client thread";
+    BOOST_LOG_SEV(*logger, threads) << "hello from FleetGUI comm client thread";
 }
 
 void FleetGUICommunicationClient::onTimerForClientToServer1GetFleetShot(void)
@@ -71,9 +67,9 @@ void FleetGUICommunicationClient::onTimerForClientToServer1GetFleetShot(void)
     try
     {
         getFleetCommand_.set_ipaddress(clientconf->main_ipaddress_);
-        BOOST_LOG_SEV(*logger, notification) << "Send GetFleet message to Server1";
+        BOOST_LOG_SEV(*logger, message) << "Send GetFleet message to Server1";
         getFleetServiceStub_->GetFleet(NULL, &getFleetCommand_, &getFleetResponse_, NULL);
-        BOOST_LOG_SEV(*logger, notification)    << " Received getFleetResponse from Server1 : number of traindata = "<< getFleetResponse_.traindatalist_size();
+        BOOST_LOG_SEV(*logger, message)    << " Received getFleetResponse from Server1 : number of traindata = "<< getFleetResponse_.traindatalist_size();
         for (int i = 0; i < getFleetResponse_.traindatalist_size();i++)
         {
             TrainData td = getFleetResponse_.traindatalist(i);
@@ -98,10 +94,36 @@ void FleetGUICommunicationClient::onTimerForClientToServer1GetFleetShot(void)
                 case ARRIVED: smove = "ARRIVED";break;
                 default: smove = "NO_MOVE_DATA";break;
             }
-            BOOST_LOG_SEV(*logger, notification)    << " Train #" << i << " : " << td.ipaddress() << " " << td.kpposition() << " " << smode \
+            std::string cs;
+            if(td.commstatusok() == true) cs = "Comm Status OK"; else cs = "Comm Status NOK";
+            BOOST_LOG_SEV(*logger, message)    << " Train #" << i+1 << " " << cs << " " \
+                                                    << " : " << td.ipaddress() << " " << td.kpposition() << " " << smode \
                                                     << " " << smove << " direction " << td.direction() << " " << td.path();
-        }
 
+            TrainSession & trainSession = (*trainsSessions_)[td.ipaddress()];
+            TrainOperationSession & trainoperationsession = trainSession.GetTrainOperationSessionRef();
+
+            if(trainoperationsession.TryLockOperationSessionMutexFor(clientconf->commSessionMutexLockTimeoutMilliseconds_))
+            {
+                trainoperationsession.SetKpPosition(td.kpposition());
+                trainoperationsession.SetDirection(td.direction());
+                if(td.mode() == AUTOMATIC) {trainoperationsession.SetModeAutomatic();}
+                else if (td.mode() == MANUAL) {trainoperationsession.SetModemanual();}
+                else if (td.mode() == SEMIAUTOMATIC) {trainoperationsession.SetModeSemiAutomatic();}
+                else
+                {
+                    BOOST_LOG_SEV(*logger, critical) << "No Valid Mode in Position Message from train " << td.ipaddress();
+                }
+                trainoperationsession.SetCurrentSegmentMoveStatus(td.movement());
+                trainoperationsession.SetPath(td.path());
+                if(td.commstatusok() == true) trainoperationsession.SetLastTimeTrainPositionReceived(std::chrono::high_resolution_clock::now());
+                trainoperationsession.UnlockOperationSessionMutex();
+            }
+            else
+            {
+                BOOST_LOG_SEV(*logger, warning) << "Train Communication Session Lock failed !!!";
+            }
+        }
     }
     catch(const RCF::Exception & e)
     {
@@ -111,9 +133,7 @@ void FleetGUICommunicationClient::onTimerForClientToServer1GetFleetShot(void)
 
 void FleetGUICommunicationClient::onCloseFleetGUI()
 {
-    //QMessageBox::information(0, "..", "onCloseFleetGUIGUI ... !",0,0);
     closeGUI = true;
-    //BOOST_LOG_SEV(*logger, notification) << "Close window button event received in FleetGUICommunicationsServer thread !";
     QMessageBox *mbox = new QMessageBox;
     std::string s = "please wait " + std::to_string(clientconf->ThreadsExitTimeoutMilliseconds_/1000) + " seconds !";
     mbox->setIcon(QMessageBox::Information);
@@ -121,8 +141,6 @@ void FleetGUICommunicationClient::onCloseFleetGUI()
     mbox->setText("program is closing !");
     QTimer::singleShot(clientconf->ThreadsExitTimeoutMilliseconds_, Qt::PreciseTimer, mbox, SLOT(close()));
     mbox->show();
-
-    //this->thread()->msleep(serverconf->ThreadsExitTimeoutMilliseconds_);
     this->exit();
     if(this->wait(clientconf->ThreadsExitTimeoutMilliseconds_) == false) BOOST_LOG_SEV(*logger, warning) << "FleetGUICommunicationsServer Thread did not finished in allocated time !";
 }

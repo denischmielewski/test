@@ -15,11 +15,8 @@
 
 #include "config.hpp"
 #include "log.hpp"
-#include "protobufpositioninformationserviceimpl.hpp"
-#include "protobufsettrainmodecommandserviceimpl.hpp"
 #include "TrainSession.hpp"
 
-// Include protoc-generated header.
 #include "RCFProtoServices.pb.h"
 
 class FleetGUICommunicationClient : public QThread

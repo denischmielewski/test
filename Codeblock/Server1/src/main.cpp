@@ -68,7 +68,6 @@ int main()
             return ERROR_CONFIG_FILE_HANDLING;
         }
         server_logs_start->RemoveStartupSink();
-        //delete(train_logs_start);
 
     }
     catch(const std::exception& e)
@@ -108,7 +107,6 @@ int main()
 
     BOOST_LOG_SEV(lg, notification) << "main and all threads now execute concurrently...";
 
-    // synchronize threads:
     server->Join();
 
     BOOST_LOG_SEV(lg, notification) << "All threads completed." << std::endl;
@@ -118,16 +116,14 @@ int main()
     delete(server_configuration);
 
     //Log Summary of communication sessions with trains
-    BOOST_LOG_SEV(lg, notification) << "train communication sessions summary :" << std::endl;
     int i = 0;
     for ( auto it = g_trains.begin(); it != g_trains.end(); ++it ){i++;};
-    BOOST_LOG_SEV(lg, notification) << "number of sessions :" << i;
+    BOOST_LOG_SEV(lg, notification) << "=================Server1 communication RCFProto server sessions summary :" << "number of sessions :" << i;
     i = 0;
     for ( auto it = g_trains.begin(); it != g_trains.end(); ++it )
     {
         i++;
-        BOOST_LOG_SEV(lg, notification) << "========================== SESSION : " << i;
-        BOOST_LOG_SEV(lg, notification) << "Train IP address :" << it->first;
+        BOOST_LOG_SEV(lg, notification) << "========================== SESSION : " << i << " Train IP address :" << it->first;
         //TrainSession trainsession = it->second;
         //TrainCommSession & traincommsession = trainsession.GetTrainCommSessionRef();
         TrainCommSession & traincommsession = (it->second).GetTrainCommSessionRef();
@@ -155,6 +151,5 @@ int main()
     delete(server_logs_start);
     delete(server_logs_after_configread);
 
-    //return NO_ERROR;
     return NO_ERROR;
 }

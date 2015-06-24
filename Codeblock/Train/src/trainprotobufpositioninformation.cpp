@@ -5,7 +5,6 @@ using namespace google::protobuf;
 
 TrainProtobufPositionInformation::~TrainProtobufPositionInformation()
 {
-    //dtor
 }
 
 void TrainProtobufPositionInformation::SetResponse(PositionInformationReceive * response, Closure * done)
@@ -26,14 +25,12 @@ void TrainProtobufPositionInformation::UpdateSession(RCF::RcfProtoSession * ppro
 
     TrainSession & trainSession = (*trainsSessions_)[ipaddress];
 
-    //retrieve a ref to train comm session
     TrainCommSession & traincommsession = trainSession.GetTrainCommSessionRef();
 
     if(traincommsession.TryLockCommSessionMutexFor(softwareConfig_->commSessionMutexLockTimeoutMilliseconds_))
     {
         traincommsession.SetSessionActive();
         traincommsession.SetIpAddress(ipaddress);
-        BOOST_LOG_SEV(logger, notification) << "remote address: " << traincommsession.GetIpAddress();
         time_t timeraw = rcfSession.getConnectedAtTime();
         if(timeraw != traincommsession.GetSessionConnectionTime() && traincommsession.GetSessionRemoteCallCount() != 0)  traincommsession.IncConnectionLossCount();
         traincommsession.SetSessionConnectionTime(timeraw);

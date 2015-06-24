@@ -4,7 +4,6 @@ static startup_severity_channel_logger_mt * logger;
 
 TrainCommSession::TrainCommSession()
 {
-    //ctor
     pcommSessionTimed_Mutex = new(std::timed_mutex);
     startup_severity_channel_logger_mt& lg = client_comm_logger::get();
     logger = &lg;
@@ -12,13 +11,8 @@ TrainCommSession::TrainCommSession()
 
 TrainCommSession::~TrainCommSession()
 {
-    BOOST_LOG_SEV(*logger, notification) << "enter DESTRUCTOR TrainCommSession class";
-    //dtor
     delete pcommSessionTimed_Mutex;
-    BOOST_LOG_SEV(*logger, notification) << "leave DESTRUCTOR TrainCommSession class";
 }
-
-//=========SET members===============================================================
 
 void TrainCommSession::SetIpAddress(const std::string ipaddress)
 {
@@ -61,8 +55,6 @@ void TrainCommSession::SetSessionTotalBytesSent(uint64_t sent)
 {
     commSessionTotalBytesSent = sent;
 }
-
-//=========GET members===============================================================
 
 const std::string & TrainCommSession::GetIpAddress(void)
 {
@@ -108,8 +100,6 @@ void TrainCommSession::SetSessionConnectionTime(time_t timeraw)
 {
     commSessionConnectionTime = timeraw;
 }
-
-//=========OTHER members===============================================================
 
 bool TrainCommSession::TryLockCommSessionMutexFor(size_t milliseconds)
 {

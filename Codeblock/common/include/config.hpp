@@ -4,8 +4,8 @@
 #include "errors.hpp"
 #include <string>
 
-class config    //note: default value for members have no meaning. They will be overridden by values from xml config fiel.
-{               //      they help howver debugging if something wrong during configuration load
+class config    //note: default value for members have no meaning. They will be overridden by values from xml config file.
+{               //      they help however debugging if something wrong during configuration load
     public:
         config();
         virtual ~config();
@@ -49,6 +49,8 @@ class config    //note: default value for members have no meaning. They will be 
         int16_t defaultDirection_ = 0;
         float defaultKpPosition_ = 0.0;
         uint16_t movementThreadBeatMilliseconds_ = 22;
+        uint16_t TrainPositionDataValidationPeriodMilliseconds_ = 111;
+        uint16_t FleetGUIToServer1MessagesFrequencyMilliseconds_ = 11;
     protected:
     private:
 };

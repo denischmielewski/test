@@ -27,8 +27,7 @@ SOURCES += main.cpp \
     ../../Codeblock/common/protobuf/RCFProtoServices.pb.cc \
     fleetGUIcommunicationclient.cpp \
     fleetGUIcommunicationsserver.cpp \
-    log.cpp \
-    protobufgetfleetserviceimpl.cpp
+    log.cpp
 
 HEADERS  += \
     fleetGUI.h \
@@ -41,8 +40,7 @@ HEADERS  += \
     ../../Codeblock/common/protobuf/RCFProtoServices.pb.h \
     log.hpp \
     fleetGUIcommunicationclient.hpp \
-    fleetGUIcommunicationsserver.h \
-    protobufgetfleetserviceimpl.hpp
+    fleetGUIcommunicationsserver.h
 
 FORMS    += \
     fleetGUI.ui

@@ -14,7 +14,6 @@
 #include "TrainSession.hpp"
 #include <string>
 
-// Include protoc-generated header.
 #include "RCFProtoServices.pb.h"
 
 #include <QThread>
@@ -33,10 +32,7 @@ public:
 private:
     config const * serverconf=nullptr;
     std::unordered_map<std::string, TrainSession> * trainsSessions_;
-    //class Session session_;
 public slots:
-//    void sendModeAutomatic();
-//    void sendModeManual();
     void onCloseTrainGUI();
     void onThreadTimerShot();
     void onPositionReceivedFromTrain(std::string s);

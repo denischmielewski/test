@@ -111,7 +111,7 @@ int main(int argc, char *argv[])
 
 
     //Log Summary of communication sessions
-    BOOST_LOG_SEV(*logger, notification) << "communication sessions summary :" << std::endl;
+    BOOST_LOG_SEV(*logger, notification) << "FleetGUI communication RCFProto server sessions summary :" << std::endl;
     int i = 0;
     for ( auto it = trainsSessions.begin(); it != trainsSessions.end(); ++it ){i++;};
     BOOST_LOG_SEV(*logger, notification) << "number of sessions :" << i;
@@ -120,8 +120,7 @@ int main(int argc, char *argv[])
     for ( auto it = trainsSessions.begin(); it != trainsSessions.end(); ++it )
     {
         i++;
-        BOOST_LOG_SEV(*logger, notification) << "========================== SESSION : " << i;
-        BOOST_LOG_SEV(*logger, notification) << "IP address :" << it->first;
+        BOOST_LOG_SEV(*logger, notification) << "========================== SESSION : " << i << " IP address :" << it->first;
 
         TrainCommSession & traincommsession = (it->second).GetTrainCommSessionRef();
 

@@ -26,10 +26,10 @@ SOURCES += main.cpp\
     ../../Codeblock/common/Common-train-server1/src/TrainOperationSession.cpp \
     ../../Codeblock/common/Common-train-server1/src/TrainSession.cpp \
     traincommunicationsserver.cpp \
-    protobufpositioninformationserviceimpl.cpp \
-    protobufsettrainmodecommandserviceimpl.cpp \
     traincommunicationclient.cpp \
-    ../../Codeblock/common/protobuf/RCFProtoServices.pb.cc
+    ../../Codeblock/common/protobuf/RCFProtoServices.pb.cc \
+    protobufpositioninformationserviceimpl.cpp \
+    protobufsettrainmodecommandserviceimpl.cpp
 
 HEADERS  += traincontrols.h \
     traincommunications.h \
@@ -42,9 +42,8 @@ HEADERS  += traincontrols.h \
     ../../Codeblock/common/Common-train-server1/include/TrainSession.hpp \
     traincommunicationsserver.h \
     protobufpositioninformationserviceimpl.hpp \
-    protobufsettrainmodecommandserviceimpl.hpp \
     traincommunicationclient.hpp \
-    ../../Codeblock/common/protobuf/RCFProtoServices.pb.h
+    ../../Codeblock/common/protobuf/RCFProtoServices.pb.h \
 
 FORMS    += traincontrols.ui
 

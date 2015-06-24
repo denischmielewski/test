@@ -13,18 +13,13 @@
 
 #include <cstddef>
 #include <iostream>
-//#include <boost/log/expressions.hpp>
-//#include <boost/log/sources/severity_logger.hpp>
-//#include <boost/log/utility/setup/console.hpp>
 #include <boost/log/utility/setup/common_attributes.hpp>
 
 #include "config.hpp"
 
 namespace logging = boost::log;
-//namespace attrs = boost::log::attributes;
 namespace src = boost::log::sources;
 namespace sinks = boost::log::sinks;
-//namespace expr = boost::log::expressions;
 namespace keywords = boost::log::keywords;
 
 
@@ -33,9 +28,8 @@ namespace keywords = boost::log::keywords;
 enum severity_level
 {
     debug,                          //for development team
-    debug_temporary,                //for development team
-    internal_message,
-    external_message,
+    debug_temp,                //for development team
+    message,
     threads,
     notification,
     warning,
@@ -45,15 +39,14 @@ enum severity_level
 
 static const char* severity_level_strings[] =
 {
-            "debug              ",                      //for development team
-            "debug_temporary    ",                //for development team
-            "internal_message   ",
-            "external_message   ",
-            "threads            ",
-            "notification       ",
-            "warning            ",
-            "error              ",
-            "critical           "
+            "debug          ",                      //for development team
+            "debug_tempo    ",                //for development team
+            "message        ",
+            "threads        ",
+            "notification   ",
+            "warning        ",
+            "error          ",
+            "critical       "
 };
 
 template< typename CharT, typename TraitsT >

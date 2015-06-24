@@ -9,7 +9,6 @@
 #include <unordered_map>
 #include "TrainSession.hpp"
 
-// Include protoc-generated header.
 #include "RCFProtoServices.pb.h"
 
 #include "trainprotobufpositioninformation.hpp"

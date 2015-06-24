@@ -1,5 +1,5 @@
-#ifndef PROTOBUFGETFLEETSERVICEIMPL_HPP
-#define PROTOBUFGETFLEETSERVICEIMPL_HPP
+#ifndef PROTOBUFGETFLEETIMPL_HPP
+#define PROTOBUFGETFLEETIMPL_HPP
 
 #include "log.hpp"
 #include <RCFProto.hpp>
@@ -7,7 +7,6 @@
 #include "config.hpp"
 #include "TrainSession.hpp"
 
-// Include protoc-generated header.
 #include "RCFProtoServices.pb.h"
 
 class GetFleetImpl : public GetFleetService
@@ -16,13 +15,12 @@ public:
     GetFleetImpl(config const *, std::unordered_map<std::string, TrainSession> *trainsSessions);
     config const * softwareConfig_  = nullptr;
     std::unordered_map<std::string, TrainSession> * trainsSessions_ = nullptr;
-    // PositionInformation() method implementation.
     void GetFleet(
-        google::protobuf::RpcController *           controller,
-        const GetFleetCommand *         request,
-        GetFleetResponse *                response,
-        google::protobuf::Closure *                 done);
+        google::protobuf::RpcController *   controller,
+        const GetFleetCommand *             request,
+        GetFleetResponse *           response,
+        google::protobuf::Closure *         done);
 };
 
 
-#endif // PROTOBUFGETFLEETSERVICEIMPL_HPP
+#endif // PROTOBUFTRAININTERNALIMPL_HPP

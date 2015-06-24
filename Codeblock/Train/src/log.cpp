@@ -124,25 +124,20 @@ void init_logging_with_xml_config(config const * xmlconfig)
             % expr::smessage
     );
 
-// TODO (dev#1#15-03-27): Add filtering after adding several notification level
-
-
     if(xmlconfig->boostLogAutoFlush_) sink->locked_backend()->auto_flush(true);
     else    sink->locked_backend()->auto_flush(false);
 
     bool logLevelOK = false;
     if(xmlconfig->boostLogLevel_ == "debug")            {sink->set_filter(severity >= debug); logLevelOK = true;}
-    if(xmlconfig->boostLogLevel_ == "debug_temporary")  {sink->set_filter(severity >= debug_temporary); logLevelOK = true;}
-    if(xmlconfig->boostLogLevel_ == "internal_message") {sink->set_filter(severity >= internal_message); logLevelOK = true;}
-    if(xmlconfig->boostLogLevel_ == "external_message") {sink->set_filter(severity >= external_message); logLevelOK = true;}
-    if(xmlconfig->boostLogLevel_ == "threads")          {sink->set_filter(severity >= debug_temporary); logLevelOK = true;}
+    if(xmlconfig->boostLogLevel_ == "debug_temp")       {sink->set_filter(severity >= debug_temp); logLevelOK = true;}
+    if(xmlconfig->boostLogLevel_ == "message")          {sink->set_filter(severity >= message); logLevelOK = true;}
+    if(xmlconfig->boostLogLevel_ == "threads")          {sink->set_filter(severity >= threads); logLevelOK = true;}
     if(xmlconfig->boostLogLevel_ == "notification")     {sink->set_filter(severity >= notification); logLevelOK = true;}
     if(xmlconfig->boostLogLevel_ == "warning")          {sink->set_filter(severity >= warning); logLevelOK = true;}
     if(xmlconfig->boostLogLevel_ == "error")            {sink->set_filter(severity >= error); logLevelOK = true;}
     if(xmlconfig->boostLogLevel_ == "critical")         {sink->set_filter(severity >= critical); logLevelOK = true;}
     if(logLevelOK == false)                             {sink->set_filter(severity >= notification);}  //probably log level not entered correctly in xml config file
 
-    // Add the sink to the core
     logging::core::get()->add_sink(sink);
 
 
@@ -150,8 +145,6 @@ void init_logging_with_xml_config(config const * xmlconfig)
 
 log::log()
 {
-    //ctor
-
     try
     {
         // Initialize logging library
@@ -190,20 +183,13 @@ log::log(config const * xmlconfig)
 
 log::~log()
 {
-    //dtor
 }
 
 void log::RemoveStartupSink(void)
 {
     boost::shared_ptr< logging::core > core = logging::core::get();
-
-    // Remove the sink from the core, so that no records are passed to it
     core->remove_sink(startupSink);
-
-    // Flush all log records that may have left buffered
     startupSink->flush();
-
     startupSink.reset();
-
 }
 

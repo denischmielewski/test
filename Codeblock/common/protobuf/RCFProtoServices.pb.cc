@@ -119,13 +119,14 @@ void protobuf_AssignDesc_RCFProtoServices_2eproto() {
       ::google::protobuf::MessageFactory::generated_factory(),
       sizeof(SetOperationModeResponse));
   TrainData_descriptor_ = file->message_type(4);
-  static const int TrainData_offsets_[6] = {
+  static const int TrainData_offsets_[7] = {
     GOOGLE_PROTOBUF_GENERATED_MESSAGE_FIELD_OFFSET(TrainData, ipaddress_),
     GOOGLE_PROTOBUF_GENERATED_MESSAGE_FIELD_OFFSET(TrainData, kpposition_),
     GOOGLE_PROTOBUF_GENERATED_MESSAGE_FIELD_OFFSET(TrainData, mode_),
     GOOGLE_PROTOBUF_GENERATED_MESSAGE_FIELD_OFFSET(TrainData, movement_),
     GOOGLE_PROTOBUF_GENERATED_MESSAGE_FIELD_OFFSET(TrainData, direction_),
     GOOGLE_PROTOBUF_GENERATED_MESSAGE_FIELD_OFFSET(TrainData, path_),
+    GOOGLE_PROTOBUF_GENERATED_MESSAGE_FIELD_OFFSET(TrainData, commstatusok_),
   };
   TrainData_reflection_ =
     new ::google::protobuf::internal::GeneratedMessageReflection(
@@ -232,20 +233,20 @@ void protobuf_AddDesc_RCFProtoServices_2eproto() {
     "\n\032PositionInformationReceive\022\022\n\nserverna"
     "me\030\001 \001(\t\"\'\n\027SetOperationModeCommand\022\014\n\004m"
     "ode\030\001 \002(\t\"A\n\030SetOperationModeResponse\022\024\n"
-    "\014previousmode\030\001 \002(\t\022\017\n\007newmode\030\002 \002(\t\"s\n\t"
-    "TrainData\022\021\n\tipaddress\030\001 \002(\t\022\022\n\nkpPositi"
-    "on\030\002 \001(\002\022\014\n\004mode\030\003 \001(\005\022\020\n\010movement\030\004 \001(\005"
-    "\022\021\n\tdirection\030\005 \001(\005\022\014\n\004path\030\006 \001(\t\"$\n\017Get"
-    "FleetCommand\022\021\n\tipaddress\030\001 \002(\t\"5\n\020GetFl"
-    "eetResponse\022!\n\rtrainDataList\030\001 \003(\0132\n.Tra"
-    "inData2n\n\032PositionInformationService\022P\n\023"
-    "PositionInformation\022\034.PositionInformatio"
-    "nTransmit\032\033.PositionInformationReceive2b"
-    "\n\027SetOperationModeService\022G\n\020SetOperatio"
-    "nMode\022\030.SetOperationModeCommand\032\031.SetOpe"
-    "rationModeResponse2B\n\017GetFleetService\022/\n"
-    "\010GetFleet\022\020.GetFleetCommand\032\021.GetFleetRe"
-    "sponseB\t\200\001\001\210\001\001\220\001\001", 817);
+    "\014previousmode\030\001 \002(\t\022\017\n\007newmode\030\002 \002(\t\"\211\001\n"
+    "\tTrainData\022\021\n\tipaddress\030\001 \002(\t\022\022\n\nkpPosit"
+    "ion\030\002 \001(\002\022\014\n\004mode\030\003 \001(\005\022\020\n\010movement\030\004 \001("
+    "\005\022\021\n\tdirection\030\005 \001(\005\022\014\n\004path\030\006 \001(\t\022\024\n\014co"
+    "mmstatusOK\030\007 \001(\010\"$\n\017GetFleetCommand\022\021\n\ti"
+    "paddress\030\001 \002(\t\"5\n\020GetFleetResponse\022!\n\rtr"
+    "ainDataList\030\001 \003(\0132\n.TrainData2n\n\032Positio"
+    "nInformationService\022P\n\023PositionInformati"
+    "on\022\034.PositionInformationTransmit\032\033.Posit"
+    "ionInformationReceive2b\n\027SetOperationMod"
+    "eService\022G\n\020SetOperationMode\022\030.SetOperat"
+    "ionModeCommand\032\031.SetOperationModeRespons"
+    "e2B\n\017GetFleetService\022/\n\010GetFleet\022\020.GetFl"
+    "eetCommand\032\021.GetFleetResponseB\t\200\001\001\210\001\001\220\001\001", 840);
   ::google::protobuf::MessageFactory::InternalRegisterGeneratedFile(
     "RCFProtoServices.proto", &protobuf_RegisterTypes);
   PositionInformationTransmit::default_instance_ = new PositionInformationTransmit();
@@ -1542,6 +1543,7 @@ const int TrainData::kModeFieldNumber;
 const int TrainData::kMovementFieldNumber;
 const int TrainData::kDirectionFieldNumber;
 const int TrainData::kPathFieldNumber;
+const int TrainData::kCommstatusOKFieldNumber;
 #endif  // !_MSC_VER
 
 TrainData::TrainData()
@@ -1569,6 +1571,7 @@ void TrainData::SharedCtor() {
   movement_ = 0;
   direction_ = 0;
   path_ = const_cast< ::std::string*>(&::google::protobuf::internal::GetEmptyStringAlreadyInited());
+  commstatusok_ = false;
   ::memset(_has_bits_, 0, sizeof(_has_bits_));
 }
 
@@ -1620,7 +1623,7 @@ void TrainData::Clear() {
     ::memset(&first, 0, n);                                \
   } while (0)
 
-  if (_has_bits_[0 / 32] & 63) {
+  if (_has_bits_[0 / 32] & 127) {
     ZR_(kpposition_, direction_);
     if (has_ipaddress()) {
       if (ipaddress_ != &::google::protobuf::internal::GetEmptyStringAlreadyInited()) {
@@ -1632,6 +1635,7 @@ void TrainData::Clear() {
         path_->clear();
       }
     }
+    commstatusok_ = false;
   }
 
 #undef OFFSET_OF_FIELD_
@@ -1740,6 +1744,21 @@ bool TrainData::MergePartialFromCodedStream(
         } else {
           goto handle_unusual;
         }
+        if (input->ExpectTag(56)) goto parse_commstatusOK;
+        break;
+      }
+
+      // optional bool commstatusOK = 7;
+      case 7: {
+        if (tag == 56) {
+         parse_commstatusOK:
+          DO_((::google::protobuf::internal::WireFormatLite::ReadPrimitive<
+                   bool, ::google::protobuf::internal::WireFormatLite::TYPE_BOOL>(
+                 input, &commstatusok_)));
+          set_has_commstatusok();
+        } else {
+          goto handle_unusual;
+        }
         if (input->ExpectAtEnd()) goto success;
         break;
       }
@@ -1809,6 +1828,11 @@ void TrainData::SerializeWithCachedSizes(
       6, this->path(), output);
   }
 
+  // optional bool commstatusOK = 7;
+  if (has_commstatusok()) {
+    ::google::protobuf::internal::WireFormatLite::WriteBool(7, this->commstatusok(), output);
+  }
+
   if (!unknown_fields().empty()) {
     ::google::protobuf::internal::WireFormat::SerializeUnknownFields(
         unknown_fields(), output);
@@ -1859,6 +1883,11 @@ void TrainData::SerializeWithCachedSizes(
     target =
       ::google::protobuf::internal::WireFormatLite::WriteStringToArray(
         6, this->path(), target);
+  }
+
+  // optional bool commstatusOK = 7;
+  if (has_commstatusok()) {
+    target = ::google::protobuf::internal::WireFormatLite::WriteBoolToArray(7, this->commstatusok(), target);
   }
 
   if (!unknown_fields().empty()) {
@@ -1913,6 +1942,11 @@ int TrainData::ByteSize() const {
           this->path());
     }
 
+    // optional bool commstatusOK = 7;
+    if (has_commstatusok()) {
+      total_size += 1 + 1;
+    }
+
   }
   if (!unknown_fields().empty()) {
     total_size +=
@@ -1958,6 +1992,9 @@ void TrainData::MergeFrom(const TrainData& from) {
     if (from.has_path()) {
       set_path(from.path());
     }
+    if (from.has_commstatusok()) {
+      set_commstatusok(from.commstatusok());
+    }
   }
   mutable_unknown_fields()->MergeFrom(from.unknown_fields());
 }
@@ -1988,6 +2025,7 @@ void TrainData::Swap(TrainData* other) {
     std::swap(movement_, other->movement_);
     std::swap(direction_, other->direction_);
     std::swap(path_, other->path_);
+    std::swap(commstatusok_, other->commstatusok_);
     std::swap(_has_bits_[0], other->_has_bits_[0]);
     _unknown_fields_.Swap(&other->_unknown_fields_);
     std::swap(_cached_size_, other->_cached_size_);

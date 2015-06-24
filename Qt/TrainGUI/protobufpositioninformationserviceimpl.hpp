@@ -4,7 +4,6 @@
 #include "log.hpp"
 #include <RCFProto.hpp>
 
-// Include protoc-generated header.
 #include "RCFProtoServices.pb.h"
 
 #include <QObject>
@@ -12,16 +11,13 @@
 #include <unordered_map>
 #include "TrainSession.hpp"
 
-// PositionInformationService declaration.
 class PositionInformationImpl : public QObject, public PositionInformationService
 {
     Q_OBJECT
 public:
-//1    PositionInformationImpl(config const *, std::unordered_map<std::string, TrainSession> *trainsSessions);
     PositionInformationImpl();
     config const * softwareConfig_  = nullptr;
     std::unordered_map<std::string, TrainSession> * trainsSessions_ = nullptr;
-    // PositionInformation() method implementation.
     void PositionInformation(
         google::protobuf::RpcController *           controller,
         const PositionInformationTransmit *         request,

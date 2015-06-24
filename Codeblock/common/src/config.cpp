@@ -6,24 +6,19 @@
 #include <boost/property_tree/ptree.hpp>
 #include <fstream>
 #include <string>
-#include <unistd.h>     //for gethostname() call
+#include <unistd.h>
 #include "log.hpp"
 #include "TrainOperationSession.hpp"
-
-// TODO (dev#1#15-03-27): to be removed and use value from xml config file
-//#define MAX_BUFFER_LENGTH 1024
 
 using namespace std;
 const std::string GLOBAL_STARTUP_CONFIG_XML_FILE = "/home/train/config/global/user_startup_config.xml";
 const std::string GLOBAL_DEV_CONFIG_XML_FILE = "/home/train/config/global/dev_config.xml";
 const std::string DEFAULT_DATA_CONFIG_XML_FILE = "/home/train/config/local/defaultdata.xml";
 
-//retrieve BOOSTlogger
 startup_severity_channel_logger_mt& lg = startup_logger::get();
 
 config::config()
 {
-    //ctor
     boost::property_tree::ptree pt1, pt2, pt3;
     std::ifstream configFile, configFile2, configFile3;
     std::string ipAddress;
@@ -88,7 +83,6 @@ config::config()
         BOOST_LOG_SEV(lg, notification) << "PARSED OK config file /home/train/config/local/defaultdata.xml !";
     }
 
-    //global config files found. Retrieve all config parameters for this element (train or server or operator PC...)
     try
     {
         std::string node = "TRAIN_CONFIG_DEV.LINUX_SYSTEM_CALL_BUFFER_SIZE";
@@ -229,6 +223,15 @@ config::config()
         TrainToTrainGUIMessagesFrequency_ = std::stoul(pt1.get<std::string>(node), nullptr, 10);
         BOOST_LOG_SEV(lg, notification) << "train to TrainGUI messages frequency : " << TrainToTrainGUIMessagesFrequency_ << " milliseconds";
 
+        node = "TRAIN_STARTUP_CONFIG.SYNCHRONOUS_MESSAGES.FLEETGUI_TO_SERVER1_MESSAGES_FREQUENCY";
+        FleetGUIToServer1MessagesFrequencyMilliseconds_ = std::stoul(pt1.get<std::string>(node), nullptr, 10);
+        BOOST_LOG_SEV(lg, notification) << "FleetGUI to Server1 messages frequency : " << FleetGUIToServer1MessagesFrequencyMilliseconds_ << " milliseconds";
+
+        node = "TRAIN_STARTUP_CONFIG.SYNCHRONOUS_MESSAGES.SERVER1_TRAIN_POSITION_DATA_VALIDATION_PERIOD";
+        TrainPositionDataValidationPeriodMilliseconds_ = std::stoul(pt1.get<std::string>(node), nullptr, 10);
+        BOOST_LOG_SEV(lg, notification) << "period for which position Data received are valid : " << TrainPositionDataValidationPeriodMilliseconds_ << " milliseconds";
+
+
         if(loadTrainOperationDataFromDefaultDataXmlFile_)
         {
             node = "DEFAULT.MODE";
@@ -275,7 +278,6 @@ int16_t config::configureMainIPPortMask_(void)
     string ls = GetStdoutFromCommand(command, linuxSysCallBufferSize_);
     //Verify if IP address has been properly configured
     command = "ip addr list | sed -n \"/"+ adapter_ + "/,/" + adapter_ +  "/p\" | grep inet";
-    //ls = GetStdoutFromCommand("ip addr list | sed -n \"/eth0/,/eth0/p\" | grep inet");
     ls = GetStdoutFromCommand(command, linuxSysCallBufferSize_);
 
     if(ls.find(main_ipaddress_,0) == string::npos)
@@ -297,7 +299,6 @@ int16_t config::configureGUIIPPortMask_(void)
     string ls = GetStdoutFromCommand(command, linuxSysCallBufferSize_);
     //Verify if IP address has been properly configured
     command = "ip addr list | sed -n \"/"+ adapter_ + "/,/" + adapter_ +  "/p\" | grep inet";
-    //ls = GetStdoutFromCommand("ip addr list | sed -n \"/eth0/,/eth0/p\" | grep inet");
     ls = GetStdoutFromCommand(command, linuxSysCallBufferSize_);
 
     if(ls.find(gui_ipaddress_,0) == string::npos)
@@ -319,7 +320,6 @@ int16_t config::removeMainIPPortMask_(void)
     string ls = GetStdoutFromCommand(command, linuxSysCallBufferSize_);
     //Verify if IP address has been properly configured
     command = "ip addr list | sed -n \"/"+ adapter_ + "/,/" + adapter_ +  "/p\" | grep inet";
-    //ls = GetStdoutFromCommand("ip addr list | sed -n \"/eth0/,/eth0/p\" | grep inet");
     ls = GetStdoutFromCommand(command, linuxSysCallBufferSize_);
 
     if(ls.find(main_ipaddress_,0) == string::npos)
@@ -336,12 +336,11 @@ int16_t config::removeMainIPPortMask_(void)
 
 int16_t config::removeGUIIPPortMask_(void)
 {
-//remove main IP address on specified adapter
+    //remove main IP address on specified adapter
     string command = "sudo -S ip addr del " + gui_ipaddress_ + " dev " + adapter_;
     string ls = GetStdoutFromCommand(command, linuxSysCallBufferSize_);
     //Verify if IP address has been properly configured
     command = "ip addr list | sed -n \"/"+ adapter_ + "/,/" + adapter_ +  "/p\" | grep inet";
-    //ls = GetStdoutFromCommand("ip addr list | sed -n \"/eth0/,/eth0/p\" | grep inet");
     ls = GetStdoutFromCommand(command, linuxSysCallBufferSize_);
 
     if(ls.find(main_ipaddress_,0) == string::npos)

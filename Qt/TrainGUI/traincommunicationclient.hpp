@@ -19,7 +19,6 @@
 #include "protobufsettrainmodecommandserviceimpl.hpp"
 #include "TrainSession.hpp"
 
-// Include protoc-generated header.
 #include "RCFProtoServices.pb.h"
 
 class TrainCommunicationClient : public QThread
@@ -30,8 +29,6 @@ public:
     TrainCommunicationClient(config const * conf, std::unordered_map<std::string, TrainSession> * trainsSessions);
     void run(void);
 private:
-    //SetOperationModeCommand * operationModeRequest_ = 0;
-    //SetOperationModeResponse * operationModeResponse_ = 0;
     SetOperationModeCommand operationModeRequest_;
     SetOperationModeResponse operationModeResponse_;
     SetOperationModeService::Stub * setOperationModeServiceStub_;

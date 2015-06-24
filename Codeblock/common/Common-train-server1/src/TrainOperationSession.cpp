@@ -5,18 +5,14 @@ const std::string GLOBAL_CONFIG_FOLDER = "/home/train/config/global/";
 
 TrainOperationSession::TrainOperationSession()
 {
-    //ctor
     operationSessionTimed_Mutex_ = new(std::timed_mutex);
-    //retrieve BOOSTlogger
     logger_ = movement_logger::get();
+    lastTimeTrainPositionReceived_ = std::chrono::high_resolution_clock::now();
 }
 
 TrainOperationSession::~TrainOperationSession()
 {
-    BOOST_LOG_SEV(logger_, notification) << "enter DESTRUCTOR TrainOperationSession class";
-    //dtor
     delete operationSessionTimed_Mutex_;
-    BOOST_LOG_SEV(logger_, notification) << "leave DESTRUCTOR TrainOperationSession class";
 }
 
 void TrainOperationSession::SetSoftwareConfig(config const * config)
@@ -25,13 +21,13 @@ void TrainOperationSession::SetSoftwareConfig(config const * config)
     operationSessionTimed_Mutex_ = new(std::timed_mutex);
 }
 
-bool TrainOperationSession::TryLockCommSessionMutexFor(size_t milliseconds)
+bool TrainOperationSession::TryLockOperationSessionMutexFor(size_t milliseconds)
 {
     if(operationSessionTimed_Mutex_->try_lock_for(std::chrono::milliseconds(milliseconds)))    return true;
     else return false;
 }
 
-void TrainOperationSession::UnlockCommSessionMutex(void)
+void TrainOperationSession::UnlockOperationSessionMutex(void)
 {
     operationSessionTimed_Mutex_->unlock();
 }
@@ -146,6 +142,25 @@ void TrainOperationSession::SetCurrentSegmentMoveStatus(uint16_t i)
     currentSegmentMoveStatus_ = i;
 }
 
+void TrainOperationSession::SetLastTimeTrainPositionReceived(std::chrono::high_resolution_clock::time_point datetime)
+{
+    lastTimeTrainPositionReceived_ = datetime;
+}
+std::chrono::high_resolution_clock::time_point TrainOperationSession::GetLastTimeTrainPositionReceived(void)
+{
+    return lastTimeTrainPositionReceived_;
+}
+
+void TrainOperationSession::SetOperationSessionAsATrain(void)
+{
+    isATrain_ = true;
+}
+
+bool TrainOperationSession::IsThisSessionATrain(void)
+{
+    return isATrain_;
+}
+
 void TrainOperationSession::TrainOperationSessionThreadCode(void)
 {
     extern volatile int g_signal_received;
@@ -156,7 +171,7 @@ void TrainOperationSession::TrainOperationSessionThreadCode(void)
     uint16_t threadBeat = softwareConfig_->movementThreadBeatMilliseconds_;
     std::chrono::high_resolution_clock::time_point tTimePointForStationStop;
 
-    BOOST_LOG_SEV(logger_, notification) << "+++++++++++ hello from move thread !!! +++++++++++++++";
+    BOOST_LOG_SEV(logger_, threads) << "+++++++++++ hello from move thread !!! +++++++++++++++";
 
     std::list<MoveSegment>::iterator it = segmentsList.begin();
     std::advance(it, currentSegmentID_ - 1);
@@ -230,7 +245,8 @@ void TrainOperationSession::TrainOperationSessionThreadCode(void)
                         else
                         {
                             currentSpeedtmp += (float)((*it).acceleration_*3.6) * f;
-                        }                        //verify if brake area has been reached
+                        }
+                        //verify if brake area has been reached
                         if(directiontmp == 1)
                         {
                             if(KpPositiontmp >= (*it).stopKp_ - (*it).brakeDistanceFromStop_)
@@ -362,14 +378,14 @@ void TrainOperationSession::TrainOperationSessionThreadCode(void)
                             if (directiontmp == 1 && currentSegmentIDtmp < numberOfSegments_)
                             {
                                 currentSegmentIDtmp++;
-                                BOOST_LOG_SEV(logger_, notification)    << " *************************NEXT SEGMENT : #" \
+                                BOOST_LOG_SEV(logger_, threads)    << " *************************NEXT SEGMENT : #" \
                                                                         << currentSegmentIDtmp << " !!!*********************** " ;
                                 std::advance(it, 1);
                             }
                             else if (directiontmp == 2 && currentSegmentIDtmp > 1)
                             {
                                 currentSegmentIDtmp--;
-                                BOOST_LOG_SEV(logger_, notification)    << " *************************NEXT SEGMENT : #" \
+                                BOOST_LOG_SEV(logger_, threads)    << " *************************NEXT SEGMENT : #" \
                                                                         << currentSegmentIDtmp << " !!!*********************** " ;
 
                                 it = segmentsList.begin();
@@ -378,13 +394,13 @@ void TrainOperationSession::TrainOperationSessionThreadCode(void)
                             else if (directiontmp == 1 && currentSegmentIDtmp == numberOfSegments_)
                             {
                                 directiontmp = 2;
-                                BOOST_LOG_SEV(logger_, notification)    << " *************************REVERSE DIRECTION : " \
+                                BOOST_LOG_SEV(logger_, threads)    << " *************************REVERSE DIRECTION : " \
                                                                         << directiontmp << " !!!*********************** " ;
                             }
                             else if (directiontmp == 2 && currentSegmentIDtmp == 1)
                             {
                                 directiontmp = 1;
-                                BOOST_LOG_SEV(logger_, notification)    << " *************************REVERSE DIRECTION : " \
+                                BOOST_LOG_SEV(logger_, threads)    << " *************************REVERSE DIRECTION : " \
                                                                         << directiontmp << " !!!*********************** " ;
                             }
                             else BOOST_LOG_SEV(logger_, critical) << loop << " IMPOSSIBLE direction/segmentID combination !!!" ;
@@ -426,8 +442,8 @@ void TrainOperationSession::TrainOperationSessionThreadCode(void)
                                                                     << KpPositiontmp << " Direction " << directiontmp \
                                                                     << " Speed " << currentSpeedtmp << " km/h";
 
-        //store store oepration session value with mutex lock
-        if(TryLockCommSessionMutexFor(softwareConfig_->commSessionMutexLockTimeoutMilliseconds_))
+        //store store operation session values with mutex lock
+        if(TryLockOperationSessionMutexFor(softwareConfig_->commSessionMutexLockTimeoutMilliseconds_))
         {
             mode_ = modetmp;
             currentSegmentMoveStatus_ = currentSegmentMoveStatustmp;
@@ -435,7 +451,7 @@ void TrainOperationSession::TrainOperationSessionThreadCode(void)
             currentSegmentID_ = currentSegmentIDtmp;
             currentSpeed_ = currentSpeedtmp;
             direction_ = directiontmp;
-            UnlockCommSessionMutex();
+            UnlockOperationSessionMutex();
         }
         else
         {
@@ -448,7 +464,7 @@ void TrainOperationSession::TrainOperationSessionThreadCode(void)
 
         if(std::chrono::duration_cast<std::chrono::milliseconds>(tNow-tForNotification).count() >= softwareConfig_->ThreadsLogNotificationFrequencyMilliseconds_)
         {
-            BOOST_LOG_SEV(logger_, notification) << "+++++++++++ hello from move thread !!! +++++++++++++++";
+            BOOST_LOG_SEV(logger_, threads) << "+++++++++++ hello from move thread !!! +++++++++++++++";
             tForNotification = std::chrono::high_resolution_clock::now();
         }
 
@@ -457,7 +473,6 @@ void TrainOperationSession::TrainOperationSessionThreadCode(void)
             BOOST_LOG_SEV(logger_, critical)    << "movement thread beat exceeded : " \
                                                 << std::chrono::duration_cast<std::chrono::milliseconds>(tNow-tForthreadBeat).count() \
                                                 << " ms measured ! Ending all threads and program !!!";
-            //g_signal_received = 1;
             return;
         }
 
@@ -469,7 +484,7 @@ void TrainOperationSession::TrainOperationSessionThreadCode(void)
 
     }
 
-    if(g_signal_received) BOOST_LOG_SEV(logger_, notification) << "Signal received, terminating Protobuf Synchronous Client for Train GUI Thread";
+    if(g_signal_received) BOOST_LOG_SEV(logger_, threads) << "Signal received, terminating Protobuf Synchronous Client for Train GUI Thread";
 }
 
 void TrainOperationSession::TrainOperationSessionWatchdogThreadCode(void)
@@ -479,8 +494,6 @@ void TrainOperationSession::TrainOperationSessionWatchdogThreadCode(void)
 
 void TrainOperationSession::StartTrainOperationSessionThreadCode(void)
 {
-    // This will start the thread. Notice move semantics!
-    //std::thread t = std::thread(&TrainOperationSession::TrainOperationSessionThreadCode, this);
     trainOperationSessionThreadCode_ = new std::thread(&TrainOperationSession::TrainOperationSessionThreadCode, this);
 }
 
@@ -491,13 +504,10 @@ void TrainOperationSession::JoinTrainOperationSessionThreadCode(void)
 
 void TrainOperationSession::StartTrainOperationSessionWatchdogThreadCode(void)
 {
-    // This will start the thread. Notice move semantics!
-    //TrainOperationSessionWatchdogThreadCode_ = std::thread(&TrainOperationSession::TrainOperationSessionWatchdogThreadCode,this);
 }
 
 void TrainOperationSession::JoinTrainOperationSessionWatchdogThreadCode(void)
 {
-    //if(TrainOperationSessionWatchdogThreadCode_.joinable()) TrainOperationSessionWatchdogThreadCode_.join();
 }
 
 int16_t TrainOperationSession::LoadTrainOperationSession(void)

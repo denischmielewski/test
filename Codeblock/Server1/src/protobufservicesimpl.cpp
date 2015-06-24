@@ -8,9 +8,6 @@ using namespace google::protobuf;
 extern std::unordered_map<std::string, TrainSession>    g_trains;
 uint16_t g_commSessionMutexLockTimeoutMilliseconds = 111;
 
-
-
-// PositionInformation() method implementation.
 void PositionInformationImpl::PositionInformation(  RpcController *                             controller,
                                                     const PositionInformationTransmit *         request,
                                                     PositionInformationReceive *                response,
@@ -37,7 +34,7 @@ void PositionInformationImpl::PositionInformation(  RpcController *             
         case APPROCHING: smove = "APPROCHING";break;
         case ARRIVED: smove = "ARRIVED";break;
     }
-    BOOST_LOG_SEV(lg, notification) << "position received from train : " << request->trainid() << " " << request->kpposition() << " " \
+    BOOST_LOG_SEV(lg, message) << "position received from train : " << request->trainid() << " " << request->kpposition() << " " \
                                     << smode << " " << smove << " direction " << request->direction() << " " \
                                     << request->path();
 
@@ -45,9 +42,7 @@ void PositionInformationImpl::PositionInformation(  RpcController *             
     RCF::RcfProtoSession * pprotoSession = rcfController->getSession();
     RCF::RcfSession & rcfSession = rcfController->getSession()->getRcfSession();
 
-    // Fill in the response.
     response->set_servername("server1");
-    // Send response back to the client.
     done->Run();
 
     //Retrieve session info and store them in global g_trains unordered_map
@@ -56,9 +51,8 @@ void PositionInformationImpl::PositionInformation(  RpcController *             
     std::size_t pos = ipaddressmask.find(":");      // position of "/" in string
     std::string ipaddress = ipaddressmask.substr (0,pos);
 
-    TrainSession & trainSession = g_trains[ipaddress];
+    TrainSession & trainSession = g_trains[request->trainid()];
 
-    //retrieve a ref to train comm session
     TrainCommSession & traincommsession = trainSession.GetTrainCommSessionRef();
 
     if(traincommsession.TryLockCommSessionMutexFor(g_commSessionMutexLockTimeoutMilliseconds))
@@ -73,6 +67,30 @@ void PositionInformationImpl::PositionInformation(  RpcController *             
         traincommsession.SetSessionTotalBytesReceived(pprotoSession->getTotalBytesReceived() );
         traincommsession.SetSessionTotalBytesSent(pprotoSession->getTotalBytesSent());
         traincommsession.UnlockCommSessionMutex();
+    }
+    else
+    {
+        BOOST_LOG_SEV(lg, warning) << "Train Communication Session Lock failed !!!";
+    }
+
+    TrainOperationSession & trainoperationsession = trainSession.GetTrainOperationSessionRef();
+
+    if(trainoperationsession.TryLockOperationSessionMutexFor(g_commSessionMutexLockTimeoutMilliseconds))
+    {
+        trainoperationsession.SetOperationSessionAsATrain();
+        trainoperationsession.SetKpPosition(request->kpposition());
+        trainoperationsession.SetDirection(request->direction());
+        if(request->mode() == AUTOMATIC) {trainoperationsession.SetModeAutomatic();}
+        else if (request->mode() == MANUAL) {trainoperationsession.SetModemanual();}
+        else if (request->mode() == SEMIAUTOMATIC) {trainoperationsession.SetModeSemiAutomatic();}
+        else
+        {
+            BOOST_LOG_SEV(lg, critical) << "No Valid Mode in Position Message from train " << request->trainid();
+        }
+        trainoperationsession.SetCurrentSegmentMoveStatus(request->movement());
+        trainoperationsession.SetPath(request->path());
+        trainoperationsession.UnlockOperationSessionMutex();
+        trainoperationsession.SetLastTimeTrainPositionReceived(std::chrono::high_resolution_clock::now());
     }
     else
     {

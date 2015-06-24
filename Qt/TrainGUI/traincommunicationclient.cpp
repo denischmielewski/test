@@ -16,8 +16,6 @@ TrainCommunicationClient::TrainCommunicationClient(config const * conf, std::uno
 
 TrainCommunicationClient::~TrainCommunicationClient()
 {
-    BOOST_LOG_SEV(*logger, notification) << "enter DESTRUCTOR TrainCommunicationClient class";
-    BOOST_LOG_SEV(*logger, notification) << "leave DESTRUCTOR TrainCommunicationClient class";
 }
 
 void TrainCommunicationClient::TrainCommunicationClient::run(void)
@@ -27,15 +25,11 @@ void TrainCommunicationClient::TrainCommunicationClient::run(void)
 
     try
     {
-        //RCF::RcfProtoChannel channel( RCF::TcpEndpoint(clientconf->main_ipaddress_, std::stoi(clientconf->main_listener_port_)));
         chan = new RCF::RcfProtoChannel( RCF::TcpEndpoint(clientconf->main_ipaddress_, std::stoi(clientconf->main_listener_port_)));
-        BOOST_LOG_SEV(*logger, notification) << "Message to main software will be sent to : " << clientconf->main_ipaddress_ << " on port : " << clientconf->main_listener_port_;
-        // connect timeout in ms.
+        BOOST_LOG_SEV(*logger, threads) << "Message to main software will be sent to : " << clientconf->main_ipaddress_ << " on port : " << clientconf->main_listener_port_;
        chan->setConnectTimeoutMs(clientconf->TCPIP_Connection_Timeout_);
-       // remote call timeout in ms.
        chan->setRemoteCallTimeoutMs(clientconf->TCPIP_Reply_Timeout_);
 
-       //SetOperationModeService::Stub stub(&channel);
        stub = new SetOperationModeService::Stub(chan);
        setOperationModeServiceStub_ = stub;
     }
@@ -48,9 +42,9 @@ void TrainCommunicationClient::TrainCommunicationClient::run(void)
     QTimer * timer = new QTimer;
     connect(timer, &QTimer::timeout, this, &TrainCommunicationClient::onThreadTimerShot);
     timer->start(clientconf->ThreadsLogNotificationFrequencyMilliseconds_);
-    BOOST_LOG_SEV(*logger, notification) << "TrainCommunicationsClientThread event loop will start";
+    BOOST_LOG_SEV(*logger, threads) << "TrainCommunicationsClientThread event loop will start";
     exec();
-    BOOST_LOG_SEV(*logger, notification) << "TrainCommunicationsClientThread event loop terminated";
+    BOOST_LOG_SEV(*logger, threads) << "TrainCommunicationsClientThread event loop terminated";
 
     delete chan;
     delete stub;
@@ -58,14 +52,12 @@ void TrainCommunicationClient::TrainCommunicationClient::run(void)
 
 void TrainCommunicationClient::onThreadTimerShot(void)
 {
-    BOOST_LOG_SEV(*logger, notification) << "hello from trainGUI comm client thread";
+    BOOST_LOG_SEV(*logger, threads) << "hello from trainGUI comm client thread";
 }
 
 void TrainCommunicationClient::onCloseTrainGUI()
 {
-    //QMessageBox::information(0, "..", "onCloseTrainGUI ... !",0,0);
     closeGUI = true;
-    //BOOST_LOG_SEV(*logger, notification) << "Close window button event received in TrainCommunicationsServer thread !";
     QMessageBox *mbox = new QMessageBox;
     std::string s = "please wait " + std::to_string(clientconf->ThreadsExitTimeoutMilliseconds_/1000) + " seconds !";
     mbox->setIcon(QMessageBox::Information);
@@ -73,8 +65,6 @@ void TrainCommunicationClient::onCloseTrainGUI()
     mbox->setText("program is closing !");
     QTimer::singleShot(clientconf->ThreadsExitTimeoutMilliseconds_, Qt::PreciseTimer, mbox, SLOT(close()));
     mbox->show();
-
-    //this->thread()->msleep(serverconf->ThreadsExitTimeoutMilliseconds_);
     this->exit();
     if(this->wait(clientconf->ThreadsExitTimeoutMilliseconds_) == false) BOOST_LOG_SEV(*logger, warning) << "TrainCommunicationsServer Thread did not finished in allocated time !";
 }
@@ -84,9 +74,9 @@ void TrainCommunicationClient::onChangeModeToManual()
     try
     {
         operationModeRequest_.set_mode("Manual");
-        BOOST_LOG_SEV(*logger, notification) << "Sending New mode message to main software : Manual mode";
+        BOOST_LOG_SEV(*logger, message) << "Sending New mode message to main software : Manual mode";
         setOperationModeServiceStub_->SetOperationMode(NULL, &operationModeRequest_, &operationModeResponse_, NULL);
-        BOOST_LOG_SEV(*logger, notification)    << "Received response from main software : new mode = " << operationModeResponse_.newmode()
+        BOOST_LOG_SEV(*logger, message)    << "Received response from main software : new mode = " << operationModeResponse_.newmode() \
                                                 << " previous mode = " << operationModeResponse_.previousmode();
     }
     catch(const RCF::Exception & e)
@@ -100,9 +90,9 @@ void TrainCommunicationClient::onChangeModeToAutomatic()
     try
     {
         operationModeRequest_.set_mode("Automatic");
-        BOOST_LOG_SEV(*logger, notification) << "Sending New Mode message to main software : Automatic mode";
+        BOOST_LOG_SEV(*logger, message) << "Sending New Mode message to main software : Automatic mode";
         setOperationModeServiceStub_->SetOperationMode(NULL, &operationModeRequest_, &operationModeResponse_, NULL);
-        BOOST_LOG_SEV(*logger, notification)    << "Received response from main software : new mode = " << operationModeResponse_.newmode()
+        BOOST_LOG_SEV(*logger, message)    << "Received response from main software : new mode = " << operationModeResponse_.newmode()
                                                 << " previous mode = " << operationModeResponse_.previousmode();
     }
     catch(const RCF::Exception & e)

@@ -2,23 +2,18 @@
 
 TrainProtobufSetTrainModeCommand::~TrainProtobufSetTrainModeCommand()
 {
-    //dtor
 }
 
 void TrainProtobufSetTrainModeCommand::SetResponse(SetOperationModeResponse * response, google::protobuf::Closure * done)
 {
-    // Fill in the response.
     response->set_previousmode("Manual");
     response->set_newmode("Automatic");
-
-    // Send response back to the client.
     done->Run();
 }
 
 void TrainProtobufSetTrainModeCommand::UpdateSession(RCF::RcfProtoSession * pprotoSession, RCF::RcfSession & rcfSession)
 {
     //Retrieve session info and store them in global trainsSessions unordered_map
-    //trainsSessions is keyed by train IP addresses
     std::string ipaddressmask = rcfSession.getClientAddress().string();
     std::size_t pos = ipaddressmask.find(":");      // position of "/" in string
     std::string ipaddress = ipaddressmask.substr (0,pos);
@@ -27,7 +22,6 @@ void TrainProtobufSetTrainModeCommand::UpdateSession(RCF::RcfProtoSession * ppro
 
     TrainSession & trainSession = (*trainsSessions_)[ipaddress];
 
-    //retrieve a ref to train comm session
     TrainCommSession & traincommsession = trainSession.GetTrainCommSessionRef();
 
     if(traincommsession.TryLockCommSessionMutexFor(softwareConfig_->commSessionMutexLockTimeoutMilliseconds_))

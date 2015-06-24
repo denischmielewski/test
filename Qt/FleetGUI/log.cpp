@@ -129,10 +129,9 @@ void init_logging_with_xml_config(config const * xmlconfig)
 
     bool logLevelOK = false;
     if(xmlconfig->boostLogLevel_ == "debug")            {sink->set_filter(severity >= debug); logLevelOK = true;}
-    if(xmlconfig->boostLogLevel_ == "debug_temporary")  {sink->set_filter(severity >= debug_temporary); logLevelOK = true;}
-    if(xmlconfig->boostLogLevel_ == "internal_message") {sink->set_filter(severity >= internal_message); logLevelOK = true;}
-    if(xmlconfig->boostLogLevel_ == "external_message") {sink->set_filter(severity >= external_message); logLevelOK = true;}
-    if(xmlconfig->boostLogLevel_ == "threads")          {sink->set_filter(severity >= debug_temporary); logLevelOK = true;}
+    if(xmlconfig->boostLogLevel_ == "debug_temp")       {sink->set_filter(severity >= debug_temp); logLevelOK = true;}
+    if(xmlconfig->boostLogLevel_ == "message")          {sink->set_filter(severity >= message); logLevelOK = true;}
+    if(xmlconfig->boostLogLevel_ == "threads")          {sink->set_filter(severity >= threads); logLevelOK = true;}
     if(xmlconfig->boostLogLevel_ == "notification")     {sink->set_filter(severity >= notification); logLevelOK = true;}
     if(xmlconfig->boostLogLevel_ == "warning")          {sink->set_filter(severity >= warning); logLevelOK = true;}
     if(xmlconfig->boostLogLevel_ == "error")            {sink->set_filter(severity >= error); logLevelOK = true;}

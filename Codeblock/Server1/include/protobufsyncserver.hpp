@@ -11,7 +11,6 @@
 #include <RCFProto.hpp>
 #include <ctime>
 
-// Include protoc-generated header.
 #include "RCFProtoServices.pb.h"
 
 class ProtobufSyncServer

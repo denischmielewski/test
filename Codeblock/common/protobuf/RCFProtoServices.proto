@@ -7,7 +7,7 @@ option py_generic_services = true;
 //============Position transmit service=========================================================
 // Define a request.
 message PositionInformationTransmit {
-  optional string trainid = 1;
+  optional string trainid = 1;		//must be IP address
   optional float kpPosition = 2;
   optional int32 mode = 3; 
   optional int32 movement = 4;
@@ -28,6 +28,7 @@ service PositionInformationService
 //============Position transmit service=========================================================
 
 //============Set Operation Mode Service : automatic or manual=========================================================
+//this message is only between the train and its GUI
 // Define a request.
 message SetOperationModeCommand{
   required string mode = 1;
@@ -53,6 +54,7 @@ message TrainData {
   optional int32 movement = 4;
   optional int32 direction = 5;
   optional string path = 6;
+  optional bool commstatusOK = 7;
 }
 
 // Define a request.

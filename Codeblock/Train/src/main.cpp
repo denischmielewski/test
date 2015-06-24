@@ -2,8 +2,6 @@
 #include "config.hpp"
 #include "log.hpp"
 #include <iostream>
-#include "protobufsyncclient.hpp"
-#include "protobufsyncGUIclient.hpp"
 #include <thread>
 #include <chrono>
 #include <signal.h>
@@ -158,7 +156,6 @@ int main()
     }
 
     TrainSession & trainSession = trainsSessions[train_configuration->main_ipaddress_];
-    //retrieve a ref to train operation session
     TrainOperationSession & trainoperationsession = trainSession.GetTrainOperationSessionRef();
     trainoperationsession.SetSoftwareConfig(train_configuration);
     //load data, identify current segment then run the thread to move !!!
@@ -173,7 +170,7 @@ int main()
     train_configuration->removeMainIPPortMask_();
 
     //Log Summary of communication sessions
-    BOOST_LOG_SEV(lg, notification) << "train communication sessions summary :" << std::endl;
+    BOOST_LOG_SEV(lg, notification) << "train communication RCFProto server sessions summary :" << std::endl;
     int i = 0;
     for ( auto it = trainsSessions.begin(); it != trainsSessions.end(); ++it ){i++;};
     BOOST_LOG_SEV(lg, notification) << "number of sessions :" << i;
@@ -181,8 +178,7 @@ int main()
     for ( auto it = trainsSessions.begin(); it != trainsSessions.end(); ++it )
     {
         i++;
-        BOOST_LOG_SEV(lg, notification) << "========================== SESSION : " << i;
-        BOOST_LOG_SEV(lg, notification) << "Train IP address :" << it->first;
+        BOOST_LOG_SEV(lg, notification) << "========================== SESSION : " << i << " Train IP address :" << it->first;
         TrainCommSession & traincommsession = (it->second).GetTrainCommSessionRef();
         if(traincommsession.TryLockCommSessionMutexFor(train_configuration->commSessionMutexLockTimeoutMilliseconds_))
         {

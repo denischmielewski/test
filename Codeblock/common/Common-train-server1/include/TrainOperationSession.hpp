@@ -51,6 +51,7 @@ struct MoveSegment
 };
 
 
+
 class TrainOperationSession
 {
     public:
@@ -59,8 +60,8 @@ class TrainOperationSession
         config const * softwareConfig_;
         void SetSoftwareConfig(config const *);
         startup_severity_channel_logger_mt logger_;
-        bool TryLockCommSessionMutexFor(size_t milliseconds);
-        void UnlockCommSessionMutex(void);
+        bool TryLockOperationSessionMutexFor(size_t milliseconds);
+        void UnlockOperationSessionMutex(void);
         void SetModeAutomatic(void);
         void SetModeSemiAutomatic(void);
         void SetModemanual(void);
@@ -91,7 +92,10 @@ class TrainOperationSession
         void JoinTrainOperationSessionWatchdogThreadCode(void);
         int16_t LoadTrainOperationSession(void);
         int16_t LoadPathSegmentsData(void);
-
+        void SetLastTimeTrainPositionReceived(std::chrono::high_resolution_clock::time_point);
+        std::chrono::high_resolution_clock::time_point GetLastTimeTrainPositionReceived(void);
+        void SetOperationSessionAsATrain(void);
+        bool IsThisSessionATrain(void);
         std::list<MoveSegment> segmentsList;
     protected:
     private:
@@ -107,9 +111,11 @@ class TrainOperationSession
         uint16_t currentSegmentID_ = 0;
         uint16_t currentSegmentMoveStatus_ = 0;
         float currentSpeed_ = 0;
+        std::chrono::high_resolution_clock::time_point lastTimeTrainPositionReceived_;
+        bool trainCommStatusOK_ = false;
         std::thread * trainOperationSessionThreadCode_;
         std::thread * TrainOperationSessionWatchdogThreadCode_;
-
+        bool isATrain_ = false;
 };
 
 #endif // TRAINOPERATIONSESSION_HPP

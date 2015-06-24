@@ -4,22 +4,11 @@
 using namespace std;
 using namespace google::protobuf;
 
-//extern std::unordered_map<std::string, TrainSession>    g_trains;
-//uint16_t g_commSessionMutexLockTimeoutMilliseconds = 111;
-/*
-PositionInformationImpl::PositionInformationImpl(config const * config, std::unordered_map<std::string, TrainSession> * trainsSessions )
-{
-    softwareConfig_ = config;
-    trainsSessions_ = trainsSessions;
-}
-*/
-
 PositionInformationImpl::PositionInformationImpl()
 {
 
 }
 
-// PositionInformation() method implementation.
 void PositionInformationImpl::PositionInformation(  RpcController *                             controller,
                                                     const PositionInformationTransmit *         request,
                                                     PositionInformationReceive *                response,
@@ -53,20 +42,16 @@ void PositionInformationImpl::PositionInformation(  RpcController *             
         case APPROCHING: smove = "APPROCHING";break;
         case ARRIVED: smove = "ARRIVED";break;
     }
-    BOOST_LOG_SEV(lg, notification) << "position received from train : " << request->trainid() << " " << request->kpposition() << " " \
+    BOOST_LOG_SEV(lg, message) << "position received from train : " << request->trainid() << " " << request->kpposition() << " " \
                                         << smode << " " << smove << " direction " << request->direction() << " " \
                                         << request->path();
 
-    // Fill in the response.
     response->set_servername("Position received OK !");
     // Send response back to the client.
     done->Run();
 
-    //Retrieve session info and store them in unordered_map
-    //g_trains is keyed by train IP addresses
     TrainSession & trainSession = (*trainsSessions_)[ipaddress];
 
-    //retrieve a ref to train comm session
     TrainCommSession & traincommsession = trainSession.GetTrainCommSessionRef();
 
     if(traincommsession.TryLockCommSessionMutexFor(softwareConfig_->commSessionMutexLockTimeoutMilliseconds_))

@@ -7,7 +7,6 @@
 #include <unordered_map>
 #include "TrainSession.hpp"
 
-// PositionInformationService declaration.
 class PositionInformationImpl : public PositionInformationService
 {
 public:
@@ -20,8 +19,6 @@ public:
         const PositionInformationTransmit *         request,
         PositionInformationReceive *                response,
         google::protobuf::Closure *                 done);
-    virtual void SetResponse(PositionInformationReceive * response, google::protobuf::Closure * done);
-    virtual void UpdateSession(RCF::RcfProtoSession * pprotoSession, RCF::RcfSession &);
 };
 
 #endif // PROTOBUFPOSITIONINFORMATIONSERVICEIMPL_HPP

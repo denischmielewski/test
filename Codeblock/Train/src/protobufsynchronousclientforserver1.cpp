@@ -2,7 +2,6 @@
 
 ProtobufSynchronousClientForServer1::~ProtobufSynchronousClientForServer1()
 {
-    //dtor
     if(ProtobufSynchronousClientThread.joinable()) ProtobufSynchronousClientThread.join();
 }
 
@@ -14,7 +13,6 @@ ProtobufSynchronousClientForServer1::ProtobufSynchronousClientForServer1(config 
 
 void ProtobufSynchronousClientForServer1::Start()
 {
-    // This will start the thread. Notice move semantics!
     ProtobufSynchronousClientThread = std::thread(&ProtobufSynchronousClientForServer1::ProtobufSynchronousClientThreadCode,this);
 }
 
@@ -29,22 +27,16 @@ void ProtobufSynchronousClientForServer1::ProtobufSynchronousClientThreadCode(vo
     extern volatile int g_signal_received;
     std::chrono::milliseconds sleepMilliseconds(clientconf->communicationThreadsSleepDurationMilliseconds_);
 
-    // Create request object.
     PositionInformationTransmit request;
     request.set_trainid(clientconf->hostname_);
-
-    // Create response object.
     PositionInformationReceive response;
 
     RCF::RcfProtoChannel channel( RCF::TcpEndpoint(clientconf->server1_ipaddress_, std::stoi(clientconf->server1_listener_port_)));
-    BOOST_LOG_SEV(lg, notification) << "Message to server1 will be sent to : " << clientconf->server1_ipaddress_ << " on port : " << clientconf->server1_listener_port_;
+    BOOST_LOG_SEV(lg, threads) << "Message to server1 will be sent to : " << clientconf->server1_ipaddress_ << " on port : " << clientconf->server1_listener_port_;
 
-    // connect timeout in ms.
     channel.setConnectTimeoutMs(clientconf->TCPIP_Connection_Timeout_);
-    // remote call timeout in ms.
     channel.setRemoteCallTimeoutMs(clientconf->TCPIP_Reply_Timeout_);
 
-    // Create service stub.
     PositionInformationService::Stub stub(&channel);
 
     std::chrono::high_resolution_clock::time_point t0 = std::chrono::high_resolution_clock::now();
@@ -64,7 +56,7 @@ void ProtobufSynchronousClientForServer1::ProtobufSynchronousClientThreadCode(vo
                 //build request
                 auto it = trainsSessions_->find(clientconf->main_ipaddress_);
                 TrainOperationSession & trainoperationsession = (it->second).GetTrainOperationSessionRef();
-                if(trainoperationsession.TryLockCommSessionMutexFor(clientconf->operationSessionMutexLockTimeoutMilliseconds_))
+                if(trainoperationsession.TryLockOperationSessionMutexFor(clientconf->operationSessionMutexLockTimeoutMilliseconds_))
                 {
 
                     request.set_trainid(clientconf->main_ipaddress_);
@@ -73,7 +65,7 @@ void ProtobufSynchronousClientForServer1::ProtobufSynchronousClientThreadCode(vo
                     request.set_direction(trainoperationsession.GetDirection());
                     request.set_movement(trainoperationsession.GetCurrentSegmentMoveStatus());
                     request.set_path(trainoperationsession.GetPath());
-                    trainoperationsession.UnlockCommSessionMutex();
+                    trainoperationsession.UnlockOperationSessionMutex();
                 }
                 else
                 {
@@ -99,13 +91,13 @@ void ProtobufSynchronousClientForServer1::ProtobufSynchronousClientThreadCode(vo
                     case APPROCHING: smove = "APPROCHING";break;
                     case ARRIVED: smove = "ARRIVED";break;
                 }
-                BOOST_LOG_SEV(lg, notification) << "Sending message to Server1 : trainID = " << request.trainid() << " path = " << request.path() \
+                BOOST_LOG_SEV(lg, message) << "Sending message to Server1 : trainID = " << request.trainid() << " path = " << request.path() \
                                                 << " direction " << request.direction() << " position " << request.kpposition() << " "\
                                                 << smode << " " << smove;
                 stub.PositionInformation(NULL, &request, &response, NULL);
 
                 // Process response.
-                BOOST_LOG_SEV(lg, notification) << "Received response from Server1 : server name = " << response.servername();
+                BOOST_LOG_SEV(lg, message) << "Received response from Server1 : server name = " << response.servername();
             }
         }
         catch(const RCF::Exception & e)
@@ -119,6 +111,6 @@ void ProtobufSynchronousClientForServer1::ProtobufSynchronousClientThreadCode(vo
 
     }
 
-    if(g_signal_received) BOOST_LOG_SEV(lg, notification) << "Signal received, terminating Client for Server1 thread";
+    if(g_signal_received) BOOST_LOG_SEV(lg, threads) << "Signal received, terminating Client for Server1 thread";
 }
 

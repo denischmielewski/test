@@ -79,9 +79,6 @@ int main(int argc, char *argv[])
         return ERROR_LOG_COULD_NOT_BE_INITIALIZED;
     }
 
-    //now we can log
-    // Initialize RCFProto.
-
     RCF::init();
     BOOST_LOG_SEV(*logger, notification) << "TrainGUI RCF init !";
 
@@ -108,7 +105,7 @@ int main(int argc, char *argv[])
 
 
     //Log Summary of communication sessions with trains
-    BOOST_LOG_SEV(*logger, notification) << "train communication sessions summary :" << std::endl;
+    BOOST_LOG_SEV(*logger, notification) << "trainGUI communication RCFProto server sessions summary :" << std::endl;
     int i = 0;
     for ( auto it = trainsSessions.begin(); it != trainsSessions.end(); ++it ){i++;};
     BOOST_LOG_SEV(*logger, notification) << "number of sessions :" << i;
@@ -117,11 +114,8 @@ int main(int argc, char *argv[])
     for ( auto it = trainsSessions.begin(); it != trainsSessions.end(); ++it )
     {
         i++;
-        BOOST_LOG_SEV(*logger, notification) << "========================== SESSION : " << i;
-        BOOST_LOG_SEV(*logger, notification) << "Train IP address :" << it->first;
+        BOOST_LOG_SEV(*logger, notification) << "========================== SESSION : " << i << " Train IP address :" << it->first;
 
-        //TrainSession trainsession = it->second;
-        //TrainCommSession & traincommsession = trainsession.GetTrainCommSessionRef();
         TrainCommSession & traincommsession = (it->second).GetTrainCommSessionRef();
 
         if(traincommsession.TryLockCommSessionMutexFor(trainGUI_configuration->commSessionMutexLockTimeoutMilliseconds_))
