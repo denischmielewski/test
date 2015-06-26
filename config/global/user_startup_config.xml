@@ -83,26 +83,33 @@
 				<GUI_IP>192.168.2.222/24</GUI_IP>
 			</IP_ADDRESSES_AND_SUBNET>
 		</Train221>
-		<SERVER1> <!-- Hostname of the linux OS, 1024 bytes MAX !!! -->
+		<Server1> <!-- Hostname of the linux OS, 1024 bytes MAX !!! -->
 			<IP_ADDRESSES_AND_SUBNET>
 				<ADAPTER>eth0</ADAPTER>
-				<MAIN_IP>192.168.1.11/24</MAIN_IP>
-				<GUI_IP>192.168.1.12/24</GUI_IP>
+				<MAIN_IP>192.168.1.21/24</MAIN_IP>
+				<GUI_IP>192.168.1.22/24</GUI_IP>
 			</IP_ADDRESSES_AND_SUBNET>
-		</SERVER1>
-		<SERVER2> <!-- Hostname of the linux OS, 1024 bytes MAX !!! -->
+		</Server1>
+		<Server2> <!-- Hostname of the linux OS, 1024 bytes MAX !!! -->
 			<IP_ADDRESSES_AND_SUBNET>
 				<ADAPTER>eth0</ADAPTER>
-				<MAIN_IP>192.168.1.15/24</MAIN_IP>
-				<GUI_IP>192.168.2.16/24</GUI_IP>
+				<MAIN_IP>192.168.1.25/24</MAIN_IP>
+				<GUI_IP>192.168.1.26/24</GUI_IP>
 			</IP_ADDRESSES_AND_SUBNET>
-		</SERVER2>
-		<SERVER3> <!-- Hostname of the linux OS, 1024 bytes MAX !!! -->
+		</Server2>
+		<Server3> <!-- Hostname of the linux OS, 1024 bytes MAX !!! -->
 			<IP_ADDRESSES_AND_SUBNET>
 				<ADAPTER>eth0</ADAPTER>
-				<MAIN_IP>192.168.1.20/24</MAIN_IP>
-				<GUI_IP>192.168.2.21/24</GUI_IP>
+				<MAIN_IP>192.168.1.21/30</MAIN_IP>
+				<GUI_IP>192.168.1.22/31</GUI_IP>
 			</IP_ADDRESSES_AND_SUBNET>
-		</SERVER3>
+		</Server3>
+		<Operator1> <!-- Hostname of the linux OS, 1024 bytes MAX !!! -->
+			<IP_ADDRESSES_AND_SUBNET>
+				<ADAPTER>eth0</ADAPTER>
+				<MAIN_IP>192.168.1.41/24</MAIN_IP>
+				<GUI_IP>192.168.1.42/24</GUI_IP>
+			</IP_ADDRESSES_AND_SUBNET>
+		</Operator1>
 	</TRAINS_IP_CONFIG>
 </TRAIN_STARTUP_CONFIG>

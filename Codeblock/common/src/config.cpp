@@ -164,19 +164,19 @@ config::config()
         server1_listener_port_ = pt1.get<std::string>(node);
         BOOST_LOG_SEV(lg, notification) << "Communication port to use for Server1 : " << server1_listener_port_;
 
-        node = "TRAIN_STARTUP_CONFIG.TRAINS_IP_CONFIG.SERVER1.IP_ADDRESSES_AND_SUBNET.MAIN_IP";
+        node = "TRAIN_STARTUP_CONFIG.TRAINS_IP_CONFIG.Server1.IP_ADDRESSES_AND_SUBNET.MAIN_IP";
         std::string ipaddressmask = pt1.get<std::string>(node);
         pos = ipaddressmask.find("/");      // position of "/" in string
         server1_ipaddress_ = ipaddressmask.substr (0,pos);
         BOOST_LOG_SEV(lg, notification) << "server1 Main sw IP address : " << server1_ipaddress_;
 
-        node = "TRAIN_STARTUP_CONFIG.TRAINS_IP_CONFIG.SERVER2.IP_ADDRESSES_AND_SUBNET.MAIN_IP";
+        node = "TRAIN_STARTUP_CONFIG.TRAINS_IP_CONFIG.Server2.IP_ADDRESSES_AND_SUBNET.MAIN_IP";
         ipaddressmask = pt1.get<std::string>(node);
         pos = ipaddressmask.find("/");      // position of "/" in string
         server2_ipaddress_ = ipaddressmask.substr (0,pos);
         BOOST_LOG_SEV(lg, notification) << "server2 Main sw IP address : " << server2_ipaddress_;
 
-        node = "TRAIN_STARTUP_CONFIG.TRAINS_IP_CONFIG.SERVER3.IP_ADDRESSES_AND_SUBNET.MAIN_IP";
+        node = "TRAIN_STARTUP_CONFIG.TRAINS_IP_CONFIG.Server3.IP_ADDRESSES_AND_SUBNET.MAIN_IP";
         ipaddressmask = pt1.get<std::string>(node);
         pos = ipaddressmask.find("/");      // position of "/" in string
         server3_ipaddress_ = ipaddressmask.substr (0,pos);
@@ -266,9 +266,6 @@ config::config()
 
 config::~config()
 {
-    //dtor
-    BOOST_LOG_SEV(lg, notification) << "enter DESTRUCTOR config class";
-    BOOST_LOG_SEV(lg, notification) << "leave DESTRUCTOR config class";
 }
 
 int16_t config::configureMainIPPortMask_(void)

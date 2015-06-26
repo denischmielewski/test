@@ -6,12 +6,15 @@
 #include <QMessageBox>
 #include <QProcess>
 #include <string>
+#include <QGraphicsScene>
 
 #include "fleetGUIcommunicationsserver.h"
 #include "fleetGUIcommunicationclient.hpp"
 #include "config.hpp"
-#include "ui_mainwindow.h"
+#include "ui_fleetGUI.h"
 #include "utils.hpp"
+
+
 
 namespace Ui {
 class MainWindow;
@@ -28,9 +31,11 @@ public:
                         FleetGUICommunicationClient const * c = 0);
     ~MainWindow();
     void closeEvent(QCloseEvent *);
+    void resizeEvent(QResizeEvent *);
 
 private:
     Ui::MainWindow *ui;
+    QGraphicsScene * myScene;
 
 signals:
     void myclose(void);

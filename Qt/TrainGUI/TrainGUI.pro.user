@@ -1,6 +1,6 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <!DOCTYPE QtCreatorProject>
-<!-- Written by QtCreator 3.3.2, 2015-06-23T16:41:08. -->
+<!-- Written by QtCreator 3.3.2, 2015-06-25T20:21:00. -->
 <qtcreator>
  <data>
   <variable>EnvironmentId</variable>
@@ -163,7 +163,7 @@
      <valuemap type="QVariantMap" key="ProjectExplorer.BuildStepList.Step.2">
       <value type="bool" key="ProjectExplorer.BuildStep.Enabled">true</value>
       <value type="QString" key="ProjectExplorer.ProcessStep.Arguments"></value>
-      <value type="QString" key="ProjectExplorer.ProcessStep.Command">/home/dev/userdev/denis/batch/deploy_from_batch_folder.sh</value>
+      <value type="QString" key="ProjectExplorer.ProcessStep.Command">/home/dev/userdev/denis/batch/deploy_TrainGUI_from_batch_folder.sh</value>
       <value type="QString" key="ProjectExplorer.ProcessStep.WorkingDirectory">/home/dev/userdev/denis/batch</value>
       <value type="QString" key="ProjectExplorer.ProjectConfiguration.DefaultDisplayName">Custom Process Step</value>
       <value type="QString" key="ProjectExplorer.ProjectConfiguration.DisplayName"></value>
