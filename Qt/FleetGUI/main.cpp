@@ -88,7 +88,7 @@ int main(int argc, char *argv[])
     FleetGUICommunicationClient FleetGUICommunicationClientThread(fleetGUI_configuration, &trainsSessions);
     FleetGUICommunicationClientThread.start();
 
-    MainWindow w(0, fleetGUI_configuration, &FleetGUICommunicationsServerThread, &FleetGUICommunicationClientThread);
+    MainWindow w(0, fleetGUI_configuration, &trainsSessions, &FleetGUICommunicationsServerThread, &FleetGUICommunicationClientThread);
 
     BOOST_LOG_SEV(*logger, notification) << "Program FleetGUI started ! Compile date : " << __DATE__ << ":" << __TIME__;
     BOOST_LOG_SEV(*logger, notification) << "Everything configured, communication thread running ... !";
@@ -111,7 +111,8 @@ int main(int argc, char *argv[])
 
 
     //Log Summary of communication sessions
-    BOOST_LOG_SEV(*logger, notification) << "FleetGUI communication RCFProto server sessions summary :" << std::endl;
+    BOOST_LOG_SEV(*logger, notification) << std::endl;
+    BOOST_LOG_SEV(*logger, notification) << "FleetGUI communication RCFProto server sessions summary :";
     int i = 0;
     for ( auto it = trainsSessions.begin(); it != trainsSessions.end(); ++it ){i++;};
     BOOST_LOG_SEV(*logger, notification) << "number of sessions :" << i;

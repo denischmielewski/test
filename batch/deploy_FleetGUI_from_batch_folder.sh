@@ -22,9 +22,9 @@ rsync -avz ../Qt/build-FleetGUI-Desktop_Qt_5_4_1_GCC_64bit-Release/FleetGUI trai
 # deploy config files to dev-VM and Operator1
 echo "==========sync config files to local train"
 rsync -avz ../config/global/*.xml /home/train/config/global
-rsync -avz ../config/local/*.xml /home/train/config/local
+#rsync -avz ../config/local/*.xml /home/train/config/local
 echo "==========sync config files to Operator1"
 rsync -avz ../config/global/*.xml train@Operator1:/home/train/config/global
-rsync -avz ../config/local/*.xml train@Operator1:/home/train/config/local
+#rsync -avz ../config/local/*.xml train@Operator1:/home/train/config/local
 
 echo "Post-build deployment of FleetGUI and config files terminated !!! Check if errors !"

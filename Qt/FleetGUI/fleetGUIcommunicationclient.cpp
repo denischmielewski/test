@@ -16,8 +16,6 @@ FleetGUICommunicationClient::FleetGUICommunicationClient(config const * conf, st
 
 FleetGUICommunicationClient::~FleetGUICommunicationClient()
 {
-    BOOST_LOG_SEV(*logger, notification) << "enter DESTRUCTOR FleetGUICommunicationClient class";
-    BOOST_LOG_SEV(*logger, notification) << "leave DESTRUCTOR FleetGUICommunicationClient class";
 }
 
 void FleetGUICommunicationClient::FleetGUICommunicationClient::run(void)
@@ -69,7 +67,7 @@ void FleetGUICommunicationClient::onTimerForClientToServer1GetFleetShot(void)
         getFleetCommand_.set_ipaddress(clientconf->main_ipaddress_);
         BOOST_LOG_SEV(*logger, message) << "Send GetFleet message to Server1";
         getFleetServiceStub_->GetFleet(NULL, &getFleetCommand_, &getFleetResponse_, NULL);
-        BOOST_LOG_SEV(*logger, message)    << " Received getFleetResponse from Server1 : number of traindata = "<< getFleetResponse_.traindatalist_size();
+        BOOST_LOG_SEV(*logger, message)    << "Received getFleetResponse from Server1 : number of traindata = "<< getFleetResponse_.traindatalist_size();
         for (int i = 0; i < getFleetResponse_.traindatalist_size();i++)
         {
             TrainData td = getFleetResponse_.traindatalist(i);
@@ -82,7 +80,6 @@ void FleetGUICommunicationClient::onTimerForClientToServer1GetFleetShot(void)
                 case MANUAL: smode = "MANUAL";break;
                 default: smode = "NO_MODE_DATA";break;
             }
-            BOOST_LOG_SEV(*logger, notification) << smode;
             std::string smove;
             switch(td.movement())
             {
@@ -96,7 +93,7 @@ void FleetGUICommunicationClient::onTimerForClientToServer1GetFleetShot(void)
             }
             std::string cs;
             if(td.commstatusok() == true) cs = "Comm Status OK"; else cs = "Comm Status NOK";
-            BOOST_LOG_SEV(*logger, message)    << " Train #" << i+1 << " " << cs << " " \
+            BOOST_LOG_SEV(*logger, message)    << "Train #" << i+1 << " " << cs << " " \
                                                     << " : " << td.ipaddress() << " " << td.kpposition() << " " << smode \
                                                     << " " << smove << " direction " << td.direction() << " " << td.path();
 
@@ -105,6 +102,7 @@ void FleetGUICommunicationClient::onTimerForClientToServer1GetFleetShot(void)
 
             if(trainoperationsession.TryLockOperationSessionMutexFor(clientconf->commSessionMutexLockTimeoutMilliseconds_))
             {
+                trainoperationsession.SetOperationSessionAsATrain();
                 trainoperationsession.SetKpPosition(td.kpposition());
                 trainoperationsession.SetDirection(td.direction());
                 if(td.mode() == AUTOMATIC) {trainoperationsession.SetModeAutomatic();}

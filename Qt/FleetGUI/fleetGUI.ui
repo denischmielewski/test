@@ -17,8 +17,8 @@
    <widget class="QPushButton" name="pushButton">
     <property name="geometry">
      <rect>
-      <x>10</x>
-      <y>300</y>
+      <x>0</x>
+      <y>350</y>
       <width>99</width>
       <height>27</height>
      </rect>
@@ -30,7 +30,7 @@
    <widget class="QGraphicsView" name="graphicsView">
     <property name="geometry">
      <rect>
-      <x>10</x>
+      <x>0</x>
       <y>0</y>
       <width>501</width>
       <height>291</height>
@@ -41,6 +41,12 @@
       <horstretch>0</horstretch>
       <verstretch>0</verstretch>
      </sizepolicy>
+    </property>
+    <property name="maximumSize">
+     <size>
+      <width>1600</width>
+      <height>900</height>
+     </size>
     </property>
     <property name="autoFillBackground">
      <bool>true</bool>

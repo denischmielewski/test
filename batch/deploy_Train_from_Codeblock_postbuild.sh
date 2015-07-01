@@ -47,19 +47,19 @@ rsync -avz ../../Qt/build-TrainGUI-Desktop_Qt_5_4_1_GCC_64bit-Release/TrainGUI t
 # deploy config files to dev-VM and all trains /home/train sub-folders
 echo "==========sync config files to local dev train"
 rsync -avz ../../config/global/*.xml /home/train/config/global
-rsync -avz ../../config/local/*.xml /home/train/config/local
+#rsync -avz ../../config/local/*.xml /home/train/config/local
 echo "==========sync config files to train 191"
 rsync -avz ../../config/global/*.xml train@Train191:/home/train/config/global
-rsync -avz ../../config/local/*.xml train@Train191:/home/train/config/local
+#rsync -avz ../../config/local/*.xml train@Train191:/home/train/config/local
 echo "==========sync config files to train 201"
 rsync -avz ../../config/global/*.xml train@Train201:/home/train/config/global
-rsync -avz ../../config/local/*.xml train@Train201:/home/train/config/local
+#rsync -avz ../../config/local/*.xml train@Train201:/home/train/config/local
 echo "==========sync config files to train 211"
 rsync -avz ../../config/global/*.xml train@Train211:/home/train/config/global
-rsync -avz ../../config/local/*.xml train@train211:/home/train/config/local
+#rsync -avz ../../config/local/*.xml train@train211:/home/train/config/local
 echo "==========sync config files to train 221"
 rsync -avz ../../config/global/*.xml train@Train221:/home/train/config/global
-rsync -avz ../../config/local/*.xml train@Train221:/home/train/config/local
+#rsync -avz ../../config/local/*.xml train@Train221:/home/train/config/local
 
 
 echo "Post-build deployment of Train and TrainGUI from Codeblock termnated !!! Check if errors ..."

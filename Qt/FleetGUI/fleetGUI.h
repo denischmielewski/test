@@ -7,12 +7,17 @@
 #include <QProcess>
 #include <string>
 #include <QGraphicsScene>
+#include <QGraphicsItem>
+#include <QGraphicsPathItem>
+#include <QPainterPath>
 
 #include "fleetGUIcommunicationsserver.h"
 #include "fleetGUIcommunicationclient.hpp"
 #include "config.hpp"
 #include "ui_fleetGUI.h"
 #include "utils.hpp"
+#include "errors.hpp"
+#include "log.hpp"
 
 
 
@@ -26,19 +31,33 @@ class MainWindow : public QMainWindow
 
 public:
     explicit MainWindow(QWidget *parent = 0,
-                        config const * fleetGUI_configuration = 0,
+                        const config * const fleetGUI_configuration = 0,
+                        std::unordered_map<std::string, TrainSession> * trainsSessions = 0,
                         FleetGUICommunicationsServer const * t = 0,
                         FleetGUICommunicationClient const * c = 0);
     ~MainWindow();
     void closeEvent(QCloseEvent *);
     void resizeEvent(QResizeEvent *);
+    startup_severity_channel_logger_mt * fleetGUI_logger_;
 
 private:
     Ui::MainWindow *ui;
+    const config * softwareConfig_ = 0;
+    std::unordered_map<std::string, TrainSession> * trainsSessions_ = 0;
     QGraphicsScene * myScene;
+    QPainterPath linePath_;
+    float linePathLength_;
+    float currentScaleW_ = 1;
+    float currentScaleY_ = 1;
+    QTimer * timerForGUIRefresh_ = nullptr;
+    std::unordered_map<std::string, QGraphicsEllipseItem *>    trainsQGraphicsEllipseItems_;
+
+    QGraphicsEllipseItem * testEllipseItem_;
 
 signals:
     void myclose(void);
+public slots:
+    void onTimerForGUIRefreshShot(void);
 };
 
 #endif // MAINWINDOW_H
