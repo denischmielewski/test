@@ -18,8 +18,7 @@
 #include "utils.hpp"
 #include "errors.hpp"
 #include "log.hpp"
-
-
+#include <unordered_map>
 
 namespace Ui {
 class MainWindow;

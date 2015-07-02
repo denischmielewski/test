@@ -2,8 +2,14 @@
 
 <!-- This file contains information for Blue line scenario step -->
 <!-- from this information and the position in garage, software will calculate movement and forks settings -->
+<!-- It also contains some information on how the line is displayed on GUI (like color, width -->
 
 <PATH>
+	<NAME>BlueLine</NAME>	
+	<COLOR_R>125</COLOR_R>
+	<COLOR_G>126</COLOR_G>
+	<COLOR_B>127</COLOR_B>
+	<DISPLAY_WIDTH>4</DISPLAY_WIDTH>	<!-- in pixels !  -->
 	<TOTAL_DISTANCE>38500</TOTAL_DISTANCE>	<!-- in meters !  -->
 	<TOTAL_SEGMENTS>23</TOTAL_SEGMENTS>
 	<!-- when moving in direction 2, software can deduct all information from information below ! So less information to enter manually  -->

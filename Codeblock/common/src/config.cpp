@@ -19,8 +19,8 @@ startup_severity_channel_logger_mt& lg = startup_logger::get();
 
 config::config()
 {
-    boost::property_tree::ptree pt1, pt2, pt3;
-    std::ifstream configFile, configFile2, configFile3;
+    boost::property_tree::ptree pt1, pt2, pt3, pt4;
+    std::ifstream configFile, configFile2, configFile3, configFile4;
     std::string ipAddress;
 
     configFile.open(GLOBAL_STARTUP_CONFIG_XML_FILE.c_str());
@@ -85,6 +85,8 @@ config::config()
 
     try
     {
+//Retrieve Configuration Data from DevConfig.xml.
+        BOOST_LOG_SEV(lg, notification) << "--------------------------- Retrieve Configuration Data from DevConfig.xml.";
         std::string node = "TRAIN_CONFIG_DEV.LINUX_SYSTEM_CALL_BUFFER_SIZE";
         linuxSysCallBufferSize_ = std::stoul(pt2.get<std::string>(node), nullptr, 10);
         BOOST_LOG_SEV(lg, notification) << "Size of buffer for linux system calls : " << linuxSysCallBufferSize_;
@@ -129,6 +131,7 @@ config::config()
         node = "TRAIN_CONFIG_DEV.MOVEMENT_THREAD_BEAT";
         movementThreadBeatMilliseconds_ = std::stoul(pt2.get<std::string>(node), nullptr, 10);
         BOOST_LOG_SEV(lg, notification) << "Movement Thread Beat period : " << movementThreadBeatMilliseconds_ << " milliseconds";
+        BOOST_LOG_SEV(lg, notification) << "--------------------------- Retrieve Configuration Data from DevConfig.xml.\n";
 
         char * hostname = nullptr;
         hostname = new char[linuxSysCallBufferSize_];   //deleted at the end of the block
@@ -136,6 +139,8 @@ config::config()
         hostname_ = std::string(hostname);
         BOOST_LOG_SEV(lg, notification) << "Computer hostname found : " << hostname_;
 
+//Retrieve Configuration Data from user_startup_config.xml.
+        BOOST_LOG_SEV(lg, notification) << "--------------------------- Retrieve Configuration Data from user_startup_config.xml";
         node = "TRAIN_STARTUP_CONFIG.TRAINS_IP_CONFIG." + string(hostname) + ".IP_ADDRESSES_AND_SUBNET.MAIN_IP";
         main_ipaddressmask_ = pt1.get<std::string>(node);
         std::size_t pos = main_ipaddressmask_.find("/");      // position of "/" in string
@@ -230,10 +235,111 @@ config::config()
         node = "TRAIN_STARTUP_CONFIG.SYNCHRONOUS_MESSAGES.SERVER1_TRAIN_POSITION_DATA_VALIDATION_PERIOD";
         TrainPositionDataValidationPeriodMilliseconds_ = std::stoul(pt1.get<std::string>(node), nullptr, 10);
         BOOST_LOG_SEV(lg, notification) << "period for which position Data received are valid : " << TrainPositionDataValidationPeriodMilliseconds_ << " milliseconds";
+        BOOST_LOG_SEV(lg, notification) << "--------------------------- End Retrieve Configuration Data from user_startup_config.xml\n";
 
+        node = "TRAIN_STARTUP_CONFIG.CONFIG_FOR_FLEETGUI.GRAPHICSCENE_X";
+        configForFleetGUISw_.graphicSceneX_ = stoi(pt1.get<std::string>(node), nullptr, 10);
+        BOOST_LOG_SEV(lg, notification) << "graphic Scene X : " << configForFleetGUISw_.graphicSceneX_;
+
+        node = "TRAIN_STARTUP_CONFIG.CONFIG_FOR_FLEETGUI.GRAPHICSCENE_Y";
+        configForFleetGUISw_.graphicSceneY_ = stoi(pt1.get<std::string>(node), nullptr, 10);
+        BOOST_LOG_SEV(lg, notification) << "graphic Scene Y : " << configForFleetGUISw_.graphicSceneX_;
+
+        node = "TRAIN_STARTUP_CONFIG.CONFIG_FOR_FLEETGUI.GRAPHICSCENE_WIDTH";
+        configForFleetGUISw_.graphicSceneWidth_ = stoi(pt1.get<std::string>(node), nullptr, 10);
+        BOOST_LOG_SEV(lg, notification) << "graphic Scene Width : " << configForFleetGUISw_.graphicSceneWidth_;
+
+        node = "TRAIN_STARTUP_CONFIG.CONFIG_FOR_FLEETGUI.GRAPHICSCENE_HEIGHT";
+        configForFleetGUISw_.graphicSceneHeight_ = stoi(pt1.get<std::string>(node), nullptr, 10);
+        BOOST_LOG_SEV(lg, notification) << "graphic Scene Height : " << configForFleetGUISw_.graphicSceneHeight_;
+
+        node = "TRAIN_STARTUP_CONFIG.CONFIG_FOR_FLEETGUI.TRAIN_DISPLAY_SIZE_IN_PIXELS";
+        configForFleetGUISw_.trainDisplaySizeInPixel_ = stoi(pt1.get<std::string>(node), nullptr, 10);
+        BOOST_LOG_SEV(lg, notification) << "train display size in pixels : " << configForFleetGUISw_.trainDisplaySizeInPixel_;
+
+        node = "TRAIN_STARTUP_CONFIG.CONFIG_FOR_FLEETGUI.TRAIN_DISPLAY_OFFSET_RELATIVE_TO_LINE_IN_PIXELS";
+        configForFleetGUISw_.trainDisplayOffsetRelativeToLineInPixels_ = stoi(pt1.get<std::string>(node), nullptr, 10);
+        BOOST_LOG_SEV(lg, notification) << "train display offset relative to line in pixels : " << configForFleetGUISw_.trainDisplayOffsetRelativeToLineInPixels_;
+
+        node = "TRAIN_STARTUP_CONFIG.CONFIG_FOR_FLEETGUI.TRAIN_MODE_DISPLAY_SIZE_IN_PIXELS";
+        configForFleetGUISw_.trainModeDisplaySizeInPixel_ = stoi(pt1.get<std::string>(node), nullptr, 10);
+        BOOST_LOG_SEV(lg, notification) << "train display offset relative to line in pixels : " << configForFleetGUISw_.trainModeDisplaySizeInPixel_;
+
+        node = "TRAIN_STARTUP_CONFIG.CONFIG_FOR_FLEETGUI.TRAIN_MODE_DISPLAY_OFFSET_RELATIVE_TO_LINE_IN_PIXELS";
+        configForFleetGUISw_.trainModeDisplayOffsetRelativeToLineInPixels_ = stoi(pt1.get<std::string>(node), nullptr, 10);
+        BOOST_LOG_SEV(lg, notification) << "train mode display offset relative to line in pixels : " << configForFleetGUISw_.trainModeDisplayOffsetRelativeToLineInPixels_;
+
+        node = "TRAIN_STARTUP_CONFIG.TRAINS_NETWORK_CONFIG.NUMBER_OF_LINES";
+        int16_t numberOfLines = stoi(pt1.get<std::string>(node), nullptr, 10);
+        BOOST_LOG_SEV(lg, notification) << "number of lines : " << numberOfLines;
+
+        for(int16_t i =1; i <= numberOfLines; i++)
+        {
+            BOOST_LOG_SEV(lg, notification) << "retrieve configuration data for line " << i;
+            node = "TRAIN_STARTUP_CONFIG.TRAINS_NETWORK_CONFIG.LINE_" + std::to_string(i) + ".FILE";
+            std::string pathToLineConfigurationData = pt1.get<std::string>(node);
+            BOOST_LOG_SEV(lg, notification) << "Path To Line " << i << " configuration data : " << pathToLineConfigurationData;
+            configFile4.open(pathToLineConfigurationData);
+            if(configFile4.fail())
+            {
+                BOOST_LOG_SEV(lg, critical) << "PROBLEM opening config file " << pathToLineConfigurationData << " !!!";
+                return;
+            }
+            else
+            {
+                BOOST_LOG_SEV(lg, notification) << "found config file " << pathToLineConfigurationData;
+                configFile4.close();
+                try{boost::property_tree::read_xml( pathToLineConfigurationData, pt4 );}
+                catch(const boost::property_tree::ptree_error& ex)
+                {
+                    BOOST_LOG_SEV(lg, critical) << "ERROR in config file " << pathToLineConfigurationData << " !!!";
+                    BOOST_LOG_SEV(lg, critical) << ex.what();
+                    return;
+                }
+                BOOST_LOG_SEV(lg, notification) << "PARSED OK config file " << pathToLineConfigurationData << " !!!";
+                struct LineData ld;
+
+                node = "PATH.NAME";
+                ld.lineName_ = pt4.get<std::string>(node);
+
+
+                node = "PATH.TOTAL_DISTANCE";
+                ld.linePKDistance_ = std::stoul(pt4.get<std::string>(node), nullptr, 10);
+
+                node = "PATH.SEGMENT_1.START_Kp";
+                ld.lineFirstKPPosition_ = std::stoul(pt4.get<std::string>(node), nullptr, 10);
+
+                node = "PATH.TOTAL_SEGMENTS";
+                ld.numberOfSegments_ =  stoi(pt4.get<std::string>(node), nullptr, 10);
+
+                node = "PATH.COLOR_R";
+                ld.lineColorR_ =  stoi(pt4.get<std::string>(node), nullptr, 10);
+
+                node = "PATH.COLOR_G";
+                ld.lineColorG_ =  stoi(pt4.get<std::string>(node), nullptr, 10);
+
+                node = "PATH.COLOR_B";
+                ld.lineColorB_ =  stoi(pt4.get<std::string>(node), nullptr, 10);
+
+                node = "PATH.DISPLAY_WIDTH";
+                ld.lineWidthPixel_ =  stoi(pt4.get<std::string>(node), nullptr, 10);
+
+                linesData_.emplace(ld.lineName_, ld);
+                BOOST_LOG_SEV(lg, notification) << "line Name : " << ld.lineName_;
+                BOOST_LOG_SEV(lg, notification) << "line PK distance: " << linesData_[ld.lineName_].linePKDistance_;
+                BOOST_LOG_SEV(lg, notification) << "line PK distance: " << linesData_[ld.lineName_].lineFirstKPPosition_;
+                BOOST_LOG_SEV(lg, notification) << "line number of segments : " << linesData_[ld.lineName_].numberOfSegments_;
+                BOOST_LOG_SEV(lg, notification) << "line color R : " << linesData_[ld.lineName_].lineColorR_;
+                BOOST_LOG_SEV(lg, notification) << "line color G : " << linesData_[ld.lineName_].lineColorG_;
+                BOOST_LOG_SEV(lg, notification) << "line color B : " << linesData_[ld.lineName_].lineColorB_;
+                BOOST_LOG_SEV(lg, notification) << "line width in Pixels : " << linesData_[ld.lineName_].lineWidthPixel_;
+            }
+        }
 
         if(loadTrainOperationDataFromDefaultDataXmlFile_)
         {
+//Retrieve Configuration Data from defaultdata.xml.
+            BOOST_LOG_SEV(lg, notification) << "--------------------------- Retrieve Configuration Data from defaultdata.xml";
             node = "DEFAULT.MODE";
             std::string s2 = pt3.get<std::string>(node);
             if(s2 == "AUTOMATIC") defaultMode_ = AUTOMATIC;
@@ -253,8 +359,10 @@ config::config()
             node = "DEFAULT.KPPOSITION";
             defaultKpPosition_ = stof(pt3.get<std::string>(node), nullptr);
             BOOST_LOG_SEV(lg, critical) << "Default KpPosition : " << defaultKpPosition_;
+            BOOST_LOG_SEV(lg, notification) << "--------------------------- End Retrieve Configuration Data from defaultdata.xml";
         }
         delete [] hostname;
+        BOOST_LOG_SEV(lg, notification) << "--------------------------- End Retrieve Configuration Data - NO Error !";
     }
     catch(const boost::property_tree::ptree_error& ex)
     {

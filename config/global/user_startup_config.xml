@@ -43,7 +43,7 @@
 		/x-train/config/Local/operationalData.xml
 	</OPERATIONAL_DATA_XML_FILE_LOCATION>
 
-	<!-- train network configuration -->
+	<!-- train IP configuration -->
 	<TRAINS_IP_CONFIG>
 		<MAIN_LISTENER_PORT>44044</MAIN_LISTENER_PORT>
 		<GUI_LISTENER_PORT>44045</GUI_LISTENER_PORT>
@@ -112,4 +112,26 @@
 			</IP_ADDRESSES_AND_SUBNET>
 		</Operator1>
 	</TRAINS_IP_CONFIG>
+	<!-- train Network IP configuration (lines, ...)-->
+	<TRAINS_NETWORK_CONFIG>
+		<NUMBER_OF_LINES>1</NUMBER_OF_LINES>
+		<LINE_1> <!-- Hostname of the linux OS, 1024 bytes MAX !!! -->
+			<FILE>/home/train/config/global/BlueLinePath1.xml</FILE>
+		</LINE_1>
+	</TRAINS_NETWORK_CONFIG>
+	<!-- Configuration for display network and trains-->
+	<CONFIG_FOR_FLEETGUI>
+		<!-- Position of Scene's rectangle in the main window-->
+		<GRAPHICSCENE_X>0</GRAPHICSCENE_X>
+		<GRAPHICSCENE_Y>0</GRAPHICSCENE_Y>
+		<!-- maximum Size of Scene's rectangle. It will be scaled to fit into main window ! -->
+		<GRAPHICSCENE_WIDTH>1600</GRAPHICSCENE_WIDTH>
+		<GRAPHICSCENE_HEIGHT>900</GRAPHICSCENE_HEIGHT>
+		<!-- parameter for the circle that represent train on display ! -->
+		<TRAIN_DISPLAY_SIZE_IN_PIXELS>10</TRAIN_DISPLAY_SIZE_IN_PIXELS>
+		<TRAIN_DISPLAY_OFFSET_RELATIVE_TO_LINE_IN_PIXELS>20</TRAIN_DISPLAY_OFFSET_RELATIVE_TO_LINE_IN_PIXELS>
+		<!-- parameter for displaying train mode ! -->
+		<TRAIN_MODE_DISPLAY_SIZE_IN_PIXELS>10</TRAIN_MODE_DISPLAY_SIZE_IN_PIXELS>
+		<TRAIN_MODE_DISPLAY_OFFSET_RELATIVE_TO_LINE_IN_PIXELS>20</TRAIN_MODE_DISPLAY_OFFSET_RELATIVE_TO_LINE_IN_PIXELS>
+	</CONFIG_FOR_FLEETGUI>
 </TRAIN_STARTUP_CONFIG>

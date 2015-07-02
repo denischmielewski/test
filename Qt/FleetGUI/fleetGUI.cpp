@@ -4,7 +4,6 @@
 #include <string>
 #include <math.h>
 
-
 MainWindow::MainWindow(QWidget *parent, const config * fleetGUI_configuration,
                                         std::unordered_map<std::string, TrainSession> * trainsSessions,
                                         FleetGUICommunicationsServer const * t, const FleetGUICommunicationClient *c) :
@@ -26,10 +25,7 @@ MainWindow::MainWindow(QWidget *parent, const config * fleetGUI_configuration,
     connection = connect(this, &MainWindow::myclose, t, &FleetGUICommunicationsServer::onCloseFleetGUI);
     connection = connect(this, &MainWindow::myclose, c, &FleetGUICommunicationClient::onCloseFleetGUI);
     myScene = new QGraphicsScene(0,0,1600,900,this);
-    //myScene = new QGraphicsScene(this);
     ui->graphicsView->setScene(myScene);
-    //ui->graphicsView->scale(0.25,0.25);
-    //ui->graphicsView->setRenderHints(QPainter::Antialiasing | QPainter::SmoothPixmapTransform);
     ui->graphicsView->setRenderHints(QPainter::Antialiasing);
     QBrush redBrush(Qt::red);
     QBrush blueBrush(Qt::blue);
@@ -37,10 +33,8 @@ MainWindow::MainWindow(QWidget *parent, const config * fleetGUI_configuration,
     blackPen.setWidth(2);
     QPen redPen(Qt::red);
     redPen.setWidth(2);
-    QLine Line(0,0,1000,250);
+    //QLine Line(0,0,1000,250);
 
-    //path.moveTo(400, 400);
-    //path.lineTo(100, 100);
     path.moveTo(50, 800);
     path.cubicTo(80,600, 200,600, 200,600);
     path.cubicTo(300,600, 300,400, 300,400);
@@ -62,20 +56,7 @@ MainWindow::MainWindow(QWidget *parent, const config * fleetGUI_configuration,
     path.cubicTo(1145,559, 1070,542, 1040,595);
     path.cubicTo(872,737, 609,755, 400,790);
 
-    //QGraphicsEllipseItem * myEllipse = myScene->addEllipse(500,250,600,300,blackPen, redBrush);
-    //QGraphicsEllipseItem * myEllipse = ui->graphicsView->scene()->addEllipse(0,0,50,25,blackPen, redBrush);
-    //QGraphicsLineItem * myLine = ui->graphicsView->scene()->addLine(Line,redPen);
-    //ui->graphicsView->scene()->setBackgroundBrush(blueBrush);
-    //myEllipse->setFlag(QGraphicsItem::ItemIsMovable);
-    //QGraphicsEllipseItem * myEllipse = ui->graphicsView->scene()->addEllipse(0,0,50,25,blackPen, redBrush);
-    //QGraphicsEllipseItem * pos1Dir1Segment1Ellipse = ui->graphicsView->scene()->addEllipse(38,794,10,10,blackPen, redBrush);
-    //QGraphicsEllipseItem * pos2Dir1Segment1Ellipse = ui->graphicsView->scene()->addEllipse(58,796,10,10,blackPen, redBrush);
-    //QGraphicsEllipseItem * pos2Dir1Segment1Ellipse = ui->graphicsView->scene()->addEllipse(0,0,100,100,blackPen, redBrush);
-
-    //qDebug("\n\n ==================== TEST1 !!!!! ========================");
-    //qDebug("\n\n ==================== TEST11 !!!!! ========================");
-    // 1st step: curve length
-    linePathLength_ = path.length(); //Memorized after Line was built and before adding any item (else length is modified)
+    linePathLength_ = path.length(); //Memorized after Line was built and before adding any item (because adding items length is modified)
     std::string s = std::to_string(linePathLength_);
     //qDebug("\n\n ==================== TEST111 !!!!! ========================");
     BOOST_LOG_SEV(*fleetGUI_logger_, debug) << "\n******* length " << " is " <<  s.c_str();
@@ -83,7 +64,7 @@ MainWindow::MainWindow(QWidget *parent, const config * fleetGUI_configuration,
     QPointF qp2;
     QPointF qp3;
 
-
+/*
     for(float i = 0; i <= 200; i++)
     {
         BOOST_LOG_SEV(*fleetGUI_logger_, debug) << "==================== iteration : " << i;
@@ -125,8 +106,9 @@ MainWindow::MainWindow(QWidget *parent, const config * fleetGUI_configuration,
         path.addEllipse(qp3, 10, 10);
     }
     //qDebug("\n\n ==================== TEST2 !!!!! ========================\n\n");
+*/
     QGraphicsPathItem * myPath = ui->graphicsView->scene()->addPath(path, redPen);
-
+/*
     QGraphicsEllipseItem * e1 = ui->graphicsView->scene()->addEllipse(qp2.rx()-10/sqrt(2),qp2.ry()-10/sqrt(2),10*sqrt(2),10*sqrt(2),blackPen, blueBrush);
     QGraphicsEllipseItem * e2 = ui->graphicsView->scene()->addEllipse(qp3.rx()-10/sqrt(2),qp3.ry()-10/sqrt(2),10*sqrt(2),10*sqrt(2),blackPen, blueBrush);
     e1->setFlags(QGraphicsItem::ItemIsMovable);
@@ -135,18 +117,19 @@ MainWindow::MainWindow(QWidget *parent, const config * fleetGUI_configuration,
     e1->update();
     //e1->moveBy(20,20);
     //qDebug("\n\n ==================== TEST3 !!!!! ========================\n\n");
+*/
     timerForGUIRefresh_ = new QTimer;
     connect(timerForGUIRefresh_, &QTimer::timeout, this, &MainWindow::onTimerForGUIRefreshShot);
     timerForGUIRefresh_->start(1000);
     //qDebug("\n\n ==================== TEST4 !!!!! ========================\n\n");
-    testEllipseItem_ = ui->graphicsView->scene()->addEllipse(20,20,10,10,blackPen, blueBrush);
+/*    testEllipseItem_ = ui->graphicsView->scene()->addEllipse(20,20,10,10,blackPen, blueBrush);
     BOOST_LOG_SEV(*fleetGUI_logger_, debug) <<  "verify current position on graphic scene x = " \
                                              << testEllipseItem_->mapToScene(0,0).x() \
                                              << " y = " \
                                              << testEllipseItem_->mapToScene(0,0).y();
-    BOOST_LOG_SEV(*fleetGUI_logger_, notification) << "===================== END CONSTRUCTOR ===================";
+*/
     linePath_ = path;
-
+    BOOST_LOG_SEV(*fleetGUI_logger_, debug) << "===================== END CONSTRUCTOR MAIN WINDOW ===================";
 }
 
 MainWindow::~MainWindow()
@@ -188,7 +171,7 @@ void MainWindow::resizeEvent(QResizeEvent * evt)
     currentScaleY_ = newScaley;
 
     QRectF sceneRect = ui->graphicsView->sceneRect();
-    BOOST_LOG_SEV(*fleetGUI_logger_, debug) << "SceneRectTopLeft x = " << sceneRect.topLeft().x()
+/*    BOOST_LOG_SEV(*fleetGUI_logger_, debug) << "SceneRectTopLeft x = " << sceneRect.topLeft().x()
                                             << " SceneRectTopLeft y = " << sceneRect.topLeft().y()
                                             << " SceneRectBottomRight x = " << sceneRect.bottomRight().x()
                                             << " SceneRectBottomRight y = " << sceneRect.bottomRight().y();
@@ -197,15 +180,15 @@ void MainWindow::resizeEvent(QResizeEvent * evt)
                                             << " SceneRectTopLeft y = " << sceneRect.topLeft().y()
                                             << " SceneRectBottomRight x = " << sceneRect.bottomRight().x()
                                             << " SceneRectBottomRight y = " << sceneRect.bottomRight().y();
+*/
     ui->graphicsView->scene()->setSceneRect(sceneRect);
-
     evt->accept();
     BOOST_LOG_SEV(*fleetGUI_logger_, debug) << "===================== END RESIZE ===================";
 }
 
 void MainWindow::onTimerForGUIRefreshShot(void)
 {
-    //qDebug() << "Timer shot !";
+/*    //qDebug() << "Timer shot !";
     if(testEllipseItem_->pos().x() < 1200)
     {
         //testEllipseItem_->moveBy(20,10);
@@ -215,7 +198,7 @@ void MainWindow::onTimerForGUIRefreshShot(void)
     }
     else
         testEllipseItem_->setPos(20,10);
-
+*/
     //display trains
     BOOST_LOG_SEV(*fleetGUI_logger_, debug) << "Start Displaying trains !";
     int i = 0;
