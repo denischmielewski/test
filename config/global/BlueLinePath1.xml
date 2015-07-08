@@ -5,7 +5,7 @@
 <!-- It also contains some information on how the line is displayed on GUI (like color, width -->
 
 <PATH>
-	<NAME>BlueLine</NAME>	
+	<NAME>BlueLinePath1.xml</NAME>	
 	<COLOR_R>125</COLOR_R>
 	<COLOR_G>126</COLOR_G>
 	<COLOR_B>127</COLOR_B>

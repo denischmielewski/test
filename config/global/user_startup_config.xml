@@ -13,7 +13,7 @@
 		<MAX_LOG_FILE_SIZE_IN_KBYTES>1000</MAX_LOG_FILE_SIZE_IN_KBYTES>	<!-- precision is +/- 10% -->
 		<!-- this parameter defines the lower log level included in logs. Levels are : -->
 		<!-- debug, debug_temporary, internal_message, external_message, Threads, notification, warning, error and critical -->
-		<LOG_LEVEL>debug</LOG_LEVEL>		
+		<LOG_LEVEL>message</LOG_LEVEL>		
 	</LOG>	
 
 	<TCPIP>
@@ -128,7 +128,7 @@
 		<GRAPHICSCENE_WIDTH>1600</GRAPHICSCENE_WIDTH>
 		<GRAPHICSCENE_HEIGHT>900</GRAPHICSCENE_HEIGHT>
 		<!-- parameter for the circle that represent train on display ! -->
-		<TRAIN_DISPLAY_SIZE_IN_PIXELS>10</TRAIN_DISPLAY_SIZE_IN_PIXELS>
+		<TRAIN_DISPLAY_SIZE_IN_PIXELS>20</TRAIN_DISPLAY_SIZE_IN_PIXELS>
 		<TRAIN_DISPLAY_OFFSET_RELATIVE_TO_LINE_IN_PIXELS>20</TRAIN_DISPLAY_OFFSET_RELATIVE_TO_LINE_IN_PIXELS>
 		<!-- parameter for displaying train mode ! -->
 		<TRAIN_MODE_DISPLAY_SIZE_IN_PIXELS>10</TRAIN_MODE_DISPLAY_SIZE_IN_PIXELS>

@@ -185,20 +185,9 @@ void MainWindow::resizeEvent(QResizeEvent * evt)
     evt->accept();
     BOOST_LOG_SEV(*fleetGUI_logger_, debug) << "===================== END RESIZE ===================";
 }
-
+/*
 void MainWindow::onTimerForGUIRefreshShot(void)
 {
-/*    //qDebug() << "Timer shot !";
-    if(testEllipseItem_->pos().x() < 1200)
-    {
-        //testEllipseItem_->moveBy(20,10);
-        float x = testEllipseItem_->x() + 20;
-        float y = testEllipseItem_->y() + 10;
-        testEllipseItem_->setPos(x,y);
-    }
-    else
-        testEllipseItem_->setPos(20,10);
-*/
     //display trains
     BOOST_LOG_SEV(*fleetGUI_logger_, debug) << "Start Displaying trains !";
     int i = 0;
@@ -308,3 +297,128 @@ void MainWindow::onTimerForGUIRefreshShot(void)
         }
     }
 }
+*/
+void MainWindow::onTimerForGUIRefreshShot(void)
+{
+    //display trains
+    BOOST_LOG_SEV(*fleetGUI_logger_, debug) << "Start Displaying trains !";
+    int i = 0;
+    for ( auto it = trainsSessions_->begin(); it != trainsSessions_->end(); ++it )
+    {
+        //TrainOperationSession trainOperationSession = (it->second).GetTrainOperationSessionRef();
+        if((it->second).GetTrainOperationSessionRef().IsThisSessionATrain())
+        {
+            i++;
+        }
+    }
+    BOOST_LOG_SEV(*fleetGUI_logger_, debug) << "number of Train : " << i;
+    i = 0;
+    for ( auto it = trainsSessions_->begin(); it != trainsSessions_->end(); ++it )
+    {
+        if((it->second).GetTrainOperationSessionRef().IsThisSessionATrain())
+        {
+            i++;
+            BOOST_LOG_SEV(*fleetGUI_logger_, debug) << "========================== Train : " << i << " IP address :" << it->first;
+            // 1st step: curve length. It was calculated after Line was built and before adding any item (else length is modified)
+            BOOST_LOG_SEV(*fleetGUI_logger_, debug) << "length : " << linePathLength_;
+
+            if((it->second).GetTrainOperationSessionRef().TryLockOperationSessionMutexFor(softwareConfig_->commSessionMutexLockTimeoutMilliseconds_))
+            {
+                static QPointF qp1, qp2, qp3;
+                //retrieve information we need from TrainOPperationSession class then release mutex as fast as possible as it is accessed by message processing
+                std::string path = ((it->second).GetTrainOperationSessionRef().GetPath());
+                BOOST_LOG_SEV(*fleetGUI_logger_, debug) << "path = " << path;
+                float pkPos = (it->second).GetTrainOperationSessionRef().GetKpPosition();
+                BOOST_LOG_SEV(*fleetGUI_logger_, debug) << "pkPos = " << pkPos;
+                int dir = (it->second).GetTrainOperationSessionRef().GetDirection();
+                BOOST_LOG_SEV(*fleetGUI_logger_, debug) << "dir = " << dir;
+                (it->second).GetTrainOperationSessionRef().UnlockOperationSessionMutex();
+
+                // position in linePath_ coordinates
+                auto iter = softwareConfig_->linesData_.find(path); //note: we can not use map [] operator as it is not const
+                float ptk = (pkPos - (iter->second).lineFirstKPPosition_)/(iter->second).linePKDistance_ * linePathLength_;
+                std::string s = std::to_string(ptk);
+                BOOST_LOG_SEV(*fleetGUI_logger_, debug) << "position in linePath_ coordinates : " << ptk << " kpPosition : " << pkPos;
+
+                // retrieve percent from kpPosition
+                float p = linePath_.percentAtLength((pkPos - (iter->second).lineFirstKPPosition_)/(iter->second).linePKDistance_ * linePathLength_);
+                s = std::to_string(p);
+                BOOST_LOG_SEV(*fleetGUI_logger_, debug) << "percent : " << p << " kpPosition : " << pkPos;
+
+                // get angle at percent
+                float angle = linePath_.angleAtPercent(p);
+                s = std::to_string(angle);
+                BOOST_LOG_SEV(*fleetGUI_logger_, debug) << "angle at percent : " << angle;
+
+                // get point at percent
+                qp1 = linePath_.pointAtPercent(p);
+                s = std::to_string(qp1.rx());
+                BOOST_LOG_SEV(*fleetGUI_logger_, debug) << "x at percent "  << " is " <<  s.c_str();
+                s = std::to_string(qp1.ry());
+                BOOST_LOG_SEV(*fleetGUI_logger_, debug) << "y at percent "  << " is " <<  s.c_str();
+
+                // get slope at percent
+                float slope = linePath_.slopeAtPercent(p);
+                s = std::to_string(slope);
+                BOOST_LOG_SEV(*fleetGUI_logger_, debug) <<  "slope at percent "  << " is " <<  s.c_str();
+
+
+                QBrush yellowBrush(Qt::yellow);
+                QBrush blackBrush(Qt::black);
+                QBrush greenBrush(Qt::green);
+                //QPen greenPen(Qt::green);
+                QPen greenPen(greenBrush, 10);
+                int16_t trainSizePixel = softwareConfig_->configForFleetGUISw_.trainDisplaySizeInPixel_;
+                int16_t trainDisplayOffsetPixel = softwareConfig_->configForFleetGUISw_.trainDisplayOffsetRelativeToLineInPixels_;
+
+                bool firstTimeTrainIsReceived = false;
+                auto search = trainsQGraphicsEllipseItems_.find(it->first);
+                if(search == trainsQGraphicsEllipseItems_.end()) firstTimeTrainIsReceived = true;   //for unordered map management
+                if(dir == 1)
+                {
+                    //center of train position point for direction 1
+                    qp2.setX((qp1.rx()) - (trainDisplayOffsetPixel * sin(angle/360*2*M_PI)));
+                    qp2.setY((qp1.ry()) - (trainDisplayOffsetPixel * cos(angle/360*2*M_PI)));
+                    if(firstTimeTrainIsReceived)
+                    {
+                        //first time, create the item
+                        BOOST_LOG_SEV(*fleetGUI_logger_, debug) <<  "first time on graphic scene for " \
+                                                                 << it->first << " x = " << qp2.rx()-trainSizePixel/sqrt(2) << " y = " << qp2.ry()-trainSizePixel/sqrt(2);
+
+                        QGraphicsEllipseItem * ei = \
+                                ui->graphicsView->scene()->addEllipse(qp2.rx()-trainSizePixel/sqrt(2),qp2.ry()-trainSizePixel/sqrt(2),trainSizePixel*sqrt(2),trainSizePixel*sqrt(2),greenPen, blackBrush);
+                        trainsQGraphicsEllipseItems_.emplace(it->first, ei);
+                    }
+                    else
+                    {
+                        trainsQGraphicsEllipseItems_[it->first]->setRect(qp2.rx()-trainSizePixel/sqrt(2),qp2.ry()-trainSizePixel/sqrt(2),trainSizePixel*sqrt(2),trainSizePixel*sqrt(2));
+                    }
+                }
+                else if(dir == 2)
+                {
+                    //center of train position point for direction 2
+                    qp3.setX((qp1.rx()) + (trainDisplayOffsetPixel * sin(angle/360*2*M_PI)));
+                    qp3.setY((qp1.ry()) + (trainDisplayOffsetPixel * cos(angle/360*2*M_PI)));
+                    if(firstTimeTrainIsReceived)
+                    {
+                        //first time, create the item
+                        BOOST_LOG_SEV(*fleetGUI_logger_, debug) <<  "first time on graphic scene for " \
+                                                                 << it->first << " x = " << qp3.rx()-trainSizePixel/sqrt(2) << " y = " << qp3.ry()-trainSizePixel/sqrt(2);
+                        QGraphicsEllipseItem * ei = \
+                                ui->graphicsView->scene()->addEllipse(qp3.rx()-trainSizePixel/sqrt(2),qp3.ry()-trainSizePixel/sqrt(2),trainSizePixel*sqrt(2),trainSizePixel*sqrt(2),greenPen, blackBrush);
+                        trainsQGraphicsEllipseItems_.emplace(it->first, ei);
+                    }
+                    else
+                    {
+                        trainsQGraphicsEllipseItems_[it->first]->setRect(qp3.rx()-trainSizePixel/sqrt(2),qp3.ry()-trainSizePixel/sqrt(2),trainSizePixel*sqrt(2),trainSizePixel*sqrt(2));
+                    }
+                }
+            }
+            else
+            {
+                BOOST_LOG_SEV(*fleetGUI_logger_, warning) << "Train Operation Session Lock failed !!!";
+            }
+        }
+    }
+}
+
