@@ -3,7 +3,6 @@
 using namespace std;
 using namespace google::protobuf;
 
-static int closeGUI = false;
 static startup_severity_channel_logger_mt * logger;
 
 FleetGUICommunicationClient::FleetGUICommunicationClient(config const * conf, std::unordered_map<std::string, TrainSession> * trainsSessions)
@@ -65,9 +64,10 @@ void FleetGUICommunicationClient::onTimerForClientToServer1GetFleetShot(void)
     try
     {
         getFleetCommand_.set_ipaddress(clientconf->main_ipaddress_);
-        BOOST_LOG_SEV(*logger, message) << "Send GetFleet message to Server1";
+        BOOST_LOG_SEV(*logger, message) << "Send GetFleet message to Server1 : size = " << getFleetCommand_.ByteSize() << " cached size = " << getFleetCommand_.GetCachedSize();
         getFleetServiceStub_->GetFleet(NULL, &getFleetCommand_, &getFleetResponse_, NULL);
-        BOOST_LOG_SEV(*logger, message)    << "Received getFleetResponse from Server1 : number of traindata = "<< getFleetResponse_.traindatalist_size();
+        BOOST_LOG_SEV(*logger, message)    << "Received getFleetResponse from Server1 : size = " << getFleetResponse_.ByteSize() \
+                                           << " number of traindata = "<< getFleetResponse_.traindatalist_size() << " cached size = " << getFleetResponse_.GetCachedSize();
         for (int i = 0; i < getFleetResponse_.traindatalist_size();i++)
         {
             TrainData td = getFleetResponse_.traindatalist(i);
@@ -131,14 +131,6 @@ void FleetGUICommunicationClient::onTimerForClientToServer1GetFleetShot(void)
 
 void FleetGUICommunicationClient::onCloseFleetGUI()
 {
-    closeGUI = true;
-    QMessageBox *mbox = new QMessageBox;
-    std::string s = "please wait " + std::to_string(clientconf->ThreadsExitTimeoutMilliseconds_/1000) + " seconds !";
-    mbox->setIcon(QMessageBox::Information);
-    mbox->setWindowTitle(QString::fromStdString(s));
-    mbox->setText("program is closing !");
-    QTimer::singleShot(clientconf->ThreadsExitTimeoutMilliseconds_, Qt::PreciseTimer, mbox, SLOT(close()));
-    mbox->show();
+    BOOST_LOG_SEV(*logger, threads) << "Terminating comm client thread";
     this->exit();
-    if(this->wait(clientconf->ThreadsExitTimeoutMilliseconds_) == false) BOOST_LOG_SEV(*logger, warning) << "FleetGUICommunicationsServer Thread did not finished in allocated time !";
 }

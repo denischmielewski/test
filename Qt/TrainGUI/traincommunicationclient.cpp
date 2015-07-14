@@ -3,7 +3,6 @@
 using namespace std;
 using namespace google::protobuf;
 
-static int closeGUI = false;
 static startup_severity_channel_logger_mt * logger;
 
 TrainCommunicationClient::TrainCommunicationClient(config const * conf, std::unordered_map<std::string, TrainSession> * trainsSessions)
@@ -57,16 +56,8 @@ void TrainCommunicationClient::onThreadTimerShot(void)
 
 void TrainCommunicationClient::onCloseTrainGUI()
 {
-    closeGUI = true;
-    QMessageBox *mbox = new QMessageBox;
-    std::string s = "please wait " + std::to_string(clientconf->ThreadsExitTimeoutMilliseconds_/1000) + " seconds !";
-    mbox->setIcon(QMessageBox::Information);
-    mbox->setWindowTitle(QString::fromStdString(s));
-    mbox->setText("program is closing !");
-    QTimer::singleShot(clientconf->ThreadsExitTimeoutMilliseconds_, Qt::PreciseTimer, mbox, SLOT(close()));
-    mbox->show();
+    BOOST_LOG_SEV(*logger, threads) << "Terminating comm client thread";
     this->exit();
-    if(this->wait(clientconf->ThreadsExitTimeoutMilliseconds_) == false) BOOST_LOG_SEV(*logger, warning) << "TrainCommunicationsServer Thread did not finished in allocated time !";
 }
 
 void TrainCommunicationClient::onChangeModeToManual()

@@ -51,8 +51,8 @@
 		<dev-VM> <!-- Hostname of the linux OS, 1024 bytes MAX !!! -->
 			<IP_ADDRESSES_AND_SUBNET>
 				<ADAPTER>eth0</ADAPTER>
-				<MAIN_IP>192.168.1.11/24</MAIN_IP>
-				<GUI_IP>192.168.2.12/24</GUI_IP>
+				<MAIN_IP>192.168.1.21/24</MAIN_IP>
+				<GUI_IP>192.168.2.22/24</GUI_IP>
 			</IP_ADDRESSES_AND_SUBNET>
 		</dev-VM>
 		<Train191> <!-- Hostname of the linux OS, 1024 bytes MAX !!! -->

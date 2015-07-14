@@ -34,9 +34,11 @@ private slots:
     void on_Automatic_clicked(bool checked);
     void on_PBStopTrainSw_clicked();
     void on_PBStartTrainSw_clicked();
+    void onGuiUpdateTimerShot();
 
 private:
     Ui::TrainControls *ui;
+    QTimer * guiUpdateTimer;
 
 signals:
     void myclose(void);

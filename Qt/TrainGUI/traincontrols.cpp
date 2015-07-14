@@ -13,15 +13,21 @@ TrainControls::TrainControls(QWidget *parent, config const * trainGUI_configurat
     trainconf = trainGUI_configuration;
     startup_severity_channel_logger_mt& lg = trainGUI_logger::get();
     logger = &lg;
+    guiUpdateTimer = new QTimer;
+    //timer->start(clientconf->ThreadsLogNotificationFrequencyMilliseconds_);
+    guiUpdateTimer->start(500);
 
     connect(this, &TrainControls::myclose, t, &TrainCommunicationsServer::onCloseTrainGUI);
     connect(this, &TrainControls::myclose, c, &TrainCommunicationClient::onCloseTrainGUI);
     connect(ui->Automatic, &QRadioButton::clicked, c, &TrainCommunicationClient::onChangeModeToManual);
     connect(ui->Manual, &QRadioButton::clicked, c, &TrainCommunicationClient::onChangeModeToAutomatic);
+    connect(guiUpdateTimer, &QTimer::timeout, this, &TrainControls::onGuiUpdateTimerShot);
 }
 
 TrainControls::~TrainControls()
 {
+    guiUpdateTimer->stop();
+    delete guiUpdateTimer;
     delete ui;
 }
 
@@ -44,57 +50,40 @@ void TrainControls::closeEvent(QCloseEvent * evt)
     evt->accept();
 }
 
-
-
 void TrainControls::on_PBStopTrainSw_clicked()
 {
-    //First check if Train software is running
-    std::string command = "pgrep -x Train";
-    std::string ls = GetStdoutFromCommand(command, trainconf->linuxSysCallBufferSize_);
-    //pgrep return empty if process not found
-
-    if(ls.empty())
-    {
-        BOOST_LOG_SEV(*logger, notification) << "PB StopTrainSw pushed but Sw not running !";
-    }
-    else
-    {
-        BOOST_LOG_SEV(*logger, notification) << "PB StopTrainSw pushed, closing Sw ...";
-        ls = GetStdoutFromCommand("pkill -x Train", trainconf->linuxSysCallBufferSize_);
-        this->thread()->msleep(trainconf->linuxSysCallSleepDurationMilliseconds_);
-        ls = GetStdoutFromCommand("pgrep -x Train", trainconf->linuxSysCallBufferSize_);
-        if(ls.empty() != true)
-        {
-            BOOST_LOG_SEV(*logger, critical) << "IMPOSSIBLE TO STOP Train main Sw !!!";
-            QMessageBox::critical(0, "Software FAILURE !", "IMPOSSIBLE TO STOP Train main Sw !!!",0,0);
-        }
-    }
+    //No need to verify if the software is running. This is controlled by onGuiUpdateTimerShot
+    BOOST_LOG_SEV(*logger, notification) << "PB StopTrainSw pushed, closing Sw ...";
+    //No need to verify the syscall retrun. If something happened, onGuiUpdateTimerShot will detect it !
+    GetStdoutFromCommand("pkill -x Train", trainconf->linuxSysCallBufferSize_);
+    //disable both buttons. Everything will be set by onGuiUpdateTimerShot
+    ui->PBStartTrainSw->setDisabled(true);
+    ui->PBStopTrainSw->setDisabled(true);
 }
 
 void TrainControls::on_PBStartTrainSw_clicked()
 {
-    //First check if Train software is running
-    std::string command = "pgrep -x Train";
-    std::string ls = GetStdoutFromCommand(command, trainconf->linuxSysCallBufferSize_);
-    //preg return empty if process not found
-    if(ls.empty() == false)
+    //No need to verify if the software is running. this is controlled by onGuiUpdateTimerShot
+    BOOST_LOG_SEV(*logger, notification) << "Pushbutton StartTrainSw pushed, starting Sw In another process...";
+    QProcess *process = new QProcess(this);
+    QString file = "/home/train/programs/real/Train";
+    process->startDetached(file);
+    //disable both buttons. Everything will be set by onGuiUpdateTimerShot
+    ui->PBStartTrainSw->setDisabled(true);
+    ui->PBStopTrainSw->setDisabled(true);
+}
+
+void TrainControls::onGuiUpdateTimerShot(void)
+{
+    std::string ls = GetStdoutFromCommand("pgrep -x Train", trainconf->linuxSysCallBufferSize_);
+    if(ls.empty() == true)
     {
-        //train Sw already running
-        BOOST_LOG_SEV(*logger, notification) << "PushButton StartTrainSw pushed but Sw already running !";
+        ui->PBStartTrainSw->setEnabled(true);
+        ui->PBStopTrainSw->setDisabled(true);
     }
     else
     {
-        //train Sw is not running !
-        BOOST_LOG_SEV(*logger, notification) << "Pushbutton StartTrainSw pushed, starting Sw In another process...";
-        QProcess *process = new QProcess(this);
-        QString file = "/home/train/programs/real/Train";
-        process->startDetached(file);
-        this->thread()->msleep(trainconf->linuxSysCallSleepDurationMilliseconds_);
-        ls = GetStdoutFromCommand("pgrep -x Train", trainconf->linuxSysCallBufferSize_);
-        if(ls.empty() == true)
-        {
-            BOOST_LOG_SEV(*logger, critical) << "IMPOSSIBLE TO START Train main Sw !!!";
-            QMessageBox::critical(0, "Software FAILURE !", "IMPOSSIBLE TO START Train main Sw !!!",0,0);
-        }
+        ui->PBStartTrainSw->setDisabled(true);
+        ui->PBStopTrainSw->setEnabled(true);
     }
 }
